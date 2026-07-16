@@ -311,3 +311,40 @@ h1, h2, h3, h4, h5, h6 {
   transform: rotate(180deg);
 }
 
+/* Level 3 Sub-Submenu Styles (Procedimientos vs Registros) */
+.sidebar-sub-submenu {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 2px;
+  margin-bottom: 5px;
+}
+
+.sidebar-sub-submenu .nav-link-sub-sub {
+  color: var(--OCA-sidebar-color);
+  opacity: 0.6;
+  border-radius: 6px;
+  transition: all 0.2s;
+  font-weight: 400;
+  padding: 4px 10px;
+  display: block;
+  text-decoration: none;
+  font-size: 12.5px;
+  text-align: left;
+}
+
+.sidebar-sub-submenu .nav-link-sub-sub:hover {
+  opacity: 0.9;
+  background-color: rgba(255, 255, 255, 0.02);
+  color: #fff;
+  transform: translateX(2px);
+}
+
+.sidebar-sub-submenu .nav-link-sub-sub.active-sub-sub {
+  color: var(--OCA-primary) !important;
+  font-weight: 600;
+  opacity: 1;
+  border-left: 2px solid var(--OCA-primary);
+  border-radius: 0 6px 6px 0;
+  padding-left: 8px;
+}
+

@@ -12,7 +12,14 @@ function App() {
   const [currentView, setCurrentView] = useState('procedimientos');
   const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme-v4') || 'light');
   const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
-  const [activeFolder, setActiveFolder] = useState('Limpieza y Desinfección');
+  const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
+  const [activeSubView, setActiveSubView] = useState('procedimiento');
+  const [expandedCategories, setExpandedCategories] = useState({
+    'Limpieza y Desinfección': true,
+    'Control de Plagas': false,
+    'Residuos Sólidos y Líquidos': false,
+    'Agua Potable': false
+  });
   
   // Base de datos de Procedimientos (Control Documental)
   const [procedimientos, setProcedimientos] = useState(() => {
@@ -313,53 +320,67 @@ function App() {
               <i className={`bi bi-chevron-down arrow-rotate ${isProcedimientosOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
             </button>
             
-            {/* Submenú Desplegable */}
+            {/* Nivel 2: Categorías Desplegables */}
             {isProcedimientosOpen && (
               <ul className="sidebar-submenu">
-                <li>
-                  <button 
-                    className={`nav-link-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeFolder === 'Limpieza y Desinfección' ? 'active-sub' : 'text-white'}`}
-                    onClick={() => {
-                      setCurrentView('procedimientos');
-                      setActiveFolder('Limpieza y Desinfección');
-                    }}
-                  >
-                    <i className="bi bi-droplet-fill me-2 text-info"></i> Limpieza y Desinfección
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    className={`nav-link-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeFolder === 'Control de Plagas' ? 'active-sub' : 'text-white'}`}
-                    onClick={() => {
-                      setCurrentView('procedimientos');
-                      setActiveFolder('Control de Plagas');
-                    }}
-                  >
-                    <i className="bi bi-bug-fill me-2 text-warning"></i> Control de Plagas
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    className={`nav-link-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeFolder === 'Residuos Sólidos y Líquidos' ? 'active-sub' : 'text-white'}`}
-                    onClick={() => {
-                      setCurrentView('procedimientos');
-                      setActiveFolder('Residuos Sólidos y Líquidos');
-                    }}
-                  >
-                    <i className="bi bi-trash-fill me-2 text-success"></i> Residuos Sólidos
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    className={`nav-link-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeFolder === 'Agua Potable' ? 'active-sub' : 'text-white'}`}
-                    onClick={() => {
-                      setCurrentView('procedimientos');
-                      setActiveFolder('Agua Potable');
-                    }}
-                  >
-                    <i className="bi bi-water me-2 text-primary"></i> Agua Potable
-                  </button>
-                </li>
+                {[
+                  { name: 'Limpieza y Desinfección', icon: 'bi-droplet-fill text-info' },
+                  { name: 'Control de Plagas', icon: 'bi-bug-fill text-warning' },
+                  { name: 'Residuos Sólidos y Líquidos', icon: 'bi-trash-fill text-success' },
+                  { name: 'Agua Potable', icon: 'bi-water text-primary' }
+                ].map(cat => {
+                  const isCatExpanded = expandedCategories[cat.name];
+                  return (
+                    <li key={cat.name} className="mb-1">
+                      <button 
+                        className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'procedimientos' && activeCategory === cat.name ? 'fw-bold' : ''}`}
+                        onClick={() => {
+                          setCurrentView('procedimientos');
+                          setActiveCategory(cat.name);
+                          setExpandedCategories(prev => ({
+                            ...prev,
+                            [cat.name]: !prev[cat.name]
+                          }));
+                        }}
+                      >
+                        <span>
+                          <i className={`bi ${cat.icon} me-2`}></i> {cat.name}
+                        </span>
+                        <i className={`bi bi-chevron-down arrow-rotate ${isCatExpanded ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
+                      </button>
+                      
+                      {/* Nivel 3: Sub-submenú (Procedimiento vs Registros Asociados) */}
+                      {isCatExpanded && (
+                        <ul className="sidebar-sub-submenu">
+                          <li>
+                            <button
+                              className={`nav-link-sub-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeCategory === cat.name && activeSubView === 'procedimiento' ? 'active-sub-sub' : 'text-white'}`}
+                              onClick={() => {
+                                setCurrentView('procedimientos');
+                                setActiveCategory(cat.name);
+                                setActiveSubView('procedimiento');
+                              }}
+                            >
+                              <i className="bi bi-file-earmark-pdf me-1"></i> Procedimiento
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              className={`nav-link-sub-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeCategory === cat.name && activeSubView === 'registros' ? 'active-sub-sub' : 'text-white'}`}
+                              onClick={() => {
+                                setCurrentView('procedimientos');
+                                setActiveCategory(cat.name);
+                                setActiveSubView('registros');
+                              }}
+                            >
+                              <i className="bi bi-journal-check me-1"></i> Registros Asociados
+                            </button>
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </li>
@@ -516,8 +537,10 @@ function App() {
               onAgregar={handleAgregarProcedimiento}
               saneamientoLogs={registrosSaneamiento}
               alergenosLogs={registrosAlergenos}
-              carpetaActiva={activeFolder}
-              setCarpetaActiva={setActiveFolder}
+              carpetaActiva={activeCategory}
+              setCarpetaActiva={setActiveCategory}
+              activeSubView={activeSubView}
+              onAgregarSaneamiento={handleAgregarSaneamiento}
             />
           )}
           {currentView === 'dashboard' && (
