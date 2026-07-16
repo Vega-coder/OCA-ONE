@@ -12,13 +12,6 @@ function Procedimientos({ procedimientos, onAgregar, saneamientoLogs, alergenosL
   const [nuevoContenido, setNuevoContenido] = useState('');
   const [alertaExito, setAlertaExito] = useState(false);
 
-  const carpetas = [
-    { nombre: 'Limpieza y Desinfección', icono: 'bi-droplet-fill', color: 'text-info', desc: 'POES y bitácora de higiene general.' },
-    { nombre: 'Control de Plagas', icono: 'bi-bug-fill', color: 'text-warning', desc: 'Planes preventivos y certificados de control.' },
-    { nombre: 'Residuos Sólidos y Líquidos', icono: 'bi-trash-fill', color: 'text-success', desc: 'Disposición de residuos y aceites.' },
-    { nombre: 'Agua Potable', icono: 'bi-water', color: 'text-primary', desc: 'Análisis de cloro, pH y lavado de tanques.' }
-  ];
-
   // Datos mock de evidencias de soporte (Plagas, Residuos, Agua)
   const evidenciasSoporte = {
     'Control de Plagas': [
@@ -74,31 +67,6 @@ function Procedimientos({ procedimientos, onAgregar, saneamientoLogs, alergenosL
           <button type="button" className="btn-close" onClick={() => setAlertaExito(false)} aria-label="Close"></button>
         </div>
       )}
-
-      {/* Grid de Carpetas del Plan de Saneamiento */}
-      <div className="row g-4 mb-4">
-        {carpetas.map(folder => (
-          <div key={folder.nombre} className="col-12 col-md-6 col-lg-3">
-            <button 
-              className={`card gipa-card p-3 w-100 text-start border-0 h-100 transition-all ${
-                carpetaActiva === folder.nombre ? 'border border-success bg-success bg-opacity-10 shadow' : ''
-              }`}
-              onClick={() => {
-                setCarpetaActiva(folder.nombre);
-                setMostrarCrearForm(false);
-              }}
-            >
-              <div className="d-flex align-items-center mb-2">
-                <i className={`bi ${folder.icono} ${folder.color} fs-2 me-3`}></i>
-                <h6 className="fw-bold font-heading mb-0 text-dark" style={{ fontSize: '15px' }}>{folder.nombre}</h6>
-              </div>
-              <p className="text-muted small mb-0 mt-2" style={{ fontSize: '12px' }}>
-                {folder.desc}
-              </p>
-            </button>
-          </div>
-        ))}
-      </div>
 
       <div className="row g-4">
         {/* Procedimientos y Documentos de la Carpeta (Columna Izquierda) */}
