@@ -9,11 +9,11 @@ import AllergenRecall from './components/AllergenRecall';
 
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
-  const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme') || 'light');
+  const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme-v4') || 'light');
   
   // Base de datos de Saneamiento
   const [registrosSaneamiento, setRegistrosSaneamiento] = useState(() => {
-    const saved = localStorage.getItem('OCA-saneamiento');
+    const saved = localStorage.getItem('OCA-saneamiento-v4');
     return saved ? JSON.parse(saved) : [
       { id: 1, fecha: '2026-07-15', hora: '06:30', area: 'Cuarto Frío 1', supervisor: 'Carlos Gómez', tipo: 'Pre-operacional', producto: 'Cloro 200ppm', conforme: true, observacion: 'Cumple sin novedades' },
       { id: 2, fecha: '2026-07-15', hora: '13:00', area: 'Línea de Envasado A', supervisor: 'Ana Martínez', tipo: 'Rutinaria', producto: 'Amonio Cuaternario', conforme: true, observacion: 'Limpieza intermedia' },
@@ -24,7 +24,7 @@ function App() {
 
   // Base de datos de Variables Críticas (PCC)
   const [medicionesVariables, setMedicionesVariables] = useState(() => {
-    const saved = localStorage.getItem('OCA-variables');
+    const saved = localStorage.getItem('OCA-variables-v4');
     return saved ? JSON.parse(saved) : [
       { id: 1, fecha: '2026-07-15', hora: '08:00', punto: 'Cámara Refrigeración 1', temperatura: 4.2, ph: null, supervisor: 'Carlos Gómez', estado: 'Normal', comentario: 'Equipo operando estable.' },
       { id: 2, fecha: '2026-07-15', hora: '10:00', punto: 'Pasteurizador B', temperatura: 72.5, ph: 6.62, supervisor: 'Ana Martínez', estado: 'Normal', comentario: 'Pasteurización de leche entera.' },
@@ -35,7 +35,7 @@ function App() {
 
   // Base de datos de Manipuladores
   const [manipuladores, setManipuladores] = useState(() => {
-    const saved = localStorage.getItem('OCA-manipuladores');
+    const saved = localStorage.getItem('OCA-manipuladores-v4');
     return saved ? JSON.parse(saved) : [
       { id: 1, nombre: 'Javier Castillo', cargo: 'Operario de Envasado', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 92 },
       { id: 2, nombre: 'Marta Solano', cargo: 'Operaria de Mezclas', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 85 },
@@ -47,7 +47,7 @@ function App() {
 
   // Base de datos de Acciones CAPA (Desviaciones)
   const [accionesCapa, setAccionesCapa] = useState(() => {
-    const saved = localStorage.getItem('OCA-capa');
+    const saved = localStorage.getItem('OCA-capa-v4');
     return saved ? JSON.parse(saved) : [
       { 
         id: 1, 
@@ -67,7 +67,7 @@ function App() {
 
   // Base de datos de registros de cambio de alérgenos
   const [registrosAlergenos, setRegistrosAlergenos] = useState(() => {
-    const saved = localStorage.getItem('OCA-alergenos');
+    const saved = localStorage.getItem('OCA-alergenos-v4');
     return saved ? JSON.parse(saved) : [
       { 
         id: 1, 
@@ -85,29 +85,29 @@ function App() {
 
   // Persistencia de los estados en localStorage
   useEffect(() => {
-    localStorage.setItem('OCA-saneamiento', JSON.stringify(registrosSaneamiento));
+    localStorage.setItem('OCA-saneamiento-v4', JSON.stringify(registrosSaneamiento));
   }, [registrosSaneamiento]);
 
   useEffect(() => {
-    localStorage.setItem('OCA-variables', JSON.stringify(medicionesVariables));
+    localStorage.setItem('OCA-variables-v4', JSON.stringify(medicionesVariables));
   }, [medicionesVariables]);
 
   useEffect(() => {
-    localStorage.setItem('OCA-manipuladores', JSON.stringify(manipuladores));
+    localStorage.setItem('OCA-manipuladores-v4', JSON.stringify(manipuladores));
   }, [manipuladores]);
 
   useEffect(() => {
-    localStorage.setItem('OCA-capa', JSON.stringify(accionesCapa));
+    localStorage.setItem('OCA-capa-v4', JSON.stringify(accionesCapa));
   }, [accionesCapa]);
 
   useEffect(() => {
-    localStorage.setItem('OCA-alergenos', JSON.stringify(registrosAlergenos));
+    localStorage.setItem('OCA-alergenos-v4', JSON.stringify(registrosAlergenos));
   }, [registrosAlergenos]);
 
   // Manejo del tema (Modo Claro / Modo Oscuro)
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
-    localStorage.setItem('OCA-theme', theme);
+    localStorage.setItem('OCA-theme-v4', theme);
   }, [theme]);
 
   const toggleTheme = () => {
@@ -153,7 +153,7 @@ function App() {
           origen: 'Variables Críticas',
           fecha: nuevaMedicion.fecha,
           hora: nuevaMedicion.hora,
-          hallazgo: `Desviación en ${nuevaMedicion.punto}: Valor registrado de ${nuevaMedicion.temperatura}Â°C ${nuevaMedicion.ph ? `| pH ${nuevaMedicion.ph}` : ''}. Comentario: ${nuevaMedicion.comentario}`,
+          hallazgo: `Desviación en ${nuevaMedicion.punto}: Valor registrado de ${nuevaMedicion.temperatura}°C ${nuevaMedicion.ph ? `| pH ${nuevaMedicion.ph}` : ''}. Comentario: ${nuevaMedicion.comentario}`,
           responsable: nuevaMedicion.supervisor,
           estado: 'Abierto',
           causaRaiz: '',

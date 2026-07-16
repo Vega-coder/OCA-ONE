@@ -17,14 +17,14 @@ function Trazabilidad() {
           fase: '1. Recepción de Materia Prima (Leche)',
           fecha: '2026-07-13 06:10',
           detalles: 'Leche entera fresca recibida de Hacienda El Recreo. Lote proveedor: R-LECH-892 (5,000 Litros).',
-          controles: 'Temperatura: 3.8 Â°C | pH: 6.65 (Aprobado)',
+          controles: 'Temperatura: 3.8 °C | pH: 6.65 (Aprobado)',
           encargado: 'Carlos Gómez'
         },
         {
           fase: '2. Pasteurización e Inoculación',
           fecha: '2026-07-13 14:00',
-          detalles: 'Tratamiento térmico a 72.5Â°C por 15 segundos. Adición de cultivo láctico Lote CULT-902.',
-          controles: 'Temperatura pasteurización: 72.8 Â°C (Conforme) | pH de mezcla: 4.60 post fermentación',
+          detalles: 'Tratamiento térmico a 72.5°C por 15 segundos. Adición de cultivo láctico Lote CULT-902.',
+          controles: 'Temperatura pasteurización: 72.8 °C (Conforme) | pH de mezcla: 4.60 post fermentación',
           encargado: 'Ana Martínez'
         },
         {
@@ -38,7 +38,7 @@ function Trazabilidad() {
           fase: '4. Cuarto Frío y Distribución',
           fecha: '2026-07-15 05:00',
           detalles: 'Almacenamiento en Cámara Frigorífica 1 para estabilización de coágulo y despacho.',
-          controles: 'Temperatura cámara: 4.0 Â°C (Seguro) | Despacho: Camión refrigerado placa TXX-090 (Temp: 3.5Â°C)',
+          controles: 'Temperatura cámara: 4.0 °C (Seguro) | Despacho: Camión refrigerado placa TXX-090 (Temp: 3.5°C)',
           encargado: 'Luis Fernando Ruiz'
         }
       ]
@@ -53,14 +53,14 @@ function Trazabilidad() {
           fase: '1. Recepción de Materia Prima',
           fecha: '2026-07-12 07:15',
           detalles: 'Leche cruda recolectada. Lote proveedor: R-LECH-889 (2,500 Litros) de Hacienda San Juan.',
-          controles: 'Temperatura: 4.2 Â°C | pH: 6.60',
+          controles: 'Temperatura: 4.2 °C | pH: 6.60',
           encargado: 'Carlos Gómez'
         },
         {
           fase: '2. Coagulación y Corte de Cuajada',
           fecha: '2026-07-12 11:30',
           detalles: 'Adición de cuajo líquido Lote CUAJ-88. Corte de cuajada en cubos de 1cm.',
-          controles: 'Temperatura de cuajado: 34 Â°C | Tiempo de cuajado: 35 min',
+          controles: 'Temperatura de cuajado: 34 °C | Tiempo de cuajado: 35 min',
           encargado: 'Marta Solano'
         },
         {
@@ -74,7 +74,7 @@ function Trazabilidad() {
           fase: '4. Empaque al Vacío y Maduración',
           fecha: '2026-07-13 10:00',
           detalles: 'Empacado en bolsas termoencogibles de barrera al vacío.',
-          controles: 'Vacío: 99.8% de eficiencia (Excelente) | Temperatura de conservación: 4.5Â°C',
+          controles: 'Vacío: 99.8% de eficiencia (Excelente) | Temperatura de conservación: 4.5°C',
           encargado: 'Andrea Quintero'
         }
       ]

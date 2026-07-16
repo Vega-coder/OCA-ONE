@@ -34,7 +34,7 @@ function Capacitaciones({ manipuladores, onAgregar }) {
       {/* Alerta de Registro Exitoso */}
       {alertaExito && (
         <div className="alert alert-success alert-dismissible fade show shadow border-0 mb-4" role="alert" style={{ borderRadius: '10px' }}>
-          <strong><i className="bi bi-person-check-fill me-2"></i>Â¡Manipulador registrado!</strong> El operario ha sido registrado en la planta y asignado a su plan de capacitaciones BPM.
+          <strong><i className="bi bi-person-check-fill me-2"></i>¡Manipulador registrado!</strong> El operario ha sido registrado en la planta y asignado a su plan de capacitaciones BPM.
           <button type="button" className="btn-close" onClick={() => setAlertaExito(false)} aria-label="Close"></button>
         </div>
       )}

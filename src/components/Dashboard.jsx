@@ -25,7 +25,7 @@ function Dashboard({ saneamiento, variables, manipuladores, alertas, accionesCap
       {/* Banner de Bienvenida */}
       <div className="card border-0 bg-success text-white p-4 mb-4 rounded-3 shadow-sm position-relative overflow-hidden">
         <div className="position-relative z-1" style={{ zIndex: 2 }}>
-          <h2 className="display-6 fw-bold font-heading mb-1">Â¡Buen día, Carlos!</h2>
+          <h2 className="display-6 fw-bold font-heading mb-1">¡Buen día, Carlos!</h2>
           <p className="mb-0 opacity-90 fs-5">
             Planta operando bajo estándares HACCP. Tienes <strong>{abiertasCapa}</strong> Acciones Correctivas (CAPA) abiertas que requieren verificación.
           </p>
@@ -137,9 +137,9 @@ function Dashboard({ saneamiento, variables, manipuladores, alertas, accionesCap
                   </div>
                   <div className="d-flex align-items-baseline">
                     <span className="display-6 fw-bold font-heading text-dark me-1">4.2</span>
-                    <span className="text-muted fs-5">Â°C</span>
+                    <span className="text-muted fs-5">°C</span>
                   </div>
-                  <div className="text-muted small mt-2">Límite crítico: &le; 8.0Â°C</div>
+                  <div className="text-muted small mt-2">Límite crítico: &le; 8.0°C</div>
                 </div>
               </div>
 
@@ -151,9 +151,9 @@ function Dashboard({ saneamiento, variables, manipuladores, alertas, accionesCap
                   </div>
                   <div className="d-flex align-items-baseline">
                     <span className="display-6 fw-bold font-heading text-dark me-1">72.5</span>
-                    <span className="text-muted fs-5">Â°C</span>
+                    <span className="text-muted fs-5">°C</span>
                   </div>
-                  <div className="text-muted small mt-2">Límite crítico: &ge; 72.0Â°C (15s)</div>
+                  <div className="text-muted small mt-2">Límite crítico: &ge; 72.0°C (15s)</div>
                 </div>
               </div>
 
@@ -179,9 +179,9 @@ function Dashboard({ saneamiento, variables, manipuladores, alertas, accionesCap
                   </div>
                   <div className="d-flex align-items-baseline">
                     <span className="display-6 fw-bold font-heading text-dark me-1">-18.5</span>
-                    <span className="text-muted fs-5">Â°C</span>
+                    <span className="text-muted fs-5">°C</span>
                   </div>
-                  <div className="text-muted small mt-2">Límite crítico: &le; -15.0Â°C</div>
+                  <div className="text-muted small mt-2">Límite crítico: &le; -15.0°C</div>
                 </div>
               </div>
             </div>

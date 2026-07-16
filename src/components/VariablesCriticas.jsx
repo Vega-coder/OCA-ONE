@@ -23,11 +23,11 @@ function VariablesCriticas({ mediciones, onAgregar }) {
     let estado = 'Normal';
     
     if (punto === 'Cámara Refrigeración 1') {
-      if (temperatura > 8.0) estado = 'Alerta'; // Máx 8Â°C
+      if (temperatura > 8.0) estado = 'Alerta'; // Máx 8°C
     } else if (punto === 'Cámara Congelación 2') {
-      if (temperatura > -15.0) estado = 'Alerta'; // Máx -15Â°C (por ejemplo, -10Â°C es muy caliente)
+      if (temperatura > -15.0) estado = 'Alerta'; // Máx -15°C (por ejemplo, -10°C es muy caliente)
     } else if (punto === 'Pasteurizador B') {
-      if (temperatura < 72.0) estado = 'Alerta'; // Mínimo 72Â°C para pasteurizar
+      if (temperatura < 72.0) estado = 'Alerta'; // Mínimo 72°C para pasteurizar
       if (ph && (ph < 6.4 || ph > 6.9)) estado = 'Alerta';
     } else if (punto === 'Silaje de Materia Prima') {
       if (temperatura > 10.0) estado = 'Alerta'; // Control refrigerado materia prima
@@ -71,7 +71,7 @@ function VariablesCriticas({ mediciones, onAgregar }) {
       {/* Alerta Guardada */}
       {alertaExito && (
         <div className="alert alert-success alert-dismissible fade show shadow border-0 mb-4" role="alert" style={{ borderRadius: '10px' }}>
-          <strong><i className="bi bi-shield-check me-2"></i>Â¡Variable guardada con éxito!</strong> La medición ha sido indexada en el sistema. El sistema analizó el límite crítico de forma automática.
+          <strong><i className="bi bi-shield-check me-2"></i>¡Variable guardada con éxito!</strong> La medición ha sido indexada en el sistema. El sistema analizó el límite crítico de forma automática.
           <button type="button" className="btn-close" onClick={() => setAlertaExito(false)} aria-label="Close"></button>
         </div>
       )}
@@ -83,25 +83,25 @@ function VariablesCriticas({ mediciones, onAgregar }) {
           <div className="col-12 col-md-6 col-lg-3">
             <div className="p-2 border-start border-3 border-success bg-body">
               <strong className="d-block small">Cámara Refrigeración 1</strong>
-              <span className="small text-muted">Temperatura &le; 8.0 Â°C</span>
+              <span className="small text-muted">Temperatura &le; 8.0 °C</span>
             </div>
           </div>
           <div className="col-12 col-md-6 col-lg-3">
             <div className="p-2 border-start border-3 border-success bg-body">
               <strong className="d-block small">Cámara Congelación 2</strong>
-              <span className="small text-muted">Temperatura &le; -15.0 Â°C</span>
+              <span className="small text-muted">Temperatura &le; -15.0 °C</span>
             </div>
           </div>
           <div className="col-12 col-md-6 col-lg-3">
             <div className="p-2 border-start border-3 border-success bg-body">
               <strong className="d-block small">Pasteurizador B</strong>
-              <span className="small text-muted">Temp. &ge; 72.0 Â°C | pH 6.4 - 6.9</span>
+              <span className="small text-muted">Temp. &ge; 72.0 °C | pH 6.4 - 6.9</span>
             </div>
           </div>
           <div className="col-12 col-md-6 col-lg-3">
             <div className="p-2 border-start border-3 border-success bg-body">
               <strong className="d-block small">Silaje Materia Prima</strong>
-              <span className="small text-muted">Temp. &le; 8.0 Â°C | pH 6.5 - 6.8</span>
+              <span className="small text-muted">Temp. &le; 8.0 °C | pH 6.5 - 6.8</span>
             </div>
           </div>
         </div>
@@ -133,7 +133,7 @@ function VariablesCriticas({ mediciones, onAgregar }) {
 
               {/* Temperatura */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Temperatura (Â°C)</label>
+                <label className="form-label fw-semibold small">Temperatura (°C)</label>
                 <input 
                   type="number" 
                   step="0.1" 
@@ -244,7 +244,7 @@ function VariablesCriticas({ mediciones, onAgregar }) {
                         <td><span className="fw-medium">{med.punto}</span></td>
                         <td>
                           <span className={`fw-bold ${med.estado === 'Alerta' ? 'text-danger' : 'text-dark'}`}>
-                            {med.temperatura} Â°C
+                            {med.temperatura} °C
                           </span>
                         </td>
                         <td>

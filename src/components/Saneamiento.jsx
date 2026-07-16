@@ -54,7 +54,7 @@ function Saneamiento({ registros, onAgregar }) {
       {/* Alerta de Éxito */}
       {alertaExito && (
         <div className="alert alert-success alert-dismissible fade show shadow border-0 mb-4" role="alert" style={{ borderRadius: '10px' }}>
-          <strong><i className="bi bi-check-circle-fill me-2"></i>Â¡Registro guardado con éxito!</strong> El log de saneamiento ha sido añadido al historial y guardado de manera inmutable.
+          <strong><i className="bi bi-check-circle-fill me-2"></i>¡Registro guardado con éxito!</strong> El log de saneamiento ha sido añadido al historial y guardado de manera inmutable.
           <button type="button" className="btn-close" onClick={() => setAlertaExito(false)} aria-label="Close"></button>
         </div>
       )}
@@ -99,7 +99,7 @@ function Saneamiento({ registros, onAgregar }) {
                   <option value="Amonio Cuaternario">Amonio Cuaternario (5ta Gen)</option>
                   <option value="Ácido Peracético">Ácido Peracético (150 ppm)</option>
                   <option value="Detergente Neutro">Detergente Neutro Industrial</option>
-                  <option value="Ninguno / Agua caliente">Agua a Alta Temperatura (&gt;80Â°C)</option>
+                  <option value="Ninguno / Agua caliente">Agua a Alta Temperatura (&gt;80°C)</option>
                 </select>
               </div>
 

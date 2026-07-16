@@ -38,7 +38,7 @@ function Capa({ acciones, onResolver }) {
       {/* Alerta de Cierre Exitoso */}
       {alertaExito && (
         <div className="alert alert-success alert-dismissible fade show shadow border-0 mb-4" role="alert" style={{ borderRadius: '10px' }}>
-          <strong><i className="bi bi-check-circle-fill me-2"></i>Â¡Acción CAPA Cerrada y Verificada!</strong> La desviación ha sido resuelta y los registros históricos han sido firmados digitalmente.
+          <strong><i className="bi bi-check-circle-fill me-2"></i>¡Acción CAPA Cerrada y Verificada!</strong> La desviación ha sido resuelta y los registros históricos han sido firmados digitalmente.
           <button type="button" className="btn-close" onClick={() => setAlertaExito(false)} aria-label="Close"></button>
         </div>
       )}
@@ -60,7 +60,7 @@ function Capa({ acciones, onResolver }) {
             {abiertas.length === 0 ? (
               <div className="text-center py-5 my-auto text-muted">
                 <i className="bi bi-emoji-smile display-3 text-success opacity-50 d-block mb-3"></i>
-                <h5 className="fw-semibold text-success">Â¡Todo al día!</h5>
+                <h5 className="fw-semibold text-success">¡Todo al día!</h5>
                 <p className="mb-0">No hay no conformidades abiertas. Todas las alertas previas han sido cerradas y verificadas.</p>
               </div>
             ) : (
