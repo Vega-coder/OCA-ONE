@@ -1,0 +1,269 @@
+/* Global CSS variables & styles for OCA ONE */
+:root {
+  /* Fonts */
+  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+
+  /* Theme Light (Emerald/Teal base for cleanliness/food industry) */
+  --OCA-bg: #f8fafc;
+  --OCA-card-bg: #ffffff;
+  --OCA-sidebar-bg: #0f172a;
+  --OCA-sidebar-color: #f8fafc;
+  --OCA-sidebar-active-bg: #10b981;
+  --OCA-text-primary: #0f172a;
+  --OCA-text-secondary: #475569;
+  --OCA-border-color: #e2e8f0;
+  
+  /* Primary brand colors */
+  --OCA-primary: #10b981;
+  --OCA-primary-hover: #059669;
+  --OCA-primary-light: #ecfdf5;
+  --OCA-accent: #06b6d4;
+  
+  /* Statuses */
+  --OCA-success: #10b981;
+  --OCA-warning: #f59e0b;
+  --OCA-danger: #ef4444;
+  --OCA-info: #3b82f6;
+
+  /* Shadows & Radius */
+  --OCA-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --OCA-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --OCA-shadow-lg: 0 10px 15px -3px rgba(16, 185, 129, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --OCA-shadow-card: 0 10px 25px -5px rgba(0,0,0,0.02), 0 8px 10px -6px rgba(0,0,0,0.02);
+  --OCA-radius: 12px;
+  
+  --transition-speed: 0.3s;
+}
+
+[data-theme="dark"] {
+  /* Theme Dark */
+  --OCA-bg: #0b0f19;
+  --OCA-card-bg: #111827;
+  --OCA-sidebar-bg: #0b0f19;
+  --OCA-sidebar-color: #9ca3af;
+  --OCA-sidebar-active-bg: #10b981;
+  --OCA-text-primary: #f9fafb;
+  --OCA-text-secondary: #9ca3af;
+  --OCA-border-color: #1f2937;
+  --OCA-primary-light: rgba(16, 185, 129, 0.1);
+  --OCA-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --OCA-shadow-card: 0 10px 25px -5px rgba(0,0,0,0.3);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--OCA-bg);
+  color: var(--OCA-text-primary);
+  margin: 0;
+  padding: 0;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--OCA-text-primary);
+}
+
+/* Sidebar Custom Styling */
+.OCA-sidebar {
+  background-color: var(--OCA-sidebar-bg);
+  color: var(--OCA-sidebar-color);
+  min-height: 100vh;
+  transition: all var(--transition-speed);
+  border-right: 1px solid var(--OCA-border-color);
+}
+
+.OCA-sidebar .nav-link {
+  color: var(--OCA-sidebar-color);
+  opacity: 0.8;
+  border-radius: var(--OCA-radius);
+  transition: all 0.2s;
+  font-weight: 500;
+  padding: 10px 15px;
+}
+
+.OCA-sidebar .nav-link:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.OCA-sidebar .nav-link.active {
+  background-color: var(--OCA-sidebar-active-bg) !important;
+  color: #ffffff !important;
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Dashboard Cards Custom styles */
+.OCA-card {
+  background-color: var(--OCA-card-bg);
+  border: 1px solid var(--OCA-border-color);
+  border-radius: var(--OCA-radius);
+  box-shadow: var(--OCA-shadow-card);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed), background-color var(--transition-speed);
+}
+
+.OCA-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--OCA-shadow-lg);
+}
+
+/* Glassmorphism Effect */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .glass-panel {
+  background: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Timeline styles for Trazabilidad */
+.timeline-tree {
+  position: relative;
+  padding-left: 30px;
+}
+
+.timeline-tree::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--OCA-border-color);
+}
+
+.timeline-node {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.timeline-node::before {
+  content: '';
+  position: absolute;
+  left: -26px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--OCA-primary);
+  border: 3px solid var(--OCA-card-bg);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  transition: background-color var(--transition-speed);
+}
+
+.timeline-node.danger::before {
+  background-color: var(--OCA-danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.timeline-node.warning::before {
+  background-color: var(--OCA-warning);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-view {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--OCA-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--OCA-border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--OCA-text-secondary);
+}
+
+/* Bootstrap Overrides for custom theme */
+.btn-primary {
+  background-color: var(--OCA-primary);
+  border-color: var(--OCA-primary);
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--OCA-primary-hover);
+  border-color: var(--OCA-primary-hover);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.form-control, .form-select {
+  background-color: var(--OCA-card-bg);
+  border-color: var(--OCA-border-color);
+  color: var(--OCA-text-primary);
+  border-radius: 8px;
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: var(--OCA-card-bg);
+  border-color: var(--OCA-primary);
+  color: var(--OCA-text-primary);
+  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.15);
+}
+
+.table {
+  color: var(--OCA-text-primary);
+  border-color: var(--OCA-border-color);
+}
+
+.table th {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  border-bottom: 2px solid var(--OCA-border-color);
+}
+
+.card {
+  background-color: var(--OCA-card-bg);
+  border-color: var(--OCA-border-color);
+}
+
+.badge-pulse {
+  position: relative;
+}
+
+.badge-pulse::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  animation: pulse 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+}
+
