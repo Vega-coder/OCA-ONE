@@ -15,21 +15,21 @@ function App() {
   const [registrosSaneamiento, setRegistrosSaneamiento] = useState(() => {
     const saved = localStorage.getItem('OCA-saneamiento');
     return saved ? JSON.parse(saved) : [
-      { id: 1, fecha: '2026-07-15', hora: '06:30', area: 'Cuarto FrÃ­o 1', supervisor: 'Carlos GÃ³mez', tipo: 'Pre-operacional', producto: 'Cloro 200ppm', conforme: true, observacion: 'Cumple sin novedades' },
-      { id: 2, fecha: '2026-07-15', hora: '13:00', area: 'LÃ­nea de Envasado A', supervisor: 'Ana MartÃ­nez', tipo: 'Rutinaria', producto: 'Amonio Cuaternario', conforme: true, observacion: 'Limpieza intermedia' },
-      { id: 3, fecha: '2026-07-15', hora: '18:00', area: 'AlmacÃ©n MP', supervisor: 'Diana PÃ©rez', tipo: 'Profunda', producto: 'Detergente Neutro', conforme: true, observacion: 'Lavado general' },
-      { id: 4, fecha: '2026-07-14', hora: '22:00', area: 'Cuarto FrÃ­o 2', supervisor: 'Carlos GÃ³mez', tipo: 'Profunda', producto: 'Cloro 200ppm', conforme: false, observacion: 'Presencia de residuos en desagÃ¼e. Se requiere repetir.' }
+      { id: 1, fecha: '2026-07-15', hora: '06:30', area: 'Cuarto Frío 1', supervisor: 'Carlos Gómez', tipo: 'Pre-operacional', producto: 'Cloro 200ppm', conforme: true, observacion: 'Cumple sin novedades' },
+      { id: 2, fecha: '2026-07-15', hora: '13:00', area: 'Línea de Envasado A', supervisor: 'Ana Martínez', tipo: 'Rutinaria', producto: 'Amonio Cuaternario', conforme: true, observacion: 'Limpieza intermedia' },
+      { id: 3, fecha: '2026-07-15', hora: '18:00', area: 'Almacén MP', supervisor: 'Diana Pérez', tipo: 'Profunda', producto: 'Detergente Neutro', conforme: true, observacion: 'Lavado general' },
+      { id: 4, fecha: '2026-07-14', hora: '22:00', area: 'Cuarto Frío 2', supervisor: 'Carlos Gómez', tipo: 'Profunda', producto: 'Cloro 200ppm', conforme: false, observacion: 'Presencia de residuos en desagüe. Se requiere repetir.' }
     ];
   });
 
-  // Base de datos de Variables CrÃ­ticas (PCC)
+  // Base de datos de Variables Críticas (PCC)
   const [medicionesVariables, setMedicionesVariables] = useState(() => {
     const saved = localStorage.getItem('OCA-variables');
     return saved ? JSON.parse(saved) : [
-      { id: 1, fecha: '2026-07-15', hora: '08:00', punto: 'CÃ¡mara RefrigeraciÃ³n 1', temperatura: 4.2, ph: null, supervisor: 'Carlos GÃ³mez', estado: 'Normal', comentario: 'Equipo operando estable.' },
-      { id: 2, fecha: '2026-07-15', hora: '10:00', punto: 'Pasteurizador B', temperatura: 72.5, ph: 6.62, supervisor: 'Ana MartÃ­nez', estado: 'Normal', comentario: 'PasteurizaciÃ³n de leche entera.' },
-      { id: 3, fecha: '2026-07-15', hora: '12:00', punto: 'Silaje de Materia Prima', temperatura: 5.1, ph: 6.65, supervisor: 'Diana PÃ©rez', estado: 'Normal', comentario: 'Lote L-LECHE-102 recibido.' },
-      { id: 4, fecha: '2026-07-15', hora: '14:30', punto: 'CÃ¡mara RefrigeraciÃ³n 1', temperatura: 9.8, ph: null, supervisor: 'Carlos GÃ³mez', estado: 'Alerta', comentario: 'Apertura prolongada de puerta por carga. Alerta automÃ¡tica.' }
+      { id: 1, fecha: '2026-07-15', hora: '08:00', punto: 'Cámara Refrigeración 1', temperatura: 4.2, ph: null, supervisor: 'Carlos Gómez', estado: 'Normal', comentario: 'Equipo operando estable.' },
+      { id: 2, fecha: '2026-07-15', hora: '10:00', punto: 'Pasteurizador B', temperatura: 72.5, ph: 6.62, supervisor: 'Ana Martínez', estado: 'Normal', comentario: 'Pasteurización de leche entera.' },
+      { id: 3, fecha: '2026-07-15', hora: '12:00', punto: 'Silaje de Materia Prima', temperatura: 5.1, ph: 6.65, supervisor: 'Diana Pérez', estado: 'Normal', comentario: 'Lote L-LECHE-102 recibido.' },
+      { id: 4, fecha: '2026-07-15', hora: '14:30', punto: 'Cámara Refrigeración 1', temperatura: 9.8, ph: null, supervisor: 'Carlos Gómez', estado: 'Alerta', comentario: 'Apertura prolongada de puerta por carga. Alerta automática.' }
     ];
   });
 
@@ -39,7 +39,7 @@ function App() {
     return saved ? JSON.parse(saved) : [
       { id: 1, nombre: 'Javier Castillo', cargo: 'Operario de Envasado', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 92 },
       { id: 2, nombre: 'Marta Solano', cargo: 'Operaria de Mezclas', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 85 },
-      { id: 3, nombre: 'Luis Fernando Ruiz', cargo: 'Auxiliar de AlmacÃ©n', carnetBpm: 'Vence Pronto', controlMedico: 'Apto', capacitacionProgreso: 78 },
+      { id: 3, nombre: 'Luis Fernando Ruiz', cargo: 'Auxiliar de Almacén', carnetBpm: 'Vence Pronto', controlMedico: 'Apto', capacitacionProgreso: 78 },
       { id: 4, nombre: 'Andrea Quintero', cargo: 'Operaria de Limpieza', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 100 },
       { id: 5, nombre: 'Jorge Restrepo', cargo: 'Operario de Pasteurizado', carnetBpm: 'Vencido', controlMedico: 'Pendiente', capacitacionProgreso: 45 }
     ];
@@ -54,8 +54,8 @@ function App() {
         origen: 'Saneamiento', 
         fecha: '2026-07-14', 
         hora: '22:00', 
-        hallazgo: 'Saneamiento fallido en Cuarto FrÃ­o 2: Presencia de residuos orgÃ¡nicos en desagÃ¼e.', 
-        responsable: 'Carlos GÃ³mez', 
+        hallazgo: 'Saneamiento fallido en Cuarto Frío 2: Presencia de residuos orgánicos en desagüe.', 
+        responsable: 'Carlos Gómez', 
         estado: 'Abierto', 
         causaRaiz: '', 
         planAccion: '', 
@@ -65,7 +65,7 @@ function App() {
     ];
   });
 
-  // Base de datos de registros de cambio de alÃ©rgenos
+  // Base de datos de registros de cambio de alérgenos
   const [registrosAlergenos, setRegistrosAlergenos] = useState(() => {
     const saved = localStorage.getItem('OCA-alergenos');
     return saved ? JSON.parse(saved) : [
@@ -73,12 +73,12 @@ function App() {
         id: 1, 
         fecha: '2026-07-15', 
         hora: '07:30', 
-        linea: 'LÃ­nea de Envasado A', 
-        alergenoPrevio: 'ManÃ­', 
-        alergenoObjetivo: 'Ninguno (Libre de alÃ©rgenos)', 
-        tipoPrueba: 'Lateral Flow (Hisopado rÃ¡pido)', 
-        resultado: 'Negativo (LÃ­nea Liberada)', 
-        supervisor: 'Carlos GÃ³mez' 
+        linea: 'Línea de Envasado A', 
+        alergenoPrevio: 'Maní', 
+        alergenoObjetivo: 'Ninguno (Libre de alérgenos)', 
+        tipoPrueba: 'Lateral Flow (Hisopado rápido)', 
+        resultado: 'Negativo (Línea Liberada)', 
+        supervisor: 'Carlos Gómez' 
       }
     ];
   });
@@ -119,7 +119,7 @@ function App() {
     const id = Date.now();
     setRegistrosSaneamiento(prev => [...prev, { id, ...nuevoRegistro }]);
 
-    // Si no es conforme, se genera automÃ¡ticamente una no conformidad en el mÃ³dulo CAPA
+    // Si no es conforme, se genera automáticamente una no conformidad en el módulo CAPA
     if (!nuevoRegistro.conforme) {
       setAccionesCapa(prev => [
         ...prev,
@@ -144,16 +144,16 @@ function App() {
     const id = Date.now();
     setMedicionesVariables(prev => [...prev, { id, ...nuevaMedicion }]);
 
-    // Si la variable estÃ¡ en estado de Alerta, genera automÃ¡ticamente un CAPA
+    // Si la variable está en estado de Alerta, genera automáticamente un CAPA
     if (nuevaMedicion.estado === 'Alerta') {
       setAccionesCapa(prev => [
         ...prev,
         {
           id: Date.now() + 20,
-          origen: 'Variables CrÃ­ticas',
+          origen: 'Variables Críticas',
           fecha: nuevaMedicion.fecha,
           hora: nuevaMedicion.hora,
-          hallazgo: `DesviaciÃ³n en ${nuevaMedicion.punto}: Valor registrado de ${nuevaMedicion.temperatura}Â°C ${nuevaMedicion.ph ? `| pH ${nuevaMedicion.ph}` : ''}. Comentario: ${nuevaMedicion.comentario}`,
+          hallazgo: `Desviación en ${nuevaMedicion.punto}: Valor registrado de ${nuevaMedicion.temperatura}Â°C ${nuevaMedicion.ph ? `| pH ${nuevaMedicion.ph}` : ''}. Comentario: ${nuevaMedicion.comentario}`,
           responsable: nuevaMedicion.supervisor,
           estado: 'Abierto',
           causaRaiz: '',
@@ -221,7 +221,7 @@ function App() {
 
   return (
     <div className="container-fluid p-0 d-flex">
-      {/* Sidebar de NavegaciÃ³n */}
+      {/* Sidebar de Navegación */}
       <aside className="OCA-sidebar d-flex flex-column flex-shrink-0 p-3 text-white" style={{ width: '280px' }}>
         <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
           <span className="fs-4 fw-extrabold text-success me-2">
@@ -253,7 +253,7 @@ function App() {
               className={`nav-link text-start w-100 btn border-0 ${currentView === 'variables' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('variables')}
             >
-              <i className="bi bi-thermometer-half me-2"></i> Variables CrÃ­ticas
+              <i className="bi bi-thermometer-half me-2"></i> Variables Críticas
             </button>
           </li>
           <li className="mb-1">
@@ -282,7 +282,7 @@ function App() {
               className={`nav-link text-start w-100 btn border-0 ${currentView === 'alergenos-recall' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('alergenos-recall')}
             >
-              <i className="bi bi-shield-exclamation me-2"></i> AlÃ©rgenos y Retiros
+              <i className="bi bi-shield-exclamation me-2"></i> Alérgenos y Retiros
             </button>
           </li>
           <li className="mb-1">
@@ -296,8 +296,8 @@ function App() {
         </ul>
         <hr className="bg-secondary" />
         <div className="text-secondary small">
-          <p className="mb-1"><i className="bi bi-building me-1"></i> Optimus LatinoamÃ©rica</p>
-          <p className="mb-0 text-muted" style={{ fontSize: '11px' }}>v2.0.0 - EdiciÃ³n Profesional</p>
+          <p className="mb-1"><i className="bi bi-building me-1"></i> Optimus Latinoamérica</p>
+          <p className="mb-0 text-muted" style={{ fontSize: '11px' }}>v2.0.0 - Edición Profesional</p>
         </div>
       </aside>
 
@@ -309,10 +309,10 @@ function App() {
             <h1 className="h3 mb-0 text-capitalize font-heading">
               {currentView === 'dashboard' && 'Dashboard de Calidad e Inocuidad'}
               {currentView === 'saneamiento' && 'Plan de Saneamiento e Higiene'}
-              {currentView === 'variables' && 'Monitoreo de Variables CrÃ­ticas (PCC)'}
-              {currentView === 'capa' && 'GestiÃ³n de Acciones Correctivas (CAPA)'}
+              {currentView === 'variables' && 'Monitoreo de Variables Críticas (PCC)'}
+              {currentView === 'capa' && 'Gestión de Acciones Correctivas (CAPA)'}
               {currentView === 'trazabilidad' && 'Trazabilidad de Lotes'}
-              {currentView === 'alergenos-recall' && 'Control de AlÃ©rgenos y Simulador de Retiro'}
+              {currentView === 'alergenos-recall' && 'Control de Alérgenos y Simulador de Retiro'}
               {currentView === 'capacitaciones' && 'Control de Manipuladores y BPM'}
             </h1>
             
@@ -376,7 +376,7 @@ function App() {
           </div>
         </header>
 
-        {/* Vistas DinÃ¡micas */}
+        {/* Vistas Dinámicas */}
         <div className="flex-grow-1 p-4 bg-light bg-opacity-10 fade-in-view">
           {currentView === 'dashboard' && (
             <Dashboard 
@@ -426,7 +426,7 @@ function App() {
         {/* Footer */}
         <footer className="footer mt-auto py-3 border-top bg-body-tertiary">
           <div className="container-fluid px-4 d-flex justify-content-between align-items-center text-muted small">
-            <span>&copy; 2026 OCA ONE. EdiciÃ³n Profesional - Optimus LatinoamÃ©rica.</span>
+            <span>&copy; 2026 OCA ONE. Edición Profesional - Optimus Latinoamérica.</span>
             <span>Seguridad Alimentaria: HACCP / ISO 22000 / BRCGS / IFS</span>
           </div>
         </footer>

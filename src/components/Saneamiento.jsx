@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 function Saneamiento({ registros, onAgregar }) {
-  const [area, setArea] = useState('Cuarto FrÃ­o 1');
+  const [area, setArea] = useState('Cuarto Frío 1');
   const [tipo, setTipo] = useState('Rutinaria');
   const [producto, setProducto] = useState('Cloro 200ppm');
-  const [supervisor, setSupervisor] = useState('Carlos GÃ³mez');
+  const [supervisor, setSupervisor] = useState('Carlos Gómez');
   const [conforme, setConforme] = useState(true);
   const [observacion, setObservacion] = useState('');
   const [filtroArea, setFiltroArea] = useState('Todos');
@@ -34,7 +34,7 @@ function Saneamiento({ registros, onAgregar }) {
     setObservacion('');
     setAlertaExito(true);
 
-    // Ocultar alerta despuÃ©s de 4 segundos
+    // Ocultar alerta después de 4 segundos
     setTimeout(() => {
       setAlertaExito(false);
     }, 4000);
@@ -51,10 +51,10 @@ function Saneamiento({ registros, onAgregar }) {
 
   return (
     <div className="fade-in-view">
-      {/* Alerta de Ã‰xito */}
+      {/* Alerta de Éxito */}
       {alertaExito && (
         <div className="alert alert-success alert-dismissible fade show shadow border-0 mb-4" role="alert" style={{ borderRadius: '10px' }}>
-          <strong><i className="bi bi-check-circle-fill me-2"></i>Â¡Registro guardado con Ã©xito!</strong> El log de saneamiento ha sido aÃ±adido al historial y guardado de manera inmutable.
+          <strong><i className="bi bi-check-circle-fill me-2"></i>Â¡Registro guardado con éxito!</strong> El log de saneamiento ha sido añadido al historial y guardado de manera inmutable.
           <button type="button" className="btn-close" onClick={() => setAlertaExito(false)} aria-label="Close"></button>
         </div>
       )}
@@ -68,15 +68,15 @@ function Saneamiento({ registros, onAgregar }) {
             <hr className="my-3 text-secondary" />
 
             <form onSubmit={handleSubmit}>
-              {/* Ãrea */}
+              {/* Área */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Ãrea o Equipo</label>
+                <label className="form-label fw-semibold small">Área o Equipo</label>
                 <select className="form-select" value={area} onChange={(e) => setArea(e.target.value)} required>
-                  <option value="Cuarto FrÃ­o 1">Cuarto FrÃ­o 1</option>
-                  <option value="Cuarto FrÃ­o 2">Cuarto FrÃ­o 2</option>
-                  <option value="LÃ­nea de Envasado A">LÃ­nea de Envasado A</option>
+                  <option value="Cuarto Frío 1">Cuarto Frío 1</option>
+                  <option value="Cuarto Frío 2">Cuarto Frío 2</option>
+                  <option value="Línea de Envasado A">Línea de Envasado A</option>
                   <option value="Pasteurizador B">Pasteurizador B</option>
-                  <option value="AlmacÃ©n MP">AlmacÃ©n MP</option>
+                  <option value="Almacén MP">Almacén MP</option>
                   <option value="Zona de Mezclas">Zona de Mezclas</option>
                 </select>
               </div>
@@ -91,13 +91,13 @@ function Saneamiento({ registros, onAgregar }) {
                 </select>
               </div>
 
-              {/* Producto QuÃ­mico */}
+              {/* Producto Químico */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Desinfectante / Agente QuÃ­mico</label>
+                <label className="form-label fw-semibold small">Desinfectante / Agente Químico</label>
                 <select className="form-select" value={producto} onChange={(e) => setProducto(e.target.value)} required>
                   <option value="Cloro 200ppm">Cloro (200 ppm)</option>
                   <option value="Amonio Cuaternario">Amonio Cuaternario (5ta Gen)</option>
-                  <option value="Ãcido PeracÃ©tico">Ãcido PeracÃ©tico (150 ppm)</option>
+                  <option value="Ácido Peracético">Ácido Peracético (150 ppm)</option>
                   <option value="Detergente Neutro">Detergente Neutro Industrial</option>
                   <option value="Ninguno / Agua caliente">Agua a Alta Temperatura (&gt;80Â°C)</option>
                 </select>
@@ -138,7 +138,7 @@ function Saneamiento({ registros, onAgregar }) {
                 </div>
               </div>
 
-              {/* ObservaciÃ³n */}
+              {/* Observación */}
               <div className="mb-3">
                 <label className="form-label fw-semibold small">Observaciones / Evidencia</label>
                 <textarea 
@@ -150,7 +150,7 @@ function Saneamiento({ registros, onAgregar }) {
                 ></textarea>
               </div>
 
-              {/* BotÃ³n enviar */}
+              {/* Botón enviar */}
               <div className="d-grid mt-4">
                 <button type="submit" className="btn btn-primary py-2">
                   <i className="bi bi-check-lg me-1"></i> Firmar y Guardar Registro
@@ -169,12 +169,12 @@ function Saneamiento({ registros, onAgregar }) {
               {/* Filtros */}
               <div className="d-flex gap-2">
                 <select className="form-select form-select-sm" style={{ width: '150px' }} value={filtroArea} onChange={(e) => setFiltroArea(e.target.value)}>
-                  <option value="Todos">Todas las Ãreas</option>
-                  <option value="Cuarto FrÃ­o 1">Cuarto FrÃ­o 1</option>
-                  <option value="Cuarto FrÃ­o 2">Cuarto FrÃ­o 2</option>
-                  <option value="LÃ­nea de Envasado A">LÃ­nea de Envasado A</option>
+                  <option value="Todos">Todas las Áreas</option>
+                  <option value="Cuarto Frío 1">Cuarto Frío 1</option>
+                  <option value="Cuarto Frío 2">Cuarto Frío 2</option>
+                  <option value="Línea de Envasado A">Línea de Envasado A</option>
                   <option value="Pasteurizador B">Pasteurizador B</option>
-                  <option value="AlmacÃ©n MP">AlmacÃ©n MP</option>
+                  <option value="Almacén MP">Almacén MP</option>
                 </select>
                 <select className="form-select form-select-sm" style={{ width: '130px' }} value={filtroConforme} onChange={(e) => setFiltroConforme(e.target.value)}>
                   <option value="Todos">Todos</option>
@@ -190,12 +190,12 @@ function Saneamiento({ registros, onAgregar }) {
                 <thead className="table-light sticky-top">
                   <tr>
                     <th>Fecha/Hora</th>
-                    <th>Ãrea</th>
+                    <th>Área</th>
                     <th>Tipo</th>
                     <th>Producto</th>
                     <th>Supervisor</th>
                     <th>Estado</th>
-                    <th>ObservaciÃ³n</th>
+                    <th>Observación</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -207,7 +207,7 @@ function Saneamiento({ registros, onAgregar }) {
                       </td>
                     </tr>
                   ) : (
-                    // Mostrar de mÃ¡s nuevo a mÃ¡s viejo
+                    // Mostrar de más nuevo a más viejo
                     [...registrosFiltrados].reverse().map(reg => (
                       <tr key={reg.id}>
                         <td>
@@ -239,7 +239,7 @@ function Saneamiento({ registros, onAgregar }) {
               </table>
             </div>
             <div className="text-muted small mt-3">
-              * Cumple con las exigencias del INVIMA (ResoluciÃ³n 2674 del 2013) y la COFEPRIS para la bitÃ¡cora obligatoria.
+              * Cumple con las exigencias del INVIMA (Resolución 2674 del 2013) y la COFEPRIS para la bitácora obligatoria.
             </div>
           </div>
         </div>

@@ -44,7 +44,7 @@ function Capacitaciones({ manipuladores, onAgregar }) {
         <div className="col-12 col-lg-4">
           <div className="card OCA-card p-4 border-0">
             <h4 className="card-title font-heading mb-3"><i className="bi bi-person-plus text-success me-2"></i>Registrar Manipulador</h4>
-            <p className="text-muted small">Registra nuevos operarios de planta para llevar control de sus exÃ¡menes mÃ©dicos y progreso de capacitaciÃ³n obligatoria exigida por el INVIMA.</p>
+            <p className="text-muted small">Registra nuevos operarios de planta para llevar control de sus exámenes médicos y progreso de capacitación obligatoria exigida por el INVIMA.</p>
             <hr className="my-3 text-secondary" />
 
             <form onSubmit={handleSubmit}>
@@ -56,19 +56,19 @@ function Capacitaciones({ manipuladores, onAgregar }) {
                   className="form-control" 
                   value={nombre} 
                   onChange={(e) => setNombre(e.target.value)} 
-                  placeholder="Ej: Juan PÃ©rez MartÃ­nez" 
+                  placeholder="Ej: Juan Pérez Martínez" 
                   required 
                 />
               </div>
 
               {/* Cargo */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Cargo u OperaciÃ³n</label>
+                <label className="form-label fw-semibold small">Cargo u Operación</label>
                 <select className="form-select" value={cargo} onChange={(e) => setCargo(e.target.value)} required>
                   <option value="Operario de Envasado">Operario de Envasado</option>
                   <option value="Operario de Mezclas">Operario de Mezclas</option>
                   <option value="Operario de Pasteurizado">Operario de Pasteurizado</option>
-                  <option value="Auxiliar de AlmacÃ©n">Auxiliar de AlmacÃ©n</option>
+                  <option value="Auxiliar de Almacén">Auxiliar de Almacén</option>
                   <option value="Operario de Limpieza">Operario de Limpieza</option>
                   <option value="Supervisor de Calidad">Supervisor de Calidad</option>
                 </select>
@@ -76,27 +76,27 @@ function Capacitaciones({ manipuladores, onAgregar }) {
 
               {/* Estado Carnet BPM */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Carnet de ManipulaciÃ³n BPM</label>
+                <label className="form-label fw-semibold small">Carnet de Manipulación BPM</label>
                 <select className="form-select" value={carnetBpm} onChange={(e) => setCarnetBpm(e.target.value)} required>
-                  <option value="Vigente">Vigente (Al dÃ­a)</option>
-                  <option value="Vence Pronto">Vence Pronto (Menos de 30 dÃ­as)</option>
-                  <option value="Vencido">Vencido (Requiere renovaciÃ³n)</option>
+                  <option value="Vigente">Vigente (Al día)</option>
+                  <option value="Vence Pronto">Vence Pronto (Menos de 30 días)</option>
+                  <option value="Vencido">Vencido (Requiere renovación)</option>
                 </select>
               </div>
 
-              {/* Estado Control MÃ©dico */}
+              {/* Estado Control Médico */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Control MÃ©dico de Salud</label>
+                <label className="form-label fw-semibold small">Control Médico de Salud</label>
                 <select className="form-select" value={controlMedico} onChange={(e) => setControlMedico(e.target.value)} required>
                   <option value="Apto">Apto (Sin restricciones)</option>
-                  <option value="No Apto">No Apto (Incapacidad / AfecciÃ³n cutÃ¡nea o respiratoria)</option>
+                  <option value="No Apto">No Apto (Incapacidad / Afección cutánea o respiratoria)</option>
                   <option value="Pendiente">Pendiente por agendar examen</option>
                 </select>
               </div>
 
-              {/* Progreso de CapacitaciÃ³n */}
+              {/* Progreso de Capacitación */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Progreso de CapacitaciÃ³n BPM ({capacitacionProgreso}%)</label>
+                <label className="form-label fw-semibold small">Progreso de Capacitación BPM ({capacitacionProgreso}%)</label>
                 <input 
                   type="range" 
                   className="form-range" 
@@ -107,10 +107,10 @@ function Capacitaciones({ manipuladores, onAgregar }) {
                 />
               </div>
 
-              {/* BotÃ³n de envÃ­o */}
+              {/* Botón de envío */}
               <div className="d-grid mt-4">
                 <button type="submit" className="btn btn-primary py-2">
-                  <i className="bi bi-user-plus me-1"></i> AÃ±adir Operario
+                  <i className="bi bi-user-plus me-1"></i> Añadir Operario
                 </button>
               </div>
             </form>
@@ -120,14 +120,14 @@ function Capacitaciones({ manipuladores, onAgregar }) {
         {/* Listado de Operarios (Derecha) */}
         <div className="col-12 col-lg-8">
           <div className="card OCA-card p-4 border-0 h-100">
-            <h4 className="card-title font-heading mb-4"><i className="bi bi-people text-success me-2"></i>Control de Manipuladores y CapacitaciÃ³n Anual</h4>
+            <h4 className="card-title font-heading mb-4"><i className="bi bi-people text-success me-2"></i>Control de Manipuladores y Capacitación Anual</h4>
 
             <div className="table-responsive">
               <table className="table table-hover align-middle">
                 <thead className="table-light">
                   <tr>
                     <th>Nombre / Cargo</th>
-                    <th>Estado MÃ©dico</th>
+                    <th>Estado Médico</th>
                     <th>Carnet BPM</th>
                     <th>Curso BPM (IA SKOOL)</th>
                   </tr>
@@ -195,9 +195,9 @@ function Capacitaciones({ manipuladores, onAgregar }) {
             </div>
 
             <div className="mt-4 pt-3 border-top bg-light bg-opacity-25 p-3 rounded-3 border">
-              <h6 className="fw-bold text-dark mb-2"><i className="bi bi-info-circle-fill text-info me-1"></i>Requisito de CapacitaciÃ³n Anual (BPM)</h6>
+              <h6 className="fw-bold text-dark mb-2"><i className="bi bi-info-circle-fill text-info me-1"></i>Requisito de Capacitación Anual (BPM)</h6>
               <p className="text-muted mb-0 small">
-                Todo manipulador de alimentos debe cursar un mÃ­nimo de **10 horas anuales** de capacitaciÃ³n en higiene de alimentos. La integraciÃ³n con **IA SKOOL** sincroniza este progreso automÃ¡ticamente en el perfil de cada empleado.
+                Todo manipulador de alimentos debe cursar un mínimo de **10 horas anuales** de capacitación en higiene de alimentos. La integración con **IA SKOOL** sincroniza este progreso automáticamente en el perfil de cada empleado.
               </p>
             </div>
           </div>

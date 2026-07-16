@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 
 function Capa({ acciones, onResolver }) {
   const [ticketActivo, setTicketActivo] = useState(null);
-  const [causaRaiz, setCausaRaiz] = useState('Error de OperaciÃ³n / Mano de obra');
+  const [causaRaiz, setCausaRaiz] = useState('Error de Operación / Mano de obra');
   const [planAccion, setPlanAccion] = useState('');
-  const [supervisorCierre, setSupervisorCierre] = useState('Carlos GÃ³mez');
+  const [supervisorCierre, setSupervisorCierre] = useState('Carlos Gómez');
   const [alertaExito, setAlertaExito] = useState(false);
 
   const handleResolverCapa = (e, id) => {
     e.preventDefault();
     
     if (!planAccion.trim()) {
-      alert("Por favor describe el plan de acciÃ³n correctiva aplicado.");
+      alert("Por favor describe el plan de acción correctiva aplicado.");
       return;
     }
 
@@ -38,16 +38,16 @@ function Capa({ acciones, onResolver }) {
       {/* Alerta de Cierre Exitoso */}
       {alertaExito && (
         <div className="alert alert-success alert-dismissible fade show shadow border-0 mb-4" role="alert" style={{ borderRadius: '10px' }}>
-          <strong><i className="bi bi-check-circle-fill me-2"></i>Â¡AcciÃ³n CAPA Cerrada y Verificada!</strong> La desviaciÃ³n ha sido resuelta y los registros histÃ³ricos han sido firmados digitalmente.
+          <strong><i className="bi bi-check-circle-fill me-2"></i>Â¡Acción CAPA Cerrada y Verificada!</strong> La desviación ha sido resuelta y los registros históricos han sido firmados digitalmente.
           <button type="button" className="btn-close" onClick={() => setAlertaExito(false)} aria-label="Close"></button>
         </div>
       )}
 
-      {/* IntroducciÃ³n explicativa */}
+      {/* Introducción explicativa */}
       <div className="card OCA-card p-4 border-0 mb-4 bg-light bg-opacity-25">
         <h5 className="fw-bold font-heading mb-2"><i className="bi bi-shield-exclamation text-danger me-2"></i>No Conformidades y CAPA (Corrective and Preventive Actions)</h5>
         <p className="text-muted mb-0 small">
-          El mÃ³dulo CAPA es un requisito regulatorio crÃ­tico (INVIMA / FDA). Captura desviaciones operativas en tiempo real y obliga al equipo de calidad a diagnosticar la causa raÃ­z y proponer planes correctivos antes de dar el cierre a la no conformidad.
+          El módulo CAPA es un requisito regulatorio crítico (INVIMA / FDA). Captura desviaciones operativas en tiempo real y obliga al equipo de calidad a diagnosticar la causa raíz y proponer planes correctivos antes de dar el cierre a la no conformidad.
         </p>
       </div>
 
@@ -60,7 +60,7 @@ function Capa({ acciones, onResolver }) {
             {abiertas.length === 0 ? (
               <div className="text-center py-5 my-auto text-muted">
                 <i className="bi bi-emoji-smile display-3 text-success opacity-50 d-block mb-3"></i>
-                <h5 className="fw-semibold text-success">Â¡Todo al dÃ­a!</h5>
+                <h5 className="fw-semibold text-success">Â¡Todo al día!</h5>
                 <p className="mb-0">No hay no conformidades abiertas. Todas las alertas previas han sido cerradas y verificadas.</p>
               </div>
             ) : (
@@ -79,27 +79,27 @@ function Capa({ acciones, onResolver }) {
                       <form onSubmit={(e) => handleResolverCapa(e, capa.id)} className="border-top pt-3 mt-3">
                         <h6 className="fw-bold text-success mb-3"><i className="bi bi-check2-square me-1"></i>Formulario de Acciones Correctivas</h6>
                         
-                        {/* Causa RaÃ­z */}
+                        {/* Causa Raíz */}
                         <div className="mb-3">
-                          <label className="form-label fw-semibold small">AnÃ¡lisis de Causa RaÃ­z</label>
+                          <label className="form-label fw-semibold small">Análisis de Causa Raíz</label>
                           <select className="form-select form-select-sm" value={causaRaiz} onChange={(e) => setCausaRaiz(e.target.value)} required>
-                            <option value="Error de OperaciÃ³n / Mano de obra">Mano de obra (Error de OperaciÃ³n / OmisiÃ³n)</option>
-                            <option value="Falla MecÃ¡nica de Equipo / Maquinaria">Maquinaria (Falla MecÃ¡nica / ElÃ©ctrica / CalibraciÃ³n)</option>
-                            <option value="Falta de Limpieza o Mal MÃ©todo">MÃ©todo (Falta de Higiene / Procedimiento inadecuado)</option>
-                            <option value="VariaciÃ³n o Falla de Materia Prima">Material (Defectos en Materia Prima / Insumos)</option>
-                            <option value="Fallas de EnergÃ­a o Clima Externo">Medio Ambiente (Cortes de luz / Humedad / Clima)</option>
+                            <option value="Error de Operación / Mano de obra">Mano de obra (Error de Operación / Omisión)</option>
+                            <option value="Falla Mecánica de Equipo / Maquinaria">Maquinaria (Falla Mecánica / Eléctrica / Calibración)</option>
+                            <option value="Falta de Limpieza o Mal Método">Método (Falta de Higiene / Procedimiento inadecuado)</option>
+                            <option value="Variación o Falla de Materia Prima">Material (Defectos en Materia Prima / Insumos)</option>
+                            <option value="Fallas de Energía o Clima Externo">Medio Ambiente (Cortes de luz / Humedad / Clima)</option>
                           </select>
                         </div>
 
-                        {/* Plan de AcciÃ³n */}
+                        {/* Plan de Acción */}
                         <div className="mb-3">
-                          <label className="form-label fw-semibold small">Plan de AcciÃ³n Implementado (CAPA)</label>
+                          <label className="form-label fw-semibold small">Plan de Acción Implementado (CAPA)</label>
                           <textarea 
                             className="form-control form-control-sm" 
                             rows="3" 
                             value={planAccion} 
                             onChange={(e) => setPlanAccion(e.target.value)}
-                            placeholder="Detalla las medidas tomadas (ej. re-lavado, calibraciÃ³n, cuarentena del lote, etc.)"
+                            placeholder="Detalla las medidas tomadas (ej. re-lavado, calibración, cuarentena del lote, etc.)"
                             required
                           ></textarea>
                         </div>
@@ -131,7 +131,7 @@ function Capa({ acciones, onResolver }) {
                           setTicketActivo(capa.id);
                           setPlanAccion('');
                         }}>
-                          <i className="bi bi-shield-fill-check me-1"></i> Resolver DesviaciÃ³n
+                          <i className="bi bi-shield-fill-check me-1"></i> Resolver Desviación
                         </button>
                       </div>
                     )}
@@ -151,7 +151,7 @@ function Capa({ acciones, onResolver }) {
               <div className="text-center py-5 my-auto text-muted">
                 <i className="bi bi-archive-fill display-3 text-secondary opacity-25 d-block mb-3"></i>
                 <h5 className="fw-semibold">Sin registros cerrados</h5>
-                <p className="mb-0">AÃºn no se han cerrado tickets de no conformidad en este perÃ­odo.</p>
+                <p className="mb-0">Aún no se han cerrado tickets de no conformidad en este período.</p>
               </div>
             ) : (
               <div className="d-flex flex-column gap-3 overflow-auto" style={{ maxHeight: '600px' }}>
@@ -168,7 +168,7 @@ function Capa({ acciones, onResolver }) {
                     <hr className="my-2" />
                     
                     <div className="bg-body p-2 rounded small" style={{ fontSize: '12.5px' }}>
-                      <div className="mb-1"><span className="fw-bold text-success"><i className="bi bi-funnel-fill me-1"></i>Causa RaÃ­z:</span> {capa.causaRaiz}</div>
+                      <div className="mb-1"><span className="fw-bold text-success"><i className="bi bi-funnel-fill me-1"></i>Causa Raíz:</span> {capa.causaRaiz}</div>
                       <div><span className="fw-bold text-success"><i className="bi bi-clipboard2-check-fill me-1"></i>Plan Aplicado:</span> {capa.planAccion}</div>
                     </div>
                     

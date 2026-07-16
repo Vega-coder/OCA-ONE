@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 function VariablesCriticas({ mediciones, onAgregar }) {
-  const [punto, setPunto] = useState('CÃ¡mara RefrigeraciÃ³n 1');
+  const [punto, setPunto] = useState('Cámara Refrigeración 1');
   const [tempInput, setTempInput] = useState('');
   const [phInput, setPhInput] = useState('');
-  const [supervisor, setSupervisor] = useState('Carlos GÃ³mez');
+  const [supervisor, setSupervisor] = useState('Carlos Gómez');
   const [comentario, setComentario] = useState('');
   const [alertaExito, setAlertaExito] = useState(false);
   const [filtroPunto, setFiltroPunto] = useState('Todos');
@@ -19,15 +19,15 @@ function VariablesCriticas({ mediciones, onAgregar }) {
     const temperatura = parseFloat(tempInput);
     const ph = phInput !== '' ? parseFloat(phInput) : null;
 
-    // LÃ³gica de validaciÃ³n de lÃ­mites crÃ­ticos para generar la Alerta automÃ¡tica
+    // Lógica de validación de límites críticos para generar la Alerta automática
     let estado = 'Normal';
     
-    if (punto === 'CÃ¡mara RefrigeraciÃ³n 1') {
-      if (temperatura > 8.0) estado = 'Alerta'; // MÃ¡x 8Â°C
-    } else if (punto === 'CÃ¡mara CongelaciÃ³n 2') {
-      if (temperatura > -15.0) estado = 'Alerta'; // MÃ¡x -15Â°C (por ejemplo, -10Â°C es muy caliente)
+    if (punto === 'Cámara Refrigeración 1') {
+      if (temperatura > 8.0) estado = 'Alerta'; // Máx 8Â°C
+    } else if (punto === 'Cámara Congelación 2') {
+      if (temperatura > -15.0) estado = 'Alerta'; // Máx -15Â°C (por ejemplo, -10Â°C es muy caliente)
     } else if (punto === 'Pasteurizador B') {
-      if (temperatura < 72.0) estado = 'Alerta'; // MÃ­nimo 72Â°C para pasteurizar
+      if (temperatura < 72.0) estado = 'Alerta'; // Mínimo 72Â°C para pasteurizar
       if (ph && (ph < 6.4 || ph > 6.9)) estado = 'Alerta';
     } else if (punto === 'Silaje de Materia Prima') {
       if (temperatura > 10.0) estado = 'Alerta'; // Control refrigerado materia prima
@@ -46,7 +46,7 @@ function VariablesCriticas({ mediciones, onAgregar }) {
       ph,
       supervisor,
       estado,
-      comentario: comentario.trim() || 'MediciÃ³n conforme.'
+      comentario: comentario.trim() || 'Medición conforme.'
     };
 
     onAgregar(nuevo);
@@ -71,24 +71,24 @@ function VariablesCriticas({ mediciones, onAgregar }) {
       {/* Alerta Guardada */}
       {alertaExito && (
         <div className="alert alert-success alert-dismissible fade show shadow border-0 mb-4" role="alert" style={{ borderRadius: '10px' }}>
-          <strong><i className="bi bi-shield-check me-2"></i>Â¡Variable guardada con Ã©xito!</strong> La mediciÃ³n ha sido indexada en el sistema. El sistema analizÃ³ el lÃ­mite crÃ­tico de forma automÃ¡tica.
+          <strong><i className="bi bi-shield-check me-2"></i>Â¡Variable guardada con éxito!</strong> La medición ha sido indexada en el sistema. El sistema analizó el límite crítico de forma automática.
           <button type="button" className="btn-close" onClick={() => setAlertaExito(false)} aria-label="Close"></button>
         </div>
       )}
 
-      {/* LÃ­mites de Puntos de Control CrÃ­tico */}
+      {/* Límites de Puntos de Control Crítico */}
       <div className="card OCA-card p-4 border-0 mb-4 bg-light bg-opacity-25">
-        <h5 className="fw-bold font-heading mb-3"><i className="bi bi-info-circle text-info me-2"></i>LÃ­mites CrÃ­ticos de Seguridad Alimentaria (HACCP)</h5>
+        <h5 className="fw-bold font-heading mb-3"><i className="bi bi-info-circle text-info me-2"></i>Límites Críticos de Seguridad Alimentaria (HACCP)</h5>
         <div className="row g-3">
           <div className="col-12 col-md-6 col-lg-3">
             <div className="p-2 border-start border-3 border-success bg-body">
-              <strong className="d-block small">CÃ¡mara RefrigeraciÃ³n 1</strong>
+              <strong className="d-block small">Cámara Refrigeración 1</strong>
               <span className="small text-muted">Temperatura &le; 8.0 Â°C</span>
             </div>
           </div>
           <div className="col-12 col-md-6 col-lg-3">
             <div className="p-2 border-start border-3 border-success bg-body">
-              <strong className="d-block small">CÃ¡mara CongelaciÃ³n 2</strong>
+              <strong className="d-block small">Cámara Congelación 2</strong>
               <span className="small text-muted">Temperatura &le; -15.0 Â°C</span>
             </div>
           </div>
@@ -108,24 +108,24 @@ function VariablesCriticas({ mediciones, onAgregar }) {
       </div>
 
       <div className="row g-4">
-        {/* Formulario de Nueva MediciÃ³n */}
+        {/* Formulario de Nueva Medición */}
         <div className="col-12 col-lg-4">
           <div className="card OCA-card p-4 border-0">
-            <h4 className="card-title font-heading mb-3"><i className="bi bi-plus-circle text-success me-2"></i>Registrar MediciÃ³n PCC</h4>
-            <p className="text-muted small">Registra los controles directos sobre los Puntos de Control CrÃ­tico (PCC). El sistema evaluarÃ¡ el estado instantÃ¡neamente.</p>
+            <h4 className="card-title font-heading mb-3"><i className="bi bi-plus-circle text-success me-2"></i>Registrar Medición PCC</h4>
+            <p className="text-muted small">Registra los controles directos sobre los Puntos de Control Crítico (PCC). El sistema evaluará el estado instantáneamente.</p>
             <hr className="my-3 text-secondary" />
 
             <form onSubmit={handleSubmit}>
               {/* Punto de Control */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Punto de Control CrÃ­tico</label>
+                <label className="form-label fw-semibold small">Punto de Control Crítico</label>
                 <select className="form-select" value={punto} onChange={(e) => {
                   setPunto(e.target.value);
                   setTempInput('');
                   setPhInput('');
                 }} required>
-                  <option value="CÃ¡mara RefrigeraciÃ³n 1">CÃ¡mara RefrigeraciÃ³n 1</option>
-                  <option value="CÃ¡mara CongelaciÃ³n 2">CÃ¡mara CongelaciÃ³n 2</option>
+                  <option value="Cámara Refrigeración 1">Cámara Refrigeración 1</option>
+                  <option value="Cámara Congelación 2">Cámara Congelación 2</option>
                   <option value="Pasteurizador B">Pasteurizador B</option>
                   <option value="Silaje de Materia Prima">Silaje de Materia Prima</option>
                 </select>
@@ -145,7 +145,7 @@ function VariablesCriticas({ mediciones, onAgregar }) {
                 />
               </div>
 
-              {/* pH (Opcional segÃºn el punto) */}
+              {/* pH (Opcional según el punto) */}
               {requierePh && (
                 <div className="mb-3">
                   <label className="form-label fw-semibold small">Nivel de Acidez (pH)</label>
@@ -163,7 +163,7 @@ function VariablesCriticas({ mediciones, onAgregar }) {
 
               {/* Supervisor */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Responsable de MediciÃ³n</label>
+                <label className="form-label fw-semibold small">Responsable de Medición</label>
                 <input 
                   type="text" 
                   className="form-control" 
@@ -175,20 +175,20 @@ function VariablesCriticas({ mediciones, onAgregar }) {
 
               {/* Comentarios */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">AcciÃ³n Correctiva / Comentario</label>
+                <label className="form-label fw-semibold small">Acción Correctiva / Comentario</label>
                 <textarea 
                   className="form-control" 
                   rows="2" 
                   value={comentario} 
                   onChange={(e) => setComentario(e.target.value)}
-                  placeholder="Escribir si se aplicaron correcciones por desvÃ­os..."
+                  placeholder="Escribir si se aplicaron correcciones por desvíos..."
                 ></textarea>
               </div>
 
               {/* Enviar */}
               <div className="d-grid mt-4">
                 <button type="submit" className="btn btn-primary py-2">
-                  <i className="bi bi-bookmark-plus me-1"></i> Confirmar MediciÃ³n
+                  <i className="bi bi-bookmark-plus me-1"></i> Confirmar Medición
                 </button>
               </div>
             </form>
@@ -204,8 +204,8 @@ function VariablesCriticas({ mediciones, onAgregar }) {
               {/* Filtros */}
               <select className="form-select form-select-sm" style={{ width: '220px' }} value={filtroPunto} onChange={(e) => setFiltroPunto(e.target.value)}>
                 <option value="Todos">Todos los Puntos</option>
-                <option value="CÃ¡mara RefrigeraciÃ³n 1">CÃ¡mara RefrigeraciÃ³n 1</option>
-                <option value="CÃ¡mara CongelaciÃ³n 2">CÃ¡mara CongelaciÃ³n 2</option>
+                <option value="Cámara Refrigeración 1">Cámara Refrigeración 1</option>
+                <option value="Cámara Congelación 2">Cámara Congelación 2</option>
                 <option value="Pasteurizador B">Pasteurizador B</option>
                 <option value="Silaje de Materia Prima">Silaje de Materia Prima</option>
               </select>
@@ -234,7 +234,7 @@ function VariablesCriticas({ mediciones, onAgregar }) {
                       </td>
                     </tr>
                   ) : (
-                    // Mostrar de mÃ¡s nuevo a mÃ¡s viejo
+                    // Mostrar de más nuevo a más viejo
                     [...medicionesFiltradas].reverse().map(med => (
                       <tr key={med.id}>
                         <td>
@@ -276,7 +276,7 @@ function VariablesCriticas({ mediciones, onAgregar }) {
               </table>
             </div>
             <div className="text-muted small mt-3">
-              * El sistema genera una alerta instantÃ¡nea en rojo si los parÃ¡metros exceden los lÃ­mites crÃ­ticos fijados en el manual HACCP de la empresa.
+              * El sistema genera una alerta instantánea en rojo si los parámetros exceden los límites críticos fijados en el manual HACCP de la empresa.
             </div>
           </div>
         </div>

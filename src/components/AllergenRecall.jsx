@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 function AllergenRecall({ registros, onAgregar }) {
-  // Estados para Control de AlÃ©rgenos
-  const [linea, setLinea] = useState('LÃ­nea de Envasado A');
-  const [alergenoPrevio, setAlergenoPrevio] = useState('ManÃ­');
-  const [alergenoObjetivo, setAlergenoObjetivo] = useState('Ninguno (Libre de alÃ©rgenos)');
-  const [tipoPrueba, setTipoPrueba] = useState('Lateral Flow (Hisopado rÃ¡pido)');
-  const [resultado, setResultado] = useState('Negativo (LÃ­nea Liberada)');
-  const [supervisor, setSupervisor] = useState('Carlos GÃ³mez');
+  // Estados para Control de Alérgenos
+  const [linea, setLinea] = useState('Línea de Envasado A');
+  const [alergenoPrevio, setAlergenoPrevio] = useState('Maní');
+  const [alergenoObjetivo, setAlergenoObjetivo] = useState('Ninguno (Libre de alérgenos)');
+  const [tipoPrueba, setTipoPrueba] = useState('Lateral Flow (Hisopado rápido)');
+  const [resultado, setResultado] = useState('Negativo (Línea Liberada)');
+  const [supervisor, setSupervisor] = useState('Carlos Gómez');
   const [alertaExito, setAlertaExito] = useState(false);
 
   // Estados para Simulador de Mock Recall
@@ -47,7 +47,7 @@ function AllergenRecall({ registros, onAgregar }) {
     setSimulacionCompletada(false);
     setProgresoBarra(0);
 
-    // Simular progreso de bÃºsqueda de lotes, materias primas y facturas
+    // Simular progreso de búsqueda de lotes, materias primas y facturas
     const interval = setInterval(() => {
       setProgresoBarra(prev => {
         if (prev >= 100) {
@@ -64,10 +64,10 @@ function AllergenRecall({ registros, onAgregar }) {
   // Datos detallados para el simulador de Mock Recall
   const reportesRecall = {
     'L-LECHE-001': {
-      producto: 'Yogurt Entero de Fresa (PresentaciÃ³n 1000g)',
+      producto: 'Yogurt Entero de Fresa (Presentación 1000g)',
       produccion: {
         materiaPrimaUsada: 'Lote Leche R-LECH-892 (5,000 Litros)',
-        aditivoClave: 'Cultivo LÃ¡ctico L-CULT-902 | Fresa L-FRES-55',
+        aditivoClave: 'Cultivo Láctico L-CULT-902 | Fresa L-FRES-55',
         totalProducido: '4,800 Botellas',
         fechaProduccion: '2026-07-13',
       },
@@ -78,14 +78,14 @@ function AllergenRecall({ registros, onAgregar }) {
         porcentajeConciliado: '100.0%',
       },
       distribucion: [
-        { cliente: 'Supermercados Ã‰xito S.A.', factura: 'FA-98201', cantidad: '1,500 Botellas', contacto: '+57 300 456 7890', estado: 'Localizado y Bloqueado' },
-        { cliente: 'OlÃ­mpica S.A. Barranquilla', factura: 'FA-98208', cantidad: '1,100 Botellas', contacto: '+57 301 987 6543', estado: 'Localizado y Bloqueado' },
-        { cliente: 'Carulla BogotÃ¡ Norte', factura: 'FA-98314', cantidad: '1,000 Botellas', contacto: '+57 312 654 0987', estado: 'Localizado y Bloqueado' }
+        { cliente: 'Supermercados Éxito S.A.', factura: 'FA-98201', cantidad: '1,500 Botellas', contacto: '+57 300 456 7890', estado: 'Localizado y Bloqueado' },
+        { cliente: 'Olímpica S.A. Barranquilla', factura: 'FA-98208', cantidad: '1,100 Botellas', contacto: '+57 301 987 6543', estado: 'Localizado y Bloqueado' },
+        { cliente: 'Carulla Bogotá Norte', factura: 'FA-98314', cantidad: '1,000 Botellas', contacto: '+57 312 654 0987', estado: 'Localizado y Bloqueado' }
       ],
       rendimiento: {
         tiempoEjecucion: '1 min 12s',
         limitePermitido: '2 Horas',
-        eficaciaRetiro: '100.0% (Ã‰xito absoluto)',
+        eficaciaRetiro: '100.0% (Éxito absoluto)',
       }
     },
     'L-QUESO-202': {
@@ -104,12 +104,12 @@ function AllergenRecall({ registros, onAgregar }) {
       },
       distribucion: [
         { cliente: 'Cencosud / Jumbo Cali', factura: 'FA-97503', cantidad: '300 Bloques', contacto: '+57 315 222 1100', estado: 'Localizado y Bloqueado' },
-        { cliente: 'Alkosto MedellÃ­n', factura: 'FA-97512', cantidad: '250 Bloques', contacto: '+57 320 888 9900', estado: 'Localizado y Bloqueado' }
+        { cliente: 'Alkosto Medellín', factura: 'FA-97512', cantidad: '250 Bloques', contacto: '+57 320 888 9900', estado: 'Localizado y Bloqueado' }
       ],
       rendimiento: {
         tiempoEjecucion: '0 min 58s',
         limitePermitido: '2 Horas',
-        eficaciaRetiro: '100.0% (Ã‰xito absoluto)',
+        eficaciaRetiro: '100.0% (Éxito absoluto)',
       }
     }
   };
@@ -119,67 +119,67 @@ function AllergenRecall({ registros, onAgregar }) {
   return (
     <div className="fade-in-view">
       <div className="row g-4">
-        {/* Panel 1: GestiÃ³n de AlÃ©rgenos (Lado Izquierdo) */}
+        {/* Panel 1: Gestión de Alérgenos (Lado Izquierdo) */}
         <div className="col-12 col-xl-6">
           <div className="card OCA-card p-4 border-0 h-100">
-            <h4 className="card-title font-heading mb-3"><i className="bi bi-egg-fried text-warning me-2"></i>Monitoreo de AlÃ©rgenos</h4>
-            <p className="text-muted small">Registra los hisopados rÃ¡pidos (Lateral Flow) o pruebas ELISA realizados en las superficies de la lÃ­nea despuÃ©s del lavado y antes del cambio de lote para garantizar la ausencia de contaminaciÃ³n cruzada.</p>
+            <h4 className="card-title font-heading mb-3"><i className="bi bi-egg-fried text-warning me-2"></i>Monitoreo de Alérgenos</h4>
+            <p className="text-muted small">Registra los hisopados rápidos (Lateral Flow) o pruebas ELISA realizados en las superficies de la línea después del lavado y antes del cambio de lote para garantizar la ausencia de contaminación cruzada.</p>
             <hr className="my-3" />
 
             {alertaExito && (
               <div className="alert alert-success border-0 py-2 px-3 mb-3 small" style={{ borderRadius: '8px' }}>
-                <i className="bi bi-check-circle-fill me-2"></i>Prueba de alÃ©rgenos registrada con Ã©xito.
+                <i className="bi bi-check-circle-fill me-2"></i>Prueba de alérgenos registrada con éxito.
               </div>
             )}
 
             <form onSubmit={handleSubmitAlergeno} className="mb-4">
               <div className="row g-3">
                 <div className="col-12 col-md-6">
-                  <label className="form-label fw-semibold small">LÃ­nea de ProducciÃ³n</label>
+                  <label className="form-label fw-semibold small">Línea de Producción</label>
                   <select className="form-select" value={linea} onChange={(e) => setLinea(e.target.value)} required>
-                    <option value="LÃ­nea de Envasado A">LÃ­nea de Envasado A</option>
-                    <option value="LÃ­nea de Pasteurizado">LÃ­nea de Pasteurizado</option>
-                    <option value="LÃ­nea de QueserÃ­a">LÃ­nea de QueserÃ­a</option>
+                    <option value="Línea de Envasado A">Línea de Envasado A</option>
+                    <option value="Línea de Pasteurizado">Línea de Pasteurizado</option>
+                    <option value="Línea de Quesería">Línea de Quesería</option>
                     <option value="Zona de Mezclas">Zona de Mezclas</option>
                   </select>
                 </div>
 
                 <div className="col-12 col-md-6">
-                  <label className="form-label fw-semibold small">AlÃ©rgeno Previo en la LÃ­nea</label>
+                  <label className="form-label fw-semibold small">Alérgeno Previo en la Línea</label>
                   <select className="form-select" value={alergenoPrevio} onChange={(e) => setAlergenoPrevio(e.target.value)} required>
-                    <option value="ManÃ­">ManÃ­ (Cacahuate)</option>
+                    <option value="Maní">Maní (Cacahuate)</option>
                     <option value="Gluten">Gluten (Trigo/Avena)</option>
                     <option value="Lactosa">Lactosa (Leche entera)</option>
-                    <option value="Huevo">Huevo (Lecitina / AlbÃºmina)</option>
+                    <option value="Huevo">Huevo (Lecitina / Albúmina)</option>
                     <option value="Soya">Soya</option>
-                    <option value="Ninguno (LÃ­nea limpia)">Ninguno / LÃ­nea Sanitizada</option>
+                    <option value="Ninguno (Línea limpia)">Ninguno / Línea Sanitizada</option>
                   </select>
                 </div>
 
                 <div className="col-12 col-md-6">
-                  <label className="form-label fw-semibold small">AlÃ©rgeno del Producto a Fabricar</label>
+                  <label className="form-label fw-semibold small">Alérgeno del Producto a Fabricar</label>
                   <select className="form-select" value={alergenoObjetivo} onChange={(e) => setAlergenoObjetivo(e.target.value)} required>
-                    <option value="Ninguno (Libre de alÃ©rgenos)">Ninguno (Libre de alÃ©rgenos)</option>
-                    <option value="Lactosa">Lactosa (Yogurt/Queso estÃ¡ndar)</option>
-                    <option value="Gluten">Gluten (AÃ±adido de cereales)</option>
-                    <option value="ManÃ­">ManÃ­ (AdiciÃ³n de semillas)</option>
+                    <option value="Ninguno (Libre de alérgenos)">Ninguno (Libre de alérgenos)</option>
+                    <option value="Lactosa">Lactosa (Yogurt/Queso estándar)</option>
+                    <option value="Gluten">Gluten (Añadido de cereales)</option>
+                    <option value="Maní">Maní (Adición de semillas)</option>
                   </select>
                 </div>
 
                 <div className="col-12 col-md-6">
-                  <label className="form-label fw-semibold small">MÃ©todo de Prueba</label>
+                  <label className="form-label fw-semibold small">Método de Prueba</label>
                   <select className="form-select" value={tipoPrueba} onChange={(e) => setTipoPrueba(e.target.value)} required>
-                    <option value="Lateral Flow (Hisopado rÃ¡pido)">Lateral Flow (Hisopado de Superficie)</option>
+                    <option value="Lateral Flow (Hisopado rápido)">Lateral Flow (Hisopado de Superficie)</option>
                     <option value="ELISA Test (Laboratorio)">ELISA Test (Laboratorio cuantitativo)</option>
-                    <option value="ProteÃ­na Total (Hisopo reactivo)">ProteÃ­na Total (VerificaciÃ³n de enjuague)</option>
+                    <option value="Proteína Total (Hisopo reactivo)">Proteína Total (Verificación de enjuague)</option>
                   </select>
                 </div>
 
                 <div className="col-12 col-md-6">
                   <label className="form-label fw-semibold small">Resultado de Limpieza</label>
                   <select className="form-select" value={resultado} onChange={(e) => setResultado(e.target.value)} required>
-                    <option value="Negativo (LÃ­nea Liberada)">Negativo (Sin alÃ©rgeno - LÃ­nea Liberada)</option>
-                    <option value="Positivo (ContaminaciÃ³n - Re-lavar)">Positivo (AlÃ©rgeno presente - REQUIERE RE-LAVADO)</option>
+                    <option value="Negativo (Línea Liberada)">Negativo (Sin alérgeno - Línea Liberada)</option>
+                    <option value="Positivo (Contaminación - Re-lavar)">Positivo (Alérgeno presente - REQUIERE RE-LAVADO)</option>
                   </select>
                 </div>
 
@@ -191,20 +191,20 @@ function AllergenRecall({ registros, onAgregar }) {
 
               <div className="d-grid mt-4">
                 <button type="submit" className="btn btn-primary">
-                  <i className="bi bi-shield-check-fill me-1"></i> Firmar LiberaciÃ³n de AlÃ©rgenos
+                  <i className="bi bi-shield-check-fill me-1"></i> Firmar Liberación de Alérgenos
                 </button>
               </div>
             </form>
 
-            {/* Historial de AlÃ©rgenos */}
+            {/* Historial de Alérgenos */}
             <h5 className="fw-semibold text-muted small uppercase mb-3">Historial de Liberaciones</h5>
             <div className="table-responsive" style={{ maxHeight: '200px' }}>
               <table className="table table-sm table-hover align-middle" style={{ fontSize: '12.5px' }}>
                 <thead className="table-light">
                   <tr>
                     <th>Fecha</th>
-                    <th>LÃ­nea</th>
-                    <th>AlÃ©rgeno Previo</th>
+                    <th>Línea</th>
+                    <th>Alérgeno Previo</th>
                     <th>Resultado</th>
                     <th>Firma</th>
                   </tr>
@@ -235,7 +235,7 @@ function AllergenRecall({ registros, onAgregar }) {
         <div className="col-12 col-xl-6">
           <div className="card OCA-card p-4 border-0 h-100 d-flex flex-column">
             <h4 className="card-title font-heading mb-3"><i className="bi bi-bezier2 text-primary me-2"></i>Simulador de Retiro de Producto (Mock Recall)</h4>
-            <p className="text-muted small">Exigencia HACCP obligatoria para auditorÃ­as GFSI (BRC/IFS/SQF). Simula el retiro de un lote del mercado en tiempo real, cruzando inventarios de materia prima, producto en cuarentena y facturaciÃ³n a clientes.</p>
+            <p className="text-muted small">Exigencia HACCP obligatoria para auditorías GFSI (BRC/IFS/SQF). Simula el retiro de un lote del mercado en tiempo real, cruzando inventarios de materia prima, producto en cuarentena y facturación a clientes.</p>
             <hr className="my-3" />
 
             <div className="row g-2 mb-3">
@@ -310,7 +310,7 @@ function AllergenRecall({ registros, onAgregar }) {
                   </div>
                   <div className="col-6">
                     <div className="border rounded p-2 bg-body">
-                      <strong className="d-block small text-muted">ReconciliaciÃ³n de Masas</strong>
+                      <strong className="d-block small text-muted">Reconciliación de Masas</strong>
                       <span className="small fw-bold text-success"><i className="bi bi-check2 me-1"></i>{recallSeleccionado.conciliacion.porcentajeConciliado}</span>
                     </div>
                   </div>
@@ -332,7 +332,7 @@ function AllergenRecall({ registros, onAgregar }) {
                 </div>
 
                 {/* Lista de clientes a contactar en caso de emergencia */}
-                <h6 className="fw-semibold small uppercase text-muted mb-2"><i className="bi bi-telephone-outbound me-1"></i>Destinos de DistribuciÃ³n (Clientes a Contactar)</h6>
+                <h6 className="fw-semibold small uppercase text-muted mb-2"><i className="bi bi-telephone-outbound me-1"></i>Destinos de Distribución (Clientes a Contactar)</h6>
                 <div className="flex-grow-1 overflow-auto" style={{ maxHeight: '180px' }}>
                   {recallSeleccionado.distribucion.map((dist, idx) => (
                     <div key={idx} className="d-flex justify-content-between align-items-center p-2 mb-1 border rounded bg-body small" style={{ fontSize: '12px' }}>
@@ -348,10 +348,10 @@ function AllergenRecall({ registros, onAgregar }) {
                   ))}
                 </div>
 
-                {/* Tiempos de AuditorÃ­a */}
+                {/* Tiempos de Auditoría */}
                 <div className="border-top pt-3 mt-3 d-flex justify-content-between align-items-center small text-muted">
                   <span>Tiempo total de respuesta: <strong>{recallSeleccionado.rendimiento.tiempoEjecucion}</strong></span>
-                  <span>LÃ­mite de norma GFSI: <strong>{recallSeleccionado.rendimiento.limitePermitido}</strong></span>
+                  <span>Límite de norma GFSI: <strong>{recallSeleccionado.rendimiento.limitePermitido}</strong></span>
                 </div>
               </div>
             )}
