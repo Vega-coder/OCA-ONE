@@ -6,11 +6,59 @@ import Trazabilidad from './components/Trazabilidad';
 import Capacitaciones from './components/Capacitaciones';
 import Capa from './components/Capa';
 import AllergenRecall from './components/AllergenRecall';
+import Procedimientos from './components/Procedimientos';
 
 function App() {
-  const [currentView, setCurrentView] = useState('dashboard');
+  const [currentView, setCurrentView] = useState('procedimientos');
   const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme-v4') || 'light');
   
+  // Base de datos de Procedimientos (Control Documental)
+  const [procedimientos, setProcedimientos] = useState(() => {
+    const saved = localStorage.getItem('OCA-procedimientos-v4');
+    return saved ? JSON.parse(saved) : [
+      {
+        id: 1,
+        codigo: 'POES-PLG-001',
+        titulo: 'Procedimiento Operativo de Control de Plagas',
+        categoria: 'Control de Plagas',
+        version: '2.0.0',
+        fechaAprobacion: '2026-01-10',
+        responsable: 'Carlos Gómez',
+        contenido: '1. OBJETIVO: Establecer las medidas preventivas y correctivas para evitar la proliferación de plagas y vectores en la planta de procesamiento.\n\n2. ALCANCE: Aplica a todas las áreas internas, externas, almacenes y periferia de la planta.\n\n3. PROCEDIMIENTO DE INSPECCIÓN: El supervisor de calidad inspeccionará semanalmente las 15 estaciones de cebado numeradas. Se debe verificar el consumo del cebo y registrar el estado físico de la trampa.\n\n4. ACCIONES CORRECTIVAS: Si se detecta evidencia de actividad de plagas, se debe notificar inmediatamente a la empresa contratista externa de control de vectores y programar una fumigación de refuerzo en menos de 24 horas.'
+      },
+      {
+        id: 2,
+        codigo: 'POES-RES-002',
+        titulo: 'Manual de Gestión de Residuos Sólidos y Líquidos',
+        categoria: 'Residuos Sólidos y Líquidos',
+        version: '1.2.0',
+        fechaAprobacion: '2026-03-15',
+        responsable: 'Carlos Gómez',
+        contenido: '1. OBJETIVO: Normar el manejo, separación en la fuente y disposición final de los residuos sólidos y efluentes generados durante la jornada.\n\n2. CLASIFICACIÓN DE RESIDUOS: Orgánicos (Canecas Verdes), Plásticos e Inertes (Canecas Grises), Peligrosos/Químicos (Canecas Rojas).\n\n3. DISPOSICIÓN DE LÍQUIDOS: Queda estrictamente prohibido verter grasas, aceites o sustancias químicas en los sumideros de lavado. Los aceites quemados deben ser envasados en bidones plásticos y entregados al proveedor autorizado para reciclaje energético.\n\n4. REGISTRO: Cada despacho de residuos especiales debe contar con el manifiesto de disposición final firmado por la empresa transportadora certificada.'
+      },
+      {
+        id: 3,
+        codigo: 'POES-LIM-003',
+        titulo: 'Plan Maestro de Limpieza y Desinfección',
+        categoria: 'Limpieza y Desinfección',
+        version: '3.1.0',
+        fechaAprobacion: '2026-05-20',
+        responsable: 'Carlos Gómez',
+        contenido: '1. OBJETIVO: Garantizar que los equipos, utensilios y áreas estén limpios y desinfectados antes y durante la producción.\n\n2. DOSIFICACIONES PERMITIDAS:\n- Cloro: 200 ppm para superficies de contacto directo.\n- Amonio Cuaternario: 400 ppm para paredes y techos.\n- Ácido Peracético: 150 ppm para enjuague final de tuberías.\n\n3. FRECUENCIAS:\n- Pre-operacional: Lavado completo antes de iniciar turno.\n- Rutinario: Limpieza de derrames y residuos a lo largo del proceso.\n- Profunda: Desinfección completa con cepillado al final de la jornada.'
+      },
+      {
+        id: 4,
+        codigo: 'POES-AGU-004',
+        titulo: 'Procedimiento de Control y Potabilidad de Agua',
+        categoria: 'Agua Potable',
+        version: '1.0.0',
+        fechaAprobacion: '2026-02-05',
+        responsable: 'Carlos Gómez',
+        contenido: '1. OBJETIVO: Asegurar que el agua utilizada en los procesos de manufactura y limpieza sea apta para el consumo humano.\n\n2. MONITOREO DIARIO: Se debe medir el nivel de cloro libre residual (Rango aceptable: 0.3 a 2.0 ppm) y el pH (Rango aceptable: 6.5 a 8.5) en la salida del tanque principal.\n\n3. MANTENIMIENTO: Los tanques de almacenamiento de agua deben lavarse y desinfectarse de forma obligatoria cada seis (6) meses por una empresa certificada, registrando el certificado de lavado correspondiente.'
+      }
+    ];
+  });
+
   // Base de datos de Saneamiento
   const [registrosSaneamiento, setRegistrosSaneamiento] = useState(() => {
     const saved = localStorage.getItem('OCA-saneamiento-v4');
@@ -84,6 +132,10 @@ function App() {
   });
 
   // Persistencia de los estados en localStorage
+  useEffect(() => {
+    localStorage.setItem('OCA-procedimientos-v4', JSON.stringify(procedimientos));
+  }, [procedimientos]);
+
   useEffect(() => {
     localStorage.setItem('OCA-saneamiento-v4', JSON.stringify(registrosSaneamiento));
   }, [registrosSaneamiento]);
@@ -192,6 +244,18 @@ function App() {
     setManipuladores(prev => [...prev, { id: Date.now(), ...nuevoMan }]);
   };
 
+  const handleAgregarProcedimiento = (nuevoProc) => {
+    setProcedimientos(prev => [
+      ...prev,
+      {
+        id: Date.now(),
+        codigo: `POES-CUST-${Math.floor(Math.random() * 900) + 100}`,
+        fechaAprobacion: new Date().toISOString().split('T')[0],
+        ...nuevoProc
+      }
+    ]);
+  };
+
   // Calcular alertas activas para el centro de notificaciones
   const alertasActivas = [];
 
@@ -222,7 +286,7 @@ function App() {
   return (
     <div className="container-fluid p-0 d-flex">
       {/* Sidebar de Navegación */}
-      <aside className="OCA-sidebar d-flex flex-column flex-shrink-0 p-3 text-white" style={{ width: '280px' }}>
+      <aside className="gipa-sidebar d-flex flex-column flex-shrink-0 p-3 text-white" style={{ width: '280px' }}>
         <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
           <span className="fs-4 fw-extrabold text-success me-2">
             <i className="bi bi-shield-check"></i>
@@ -232,7 +296,16 @@ function App() {
         <hr className="bg-secondary" />
         
         <ul className="nav nav-pills flex-column mb-auto">
+          {/* Procedimientos y Archivos (DE PRIMERO) */}
           <li className="nav-item mb-1">
+            <button 
+              className={`nav-link text-start w-100 btn border-0 ${currentView === 'procedimientos' ? 'active' : 'text-white'}`}
+              onClick={() => setCurrentView('procedimientos')}
+            >
+              <i className="bi bi-folder2-open me-2"></i> Procedimientos y Archivos
+            </button>
+          </li>
+          <li className="mb-1">
             <button 
               className={`nav-link text-start w-100 btn border-0 ${currentView === 'dashboard' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('dashboard')}
@@ -307,6 +380,7 @@ function App() {
         <header className="navbar navbar-expand-lg border-bottom px-4 py-3 bg-body-tertiary sticky-top">
           <div className="container-fluid p-0">
             <h1 className="h3 mb-0 text-capitalize font-heading">
+              {currentView === 'procedimientos' && 'Control Documental de Saneamiento y Calidad'}
               {currentView === 'dashboard' && 'Dashboard de Calidad e Inocuidad'}
               {currentView === 'saneamiento' && 'Plan de Saneamiento e Higiene'}
               {currentView === 'variables' && 'Monitoreo de Variables Críticas (PCC)'}
@@ -378,6 +452,14 @@ function App() {
 
         {/* Vistas Dinámicas */}
         <div className="flex-grow-1 p-4 bg-light bg-opacity-10 fade-in-view">
+          {currentView === 'procedimientos' && (
+            <Procedimientos 
+              procedimientos={procedimientos} 
+              onAgregar={handleAgregarProcedimiento}
+              saneamientoLogs={registrosSaneamiento}
+              alergenosLogs={registrosAlergenos}
+            />
+          )}
           {currentView === 'dashboard' && (
             <Dashboard 
               saneamiento={registrosSaneamiento} 
@@ -436,4 +518,3 @@ function App() {
 }
 
 export default App;
-
