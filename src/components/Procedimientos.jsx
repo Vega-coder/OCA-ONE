@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-function Procedimientos({ procedimientos, onAgregar, saneamientoLogs, alergenosLogs }) {
-  const [carpetaActiva, setCarpetaActiva] = useState('Limpieza y Desinfección');
+function Procedimientos({ procedimientos, onAgregar, saneamientoLogs, alergenosLogs, carpetaActiva, setCarpetaActiva }) {
   const [procSeleccionado, setProcSeleccionado] = useState(null);
   const [mostrarCrearForm, setMostrarCrearForm] = useState(false);
 

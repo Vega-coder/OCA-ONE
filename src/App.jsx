@@ -11,6 +11,8 @@ import Procedimientos from './components/Procedimientos';
 function App() {
   const [currentView, setCurrentView] = useState('procedimientos');
   const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme-v4') || 'light');
+  const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
+  const [activeFolder, setActiveFolder] = useState('Limpieza y Desinfección');
   
   // Base de datos de Procedimientos (Control Documental)
   const [procedimientos, setProcedimientos] = useState(() => {
@@ -299,11 +301,67 @@ function App() {
           {/* Procedimientos y Archivos (DE PRIMERO) */}
           <li className="nav-item mb-1">
             <button 
-              className={`nav-link text-start w-100 btn border-0 ${currentView === 'procedimientos' ? 'active' : 'text-white'}`}
-              onClick={() => setCurrentView('procedimientos')}
+              className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'procedimientos' ? 'active' : 'text-white'}`}
+              onClick={() => {
+                setCurrentView('procedimientos');
+                setIsProcedimientosOpen(!isProcedimientosOpen);
+              }}
             >
-              <i className="bi bi-folder2-open me-2"></i> Procedimientos y Archivos
+              <span>
+                <i className="bi bi-folder2-open me-2"></i> Procedimientos y Archivos
+              </span>
+              <i className={`bi bi-chevron-down arrow-rotate ${isProcedimientosOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
             </button>
+            
+            {/* Submenú Desplegable */}
+            {isProcedimientosOpen && (
+              <ul className="sidebar-submenu">
+                <li>
+                  <button 
+                    className={`nav-link-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeFolder === 'Limpieza y Desinfección' ? 'active-sub' : 'text-white'}`}
+                    onClick={() => {
+                      setCurrentView('procedimientos');
+                      setActiveFolder('Limpieza y Desinfección');
+                    }}
+                  >
+                    <i className="bi bi-droplet-fill me-2 text-info"></i> Limpieza y Desinfección
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    className={`nav-link-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeFolder === 'Control de Plagas' ? 'active-sub' : 'text-white'}`}
+                    onClick={() => {
+                      setCurrentView('procedimientos');
+                      setActiveFolder('Control de Plagas');
+                    }}
+                  >
+                    <i className="bi bi-bug-fill me-2 text-warning"></i> Control de Plagas
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    className={`nav-link-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeFolder === 'Residuos Sólidos y Líquidos' ? 'active-sub' : 'text-white'}`}
+                    onClick={() => {
+                      setCurrentView('procedimientos');
+                      setActiveFolder('Residuos Sólidos y Líquidos');
+                    }}
+                  >
+                    <i className="bi bi-trash-fill me-2 text-success"></i> Residuos Sólidos
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    className={`nav-link-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeFolder === 'Agua Potable' ? 'active-sub' : 'text-white'}`}
+                    onClick={() => {
+                      setCurrentView('procedimientos');
+                      setActiveFolder('Agua Potable');
+                    }}
+                  >
+                    <i className="bi bi-water me-2 text-primary"></i> Agua Potable
+                  </button>
+                </li>
+              </ul>
+            )}
           </li>
           <li className="mb-1">
             <button 
@@ -458,6 +516,8 @@ function App() {
               onAgregar={handleAgregarProcedimiento}
               saneamientoLogs={registrosSaneamiento}
               alergenosLogs={registrosAlergenos}
+              carpetaActiva={activeFolder}
+              setCarpetaActiva={setActiveFolder}
             />
           )}
           {currentView === 'dashboard' && (
