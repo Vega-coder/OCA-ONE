@@ -20,9 +20,9 @@ function App() {
     'Agua Potable': false
   });
   
-  // Base de datos de Procedimientos (Control Documental)
+  // Base de datos de Procedimientos (Control Documental) con estructura ISO
   const [procedimientos, setProcedimientos] = useState(() => {
-    const saved = localStorage.getItem('OCA-procedimientos-v4');
+    const saved = localStorage.getItem('OCA-procedimientos-v5');
     return saved ? JSON.parse(saved) : [
       {
         id: 1,
@@ -32,7 +32,17 @@ function App() {
         version: '2.0.0',
         fechaAprobacion: '2026-01-10',
         responsable: 'Carlos Gómez',
-        contenido: '1. OBJETIVO: Establecer las medidas preventivas y correctivas para evitar la proliferación de plagas y vectores en la planta de procesamiento.\n\n2. ALCANCE: Aplica a todas las áreas internas, externas, almacenes y periferia de la planta.\n\n3. PROCEDIMIENTO DE INSPECCIÓN: El supervisor de calidad inspeccionará semanalmente las 15 estaciones de cebado numeradas. Se debe verificar el consumo del cebo y registrar el estado físico de la trampa.\n\n4. ACCIONES CORRECTIVAS: Si se detecta evidencia de actividad de plagas, se debe notificar inmediatamente a la empresa contratista externa de control de vectores y programar una fumigación de refuerzo en menos de 24 horas.'
+        objetivo: 'Establecer las medidas preventivas y correctivas necesarias para evitar la proliferación de insectos, roedores y otras plagas en la planta de proceso.',
+        alcance: 'Aplica a todas las áreas internas, externas, almacenes de materia prima y producto terminado.',
+        responsablesDoc: 'Empresa subcontratista de control de vectores y el supervisor de calidad.',
+        definiciones: 'Vector: Animal que puede transmitir enfermedades o contaminar alimentos.\nCebadero: Caja segura que contiene cebo rodenticida de forma controlada.',
+        desarrollo: '1. INSPECCIÓN:\n- El supervisor revisará semanalmente los 15 cebaderos numerados y registrará el consumo de cebo.\n- Se mantendrán activas las trampas de luz UV en zona de empaque.\n\n2. ACCIÓN CORRECTIVA:\n- Ante cualquier avistamiento de plagas, se llamará a la empresa contratista externa para realizar una fumigación de refuerzo en menos de 24 horas.',
+        registrosControl: [
+          { nombre: 'Planilla de Monitoreo de Estaciones de Cebado', codigo: 'F-PLG-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+        ],
+        controlCambios: [
+          { fecha: 'Enero 2026 Version 2.0.0', descripcion: 'Actualización general de cebaderos externos', responsable: 'Carlos Gómez' }
+        ]
       },
       {
         id: 2,
@@ -42,7 +52,17 @@ function App() {
         version: '1.2.0',
         fechaAprobacion: '2026-03-15',
         responsable: 'Carlos Gómez',
-        contenido: '1. OBJETIVO: Normar el manejo, separación en la fuente y disposición final de los residuos sólidos y efluentes generados durante la jornada.\n\n2. CLASIFICACIÓN DE RESIDUOS: Orgánicos (Canecas Verdes), Plásticos e Inertes (Canecas Grises), Peligrosos/Químicos (Canecas Rojas).\n\n3. DISPOSICIÓN DE LÍQUIDOS: Queda estrictamente prohibido verter grasas, aceites o sustancias químicas en los sumideros de lavado. Los aceites quemados deben ser envasados en bidones plásticos y entregados al proveedor autorizado para reciclaje energético.\n\n4. REGISTRO: Cada despacho de residuos especiales debe contar con el manifiesto de disposición final firmado por la empresa transportadora certificada.'
+        objetivo: 'Normar el correcto manejo, separación en la fuente y disposición final de los residuos generados durante el procesamiento de alimentos.',
+        alcance: 'Aplica a todas las áreas operativas, bodegas y zona de efluentes.',
+        responsablesDoc: 'Auxiliares de almacén, personal de limpieza y dirección ambiental.',
+        definiciones: 'Residuo Orgánico: Resto biodegradable de origen vegetal o animal.\nManifiesto: Documento legal que acredita la correcta disposición final.',
+        desarrollo: '1. CLASIFICACIÓN:\n- Orgánicos: Canecas Verdes.\n- Plásticos e Inertes: Canecas Grises.\n- Peligrosos o Químicos: Canecas Rojas.\n\n2. DISPOSICIÓN DE ACEITES:\n- Queda prohibido verter grasas en los sumideros de lavado. Deben almacenarse en bidones plásticos y entregarse al proveedor Ecograses S.A.',
+        registrosControl: [
+          { nombre: 'Bitácora Diaria de Retiro de Residuos', codigo: 'F-RES-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+        ],
+        controlCambios: [
+          { fecha: 'Marzo 2026 Version 1.2.0', descripcion: 'Inclusión de entrega de aceites quemados', responsable: 'Carlos Gómez' }
+        ]
       },
       {
         id: 3,
@@ -52,7 +72,19 @@ function App() {
         version: '3.1.0',
         fechaAprobacion: '2026-05-20',
         responsable: 'Carlos Gómez',
-        contenido: '1. OBJETIVO: Garantizar que los equipos, utensilios y áreas estén limpios y desinfectados antes y durante la producción.\n\n2. DOSIFICACIONES PERMITIDAS:\n- Cloro: 200 ppm para superficies de contacto directo.\n- Amonio Cuaternario: 400 ppm para paredes y techos.\n- Ácido Peracético: 150 ppm para enjuague final de tuberías.\n\n3. FRECUENCIAS:\n- Pre-operacional: Lavado completo antes de iniciar turno.\n- Rutinario: Limpieza de derrames y residuos a lo largo del proceso.\n- Profunda: Desinfección completa con cepillado al final de la jornada.'
+        objetivo: 'Garantizar que todos los equipos, utensilios e infraestructura de la planta estén limpios y desinfectados antes y durante la producción para evitar la contaminación física, química o biológica.',
+        alcance: 'Aplica a todas las salas de proceso, zona de empaque, tolvas, mezcladoras, líneas de envasado A y B, y áreas comunes de la planta.',
+        responsablesDoc: 'Operarios de limpieza, supervisores de producción y el director de aseguramiento de calidad.',
+        definiciones: 'Sanitización: Reducción del número de microorganismos a un nivel seguro.\nPOES: Procedimientos Operativos Estandarizados de Sanitización.\nDesinfectante: Insumo químico formulado para eliminar patógenos.',
+        desarrollo: '1. DOSIFICACIONES PERMITIDAS:\n- Cloro: 200 ppm para superficies de contacto directo.\n- Amonio Cuaternario: 400 ppm para paredes y techos.\n- Ácido Peracético: 150 ppm para enjuague de tuberías.\n\n2. PROCEDIMIENTO PASO A PASO:\n- Limpieza Pre-operacional: Lavado completo y cepillado antes de iniciar el turno.\n- Limpieza Rutinaria: Limpieza rápida ante derrames a lo largo de la producción.\n- Limpieza Profunda: Higienización profunda con desinfección al final de la jornada de trabajo.',
+        registrosControl: [
+          { nombre: 'Registro de Inspección Diaria de L&D', codigo: 'Q-FR-18', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' },
+          { nombre: 'Registro de Preparación de Sustancias Químicas', codigo: 'Q-FR-16', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+        ],
+        controlCambios: [
+          { fecha: 'Enero 2024 Version 1', descripcion: 'Creación del documento', responsable: 'Ing. Luis Salcedo' },
+          { fecha: 'Mayo 2026 Version 3.1.0', descripcion: 'Actualización de dosificación de cloro a 200ppm', responsable: 'Carlos Gómez' }
+        ]
       },
       {
         id: 4,
@@ -62,7 +94,17 @@ function App() {
         version: '1.0.0',
         fechaAprobacion: '2026-02-05',
         responsable: 'Carlos Gómez',
-        contenido: '1. OBJETIVO: Asegurar que el agua utilizada en los procesos de manufactura y limpieza sea apta para el consumo humano.\n\n2. MONITOREO DIARIO: Se debe medir el nivel de cloro libre residual (Rango aceptable: 0.3 a 2.0 ppm) y el pH (Rango aceptable: 6.5 a 8.5) en la salida del tanque principal.\n\n3. MANTENIMIENTO: Los tanques de almacenamiento de agua deben lavarse y desinfectarse de forma obligatoria cada seis (6) meses por una empresa certificada, registrando el certificado de lavado correspondiente.'
+        objetivo: 'Asegurar que el agua utilizada en la limpieza y elaboración de los alimentos sea microbiológica y fisicoquímicamente apta para consumo humano.',
+        alcance: 'Aplica a toda la red de agua potable interna, tanques de almacenamiento y salidas en salas de proceso.',
+        responsablesDoc: 'Supervisor de laboratorio y líder de mantenimiento.',
+        definiciones: 'Cloro Libre Residual: Cantidad de cloro activo en agua para desinfección.\nPotabilidad: Propiedad del agua que la hace apta para consumo sin riesgo.',
+        desarrollo: '1. MONITOREO DIARIO:\n- Se medirá diariamente el cloro libre residual (Rango aceptable: 0.3 a 2.0 ppm) y el pH (Rango: 6.5 a 8.5).\n\n2. MANTENIMIENTO TANQUES:\n- Los tanques deben lavarse y desinfectarse de manera obligatoria cada seis (6) meses por una empresa autorizada.',
+        registrosControl: [
+          { nombre: 'Planilla Diaria de Medición de Cloro y pH', codigo: 'F-AGU-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+        ],
+        controlCambios: [
+          { fecha: 'Febrero 2026 Version 1.0.0', descripcion: 'Creación del documento', responsable: 'Carlos Gómez' }
+        ]
       }
     ];
   });
@@ -139,9 +181,8 @@ function App() {
     ];
   });
 
-  // Persistencia de los estados en localStorage
   useEffect(() => {
-    localStorage.setItem('OCA-procedimientos-v4', JSON.stringify(procedimientos));
+    localStorage.setItem('OCA-procedimientos-v5', JSON.stringify(procedimientos));
   }, [procedimientos]);
 
   useEffect(() => {
@@ -257,7 +298,6 @@ function App() {
       ...prev,
       {
         id: Date.now(),
-        codigo: `POES-CUST-${Math.floor(Math.random() * 900) + 100}`,
         fechaAprobacion: new Date().toISOString().split('T')[0],
         ...nuevoProc
       }

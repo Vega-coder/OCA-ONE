@@ -13,14 +13,25 @@ function Procedimientos({
   const [mostrarCrearPoes, setMostrarCrearPoes] = useState(false);
   const [mostrarCrearFormato, setMostrarCrearFormato] = useState(false);
 
-  // Estados del Formulario para Crear Procedimiento (POES)
+  // Estados del Formulario para Crear Procedimiento (ISO)
   const [nuevoTitulo, setNuevoTitulo] = useState('');
-  const [nuevaCategoria, setNuevaCategoria] = useState('Limpieza y Desinfección');
+  const [nuevoCodigo, setNuevoCodigo] = useState('');
   const [nuevaVersion, setNuevaVersion] = useState('1.0.0');
   const [nuevoResponsable, setNuevoResponsable] = useState('Carlos Gómez');
-  const [nuevoContenido, setNuevoContenido] = useState('');
+  const [nuevoObjetivo, setNuevoObjetivo] = useState('');
+  const [nuevoAlcance, setNuevoAlcance] = useState('');
+  const [nuevoResponsablesDoc, setNuevoResponsablesDoc] = useState('Supervisor de Calidad y Auxiliares');
+  const [nuevaDefiniciones, setNuevaDefiniciones] = useState('');
+  const [nuevoDesarrollo, setNuevoDesarrollo] = useState('');
   
-  // Estados del Formulario para Crear Formato de Registro
+  // Registro Control Inicial para el nuevo procedimiento
+  const [regControlNombre, setRegControlNombre] = useState('');
+  const [regControlCodigo, setRegControlCodigo] = useState('');
+  const [regControlResp, setRegControlResp] = useState('Aseguramiento de Calidad');
+  const [regControlReten, setRegControlReten] = useState('1 año');
+  const [regControlDest, setRegControlDest] = useState('Destrucción');
+
+  // Estados del Formulario para Crear Formato de Registro (Imprimibles)
   const [regTitulo, setRegTitulo] = useState('');
   const [regCodigo, setRegCodigo] = useState('');
   const [regVersion, setRegVersion] = useState('1.0.0');
@@ -89,22 +100,57 @@ function Procedimientos({
   const handleCrearProcedimiento = (e) => {
     e.preventDefault();
 
-    if (!nuevoTitulo.trim() || !nuevoContenido.trim()) {
-      alert("Por favor rellena el título y las instrucciones del procedimiento.");
+    if (!nuevoTitulo.trim() || !nuevoCodigo.trim() || !nuevoObjetivo.trim() || !nuevoDesarrollo.trim()) {
+      alert("Por favor rellena el título, código, objetivo y desarrollo del procedimiento.");
       return;
     }
 
     const nuevo = {
       titulo: nuevoTitulo.trim(),
+      codigo: nuevoCodigo.trim().toUpperCase(),
       categoria: carpetaActiva,
       version: nuevaVersion,
       responsable: nuevoResponsable,
-      contenido: nuevoContenido.trim()
+      objetivo: nuevoObjetivo.trim(),
+      alcance: nuevoAlcance.trim() || 'Aplica para todas las actividades que se realizan en la planta de proceso y empaque.',
+      responsablesDoc: nuevoResponsablesDoc.trim() || 'Todo el personal que labora en la planta de proceso y empaque.',
+      definiciones: nuevaDefiniciones.trim() || 'POES: Procedimientos Operativos Estandarizados de Sanitización.',
+      desarrollo: nuevoDesarrollo.trim(),
+      registrosControl: regControlNombre.trim() ? [
+        {
+          nombre: regControlNombre.trim(),
+          codigo: regControlCodigo.trim().toUpperCase() || 'Q-REG-01',
+          responsable: regControlResp,
+          retencion: regControlReten,
+          destino: regControlDest
+        }
+      ] : [
+        {
+          nombre: 'Bitácora General de Control',
+          codigo: 'F-GEN-01',
+          responsable: 'Aseguramiento de Calidad',
+          retencion: '1 año',
+          destino: 'Destrucción'
+        }
+      ],
+      controlCambios: [
+        {
+          fecha: `Julio 2026 Versión ${nuevaVersion}`,
+          descripcion: 'Creación del documento bajo estructura ISO',
+          responsable: nuevoResponsable
+        }
+      ]
     };
 
     onAgregar(nuevo);
     setNuevoTitulo('');
-    setNuevoContenido('');
+    setNuevoCodigo('');
+    setNuevoObjetivo('');
+    setNuevoAlcance('');
+    setNuevaDefiniciones('');
+    setNuevoDesarrollo('');
+    setRegControlNombre('');
+    setRegControlCodigo('');
     setMostrarCrearPoes(false);
     setAlertaExito(true);
 
@@ -121,7 +167,6 @@ function Procedimientos({
       return;
     }
 
-    // Convertir columnas comma-separated a array de strings
     const colsArray = regColumnas.split(',').map(col => col.trim());
 
     const nuevoFormato = {
@@ -160,7 +205,7 @@ function Procedimientos({
       {/* Alerta de Creación Exitosa de Procedimiento */}
       {alertaExito && (
         <div className="alert alert-success alert-dismissible fade show shadow border-0 mb-4" role="alert" style={{ borderRadius: '10px' }}>
-          <strong><i className="bi bi-file-earmark-check-fill me-2"></i>¡Procedimiento creado con éxito!</strong> El documento ha sido indexado en su carpeta y está disponible para auditorías.
+          <strong><i className="bi bi-file-earmark-check-fill me-2"></i>¡Procedimiento creado con éxito!</strong> El documento cumple con la estructura ISO y ha sido indexado en su carpeta.
           <button type="button" className="btn-close" onClick={() => setAlertaExito(false)} aria-label="Close"></button>
         </div>
       )}
@@ -182,11 +227,11 @@ function Procedimientos({
               <h4 className="card-title font-heading mb-1 text-dark">
                 <i className="bi bi-file-earmark-pdf-fill text-danger me-2"></i>Procedimientos en: {carpetaActiva}
               </h4>
-              <p className="text-muted small mb-0">Listado oficial de manuales POES y especificaciones de calidad vigentes.</p>
+              <p className="text-muted small mb-0">Listado oficial de manuales de procedimiento ISO vigentes.</p>
             </div>
             
             {/* CONDICIONAL DE BOTÓN SUPERIOR: 
-                - Limpieza y Desinfección -> Redactar POES
+                - Limpieza y Desinfección -> Redactar Procedimiento
                 - Otros -> Redactar Registro
             */}
             {carpetaActiva === 'Limpieza y Desinfección' ? (
@@ -200,7 +245,7 @@ function Procedimientos({
                 {mostrarCrearPoes ? (
                   <span><i className="bi bi-x-circle me-1"></i> Cerrar Editor</span>
                 ) : (
-                  <span><i className="bi bi-plus-circle me-1"></i> Redactar POES</span>
+                  <span><i className="bi bi-plus-circle me-1"></i> Redactar Procedimiento</span>
                 )}
               </button>
             ) : (
@@ -220,29 +265,37 @@ function Procedimientos({
             )}
           </div>
 
-          {/* Formulario 1: Redactar POES (Solo disponible para Limpieza y Desinfección) */}
+          {/* Formulario 1: Redactar Procedimiento (Solo para Limpieza y Desinfección) */}
           {mostrarCrearPoes && carpetaActiva === 'Limpieza y Desinfección' && (
-            <form onSubmit={handleCrearProcedimiento} className="border p-4 rounded bg-light bg-opacity-25 fade-in-view mb-3">
-              <h5 className="fw-bold font-heading text-success mb-3"><i className="bi bi-file-earmark-plus me-1"></i>Redactar Nuevo Procedimiento (POES)</h5>
+            <form onSubmit={handleCrearProcedimiento} className="border p-4 rounded bg-light bg-opacity-25 fade-in-view mb-3" style={{ fontSize: '13px' }}>
+              <h5 className="fw-bold font-heading text-success mb-3"><i className="bi bi-file-earmark-plus me-1"></i>Redactar Nuevo Procedimiento Calidad (ISO-SGC)</h5>
               
-              <div className="mb-3">
-                <label className="form-label fw-semibold small">Título del Documento</label>
-                <input 
-                  type="text" 
-                  className="form-control form-control-sm" 
-                  value={nuevoTitulo} 
-                  onChange={(e) => setNuevoTitulo(e.target.value)} 
-                  placeholder="Ej: Manual de desratización y fumigación" 
-                  required 
-                />
+              <div className="row g-2 mb-3">
+                <div className="col-12 col-md-8">
+                  <label className="form-label fw-semibold small">Nombre del Procedimiento</label>
+                  <input 
+                    type="text" 
+                    className="form-control form-control-sm" 
+                    value={nuevoTitulo} 
+                    onChange={(e) => setNuevoTitulo(e.target.value)} 
+                    placeholder="Ej: Procedimiento para el Manejo de Productos Químicos" 
+                    required 
+                  />
+                </div>
+                <div className="col-12 col-md-4">
+                  <label className="form-label fw-semibold small">Código Oficial ISO</label>
+                  <input 
+                    type="text" 
+                    className="form-control form-control-sm" 
+                    value={nuevoCodigo} 
+                    onChange={(e) => setNuevoCodigo(e.target.value)} 
+                    placeholder="Ej: P-CAL-002" 
+                    required 
+                  />
+                </div>
               </div>
 
               <div className="row g-2 mb-3">
-                <div className="col-12 col-md-6">
-                  <label className="form-label fw-semibold small">Categoría del Plan</label>
-                  <input type="text" className="form-control form-control-sm bg-secondary bg-opacity-10 text-muted" value={carpetaActiva} disabled />
-                </div>
-                
                 <div className="col-6 col-md-3">
                   <label className="form-label fw-semibold small">Versión</label>
                   <input 
@@ -250,13 +303,11 @@ function Procedimientos({
                     className="form-control form-control-sm text-center" 
                     value={nuevaVersion} 
                     onChange={(e) => setNuevaVersion(e.target.value)} 
-                    placeholder="1.0.0" 
                     required 
                   />
                 </div>
-
                 <div className="col-6 col-md-3">
-                  <label className="form-label fw-semibold small">Responsable</label>
+                  <label className="form-label fw-semibold small">Elaborado/Aprobado por</label>
                   <input 
                     type="text" 
                     className="form-control form-control-sm" 
@@ -265,19 +316,97 @@ function Procedimientos({
                     required 
                   />
                 </div>
+                <div className="col-12 col-md-6">
+                  <label className="form-label fw-semibold small">Responsable del Cumplimiento</label>
+                  <input 
+                    type="text" 
+                    className="form-control form-control-sm" 
+                    value={nuevoResponsablesDoc} 
+                    onChange={(e) => setNuevoResponsablesDoc(e.target.value)} 
+                    required 
+                  />
+                </div>
               </div>
 
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Contenido del Procedimiento (Instrucciones)</label>
+                <label className="form-label fw-semibold small">1. OBJETIVO</label>
                 <textarea 
-                  className="form-control form-control-sm font-monospace" 
-                  rows="8" 
-                  value={nuevoContenido} 
-                  onChange={(e) => setNuevoContenido(e.target.value)}
-                  placeholder="Escribe el manual detallado (Objetivo, Alcance, Instrucciones paso a paso, Controles...)"
-                  style={{ fontSize: '13px' }}
+                  className="form-control form-control-sm" 
+                  rows="2" 
+                  value={nuevoObjetivo} 
+                  onChange={(e) => setNuevoObjetivo(e.target.value)}
+                  placeholder="Tener un manejo correcto de los químicos que se tienen..."
                   required
                 ></textarea>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label fw-semibold small">2. ALCANCE</label>
+                <textarea 
+                  className="form-control form-control-sm" 
+                  rows="2" 
+                  value={nuevoAlcance} 
+                  onChange={(e) => setNuevoAlcance(e.target.value)}
+                  placeholder="Este procedimiento aplica para todas las actividades que se realizan en la planta..."
+                ></textarea>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label fw-semibold small">3. DEFINICIONES</label>
+                <textarea 
+                  className="form-control form-control-sm" 
+                  rows="3" 
+                  value={nuevaDefiniciones} 
+                  onChange={(e) => setNuevaDefiniciones(e.target.value)}
+                  placeholder="Sustancia química: Cualquier material con...\nCompuesto químico: ..."
+                ></textarea>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label fw-semibold small">4. DESARROLLO DEL PROGRAMA (Instrucciones paso a paso)</label>
+                <textarea 
+                  className="form-control form-control-sm font-monospace" 
+                  rows="6" 
+                  value={nuevoDesarrollo} 
+                  onChange={(e) => setNuevoDesarrollo(e.target.value)}
+                  placeholder="Escribe detalladamente las actividades operativas..."
+                  required
+                ></textarea>
+              </div>
+
+              {/* Registro Asociado que controlará el documento */}
+              <div className="border p-3 rounded mb-3 bg-white">
+                <h6 className="fw-bold text-success mb-2 small"><i className="bi bi-link-45deg"></i>5. CONTROL DE REGISTROS (Registro que controla este POES)</h6>
+                <div className="row g-2">
+                  <div className="col-12 col-md-5">
+                    <label className="form-label fw-semibold small">Nombre del Registro</label>
+                    <input 
+                      type="text" 
+                      className="form-control form-control-sm" 
+                      placeholder="Ej: Registro Inspección Diaria de L&D" 
+                      value={regControlNombre}
+                      onChange={(e) => setRegControlNombre(e.target.value)}
+                    />
+                  </div>
+                  <div className="col-6 col-md-3">
+                    <label className="form-label fw-semibold small">Código de Registro</label>
+                    <input 
+                      type="text" 
+                      className="form-control form-control-sm" 
+                      placeholder="Ej: Q-FR-18" 
+                      value={regControlCodigo}
+                      onChange={(e) => setRegControlCodigo(e.target.value)}
+                    />
+                  </div>
+                  <div className="col-6 col-md-4">
+                    <label className="form-label fw-semibold small">Responsable Almacenamiento</label>
+                    <select className="form-select form-select-sm" value={regControlResp} onChange={(e) => setRegControlResp(e.target.value)}>
+                      <option value="Aseguramiento de Calidad">Aseguramiento de Calidad</option>
+                      <option value="Jefe de Producción">Jefe de Producción</option>
+                      <option value="Mantenimiento">Mantenimiento</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               <div className="d-flex justify-content-end gap-2">
@@ -285,7 +414,7 @@ function Procedimientos({
                   Cancelar
                 </button>
                 <button type="submit" className="btn btn-sm btn-success">
-                  <i className="bi bi-save me-1"></i> Publicar Documento
+                  <i className="bi bi-save me-1"></i> Guardar y Generar Procedimiento ISO
                 </button>
               </div>
             </form>
@@ -402,7 +531,7 @@ function Procedimientos({
                       <span className="badge bg-success-subtle text-success">V.{proc.version}</span>
                     </div>
                     <h5 className="fw-bold mb-1 text-dark" style={{ fontSize: '16px' }}>{proc.titulo}</h5>
-                    <div className="text-muted small">Aprobado el: {proc.fechaAprobacion} | Supervisor: {proc.responsable}</div>
+                    <div className="text-muted small">Aprobado el: {proc.fechaAprobacion} | Elaborado por: {proc.responsable}</div>
                   </div>
                   <div>
                     <button 
@@ -457,85 +586,201 @@ function Procedimientos({
 
       </div>
 
-      {/* Visor Modal de PDF Simulado (Para Procedimientos Textuales) */}
+      {/* Visor Modal de PDF Simulado (Estructura ISO 1:1 con la Guía del Usuario) */}
       {procSeleccionado && (
         <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1050 }}>
           <div className="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
             <div className="modal-content" style={{ borderRadius: '12px', border: 'none' }}>
               <div className="modal-header bg-dark text-white py-2 px-3 justify-content-between">
-                <h6 className="mb-0"><i className="bi bi-file-earmark-pdf text-danger me-2"></i>Visor de Documentos Oficiales (POES)</h6>
+                <h6 className="mb-0"><i className="bi bi-file-earmark-pdf text-danger me-2"></i>Visor de Documentos Oficiales (Norma ISO)</h6>
                 <button type="button" className="btn-close btn-close-white" onClick={() => setProcSeleccionado(null)} aria-label="Close"></button>
               </div>
 
               <div className="modal-body p-4 bg-secondary bg-opacity-10 d-flex justify-content-center">
                 <div 
-                  className="bg-white text-dark shadow-lg p-5 w-100" 
+                  className="bg-white text-dark shadow-lg p-5 w-100 position-relative" 
                   style={{ 
-                    minHeight: '800px', 
-                    maxWidth: '700px', 
+                    minHeight: '1000px', 
+                    maxWidth: '750px', 
                     fontFamily: 'serif', 
-                    fontSize: '14px',
+                    fontSize: '13px',
                     lineHeight: '1.6'
                   }}
                 >
-                  
-                  {/* Encabezado */}
-                  <table className="table table-bordered mb-4 text-center align-middle" style={{ fontSize: '11px', fontFamily: 'sans-serif' }}>
-                    <tbody>
-                      <tr>
-                        <td rowSpan="3" style={{ width: '25%' }} className="fw-bold fs-6 text-success">
-                          OCA ONE
-                        </td>
-                        <td rowSpan="3" style={{ width: '45%' }} className="fw-bold">
-                          SISTEMA DE GESTIÓN DE CALIDAD E INOCUIDAD
-                        </td>
-                        <td style={{ width: '30%' }}><strong>Código:</strong> {procSeleccionado.codigo}</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Versión:</strong> {procSeleccionado.version}</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Página:</strong> 1 de 1</td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  {/* Título */}
-                  <div className="text-center mb-4 mt-2">
-                    <h3 className="fw-bold text-dark font-heading uppercase" style={{ fontSize: '20px', fontFamily: 'sans-serif' }}>
-                      {procSeleccionado.titulo}
-                    </h3>
-                    <div className="small text-muted mt-1" style={{ fontFamily: 'sans-serif' }}>
-                      Área: Plan de Saneamiento Básico | Categoría: {procSeleccionado.categoria}
-                    </div>
+                  {/* Marca de Agua Diagonal: COPIA CONTROLADA */}
+                  <div 
+                    className="position-absolute text-secondary opacity-10 select-none d-flex align-items-center justify-content-center"
+                    style={{ 
+                      top: '30%', 
+                      left: '5%', 
+                      right: '5%',
+                      fontSize: '5.5rem', 
+                      fontFamily: 'sans-serif',
+                      fontWeight: 'bold', 
+                      transform: 'rotate(-28deg)', 
+                      pointerEvents: 'none',
+                      letterSpacing: '10px',
+                      zIndex: 1
+                    }}
+                  >
+                    COPIA CONTROLADA
                   </div>
 
-                  <hr className="mb-4" />
+                  {/* Z-Index Wrapper para asegurar que el texto quede sobre la marca de agua */}
+                  <div className="position-relative" style={{ zIndex: 2 }}>
+                    
+                    {/* Encabezado Formal de Calidad */}
+                    <table className="table table-bordered mb-4 text-center align-middle" style={{ fontSize: '10px', fontFamily: 'sans-serif' }}>
+                      <tbody>
+                        <tr>
+                          <td rowSpan="3" style={{ width: '20%' }} className="fw-bold fs-5 text-success">
+                            OCA ONE
+                          </td>
+                          <td rowSpan="3" style={{ width: '50%' }} className="fw-bold uppercase">
+                            PROCEDIMIENTO OPERATIVO ESTÁNDAR
+                          </td>
+                          <td style={{ width: '30%' }}><strong>CÓDIGO:</strong> {procSeleccionado.codigo}</td>
+                        </tr>
+                        <tr>
+                          <td><strong>VERSIÓN:</strong> {procSeleccionado.version}</td>
+                        </tr>
+                        <tr>
+                          <td><strong>FECHA DE APROBACIÓN:</strong> {procSeleccionado.fechaAprobacion}</td>
+                        </tr>
+                      </tbody>
+                    </table>
 
-                  {/* Contenido */}
-                  <div style={{ whiteSpace: 'pre-wrap', textAlign: 'justify' }}>
-                    {procSeleccionado.contenido}
-                  </div>
+                    {/* Portada Inicial (Estilo Primera Página ISO) */}
+                    <div className="text-center my-5 py-4 border-bottom">
+                      <h2 className="fw-bold text-dark font-heading mb-2 uppercase" style={{ fontSize: '22px', fontFamily: 'sans-serif', letterSpacing: '0.5px' }}>
+                        PROCEDIMIENTO PARA EL {procSeleccionado.titulo}
+                      </h2>
+                      <p className="text-muted small uppercase">Sistema de Gestión de la Inocuidad y Calidad Agroalimentaria</p>
+                    </div>
 
-                  {/* Firmas */}
-                  <div className="row mt-5 pt-5 text-center" style={{ fontFamily: 'sans-serif', fontSize: '12px' }}>
-                    <div className="col-6">
-                      <div className="border-top mx-auto" style={{ width: '180px' }}></div>
-                      <div className="mt-1"><strong>Elaborado por:</strong></div>
-                      <div className="text-muted">{procSeleccionado.responsable}</div>
+                    {/* Tabla de Elaborado / Aprobado (Cover Page signatures) */}
+                    <table className="table table-bordered mb-5 text-start align-middle" style={{ fontSize: '11px', fontFamily: 'sans-serif' }}>
+                      <tbody>
+                        <tr style={{ height: '70px' }}>
+                          <td style={{ width: '50%' }} className="p-3">
+                            <strong className="d-block mb-4">Elaborado por:</strong>
+                            <div className="fw-bold text-dark">{procSeleccionado.responsable}</div>
+                            <div className="text-muted small">Ingeniero de Calidad y Procesos</div>
+                          </td>
+                          <td style={{ width: '50%' }} className="p-3">
+                            <strong className="d-block mb-4">Aprobado por:</strong>
+                            <div className="fw-bold text-dark">{procSeleccionado.responsable}</div>
+                            <div className="text-muted small">Director de Operaciones SGC</div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    {/* CONTENIDO DEL PROCEDIMIENTO */}
+                    
+                    {/* OBJETIVO */}
+                    <div className="mb-4">
+                      <h6 className="fw-bold text-dark border-bottom pb-1 uppercase font-heading"><i className="bi bi-chevron-right text-success small"></i> Objetivo</h6>
+                      <p className="text-justify ps-2">{procSeleccionado.objetivo}</p>
                     </div>
-                    <div className="col-6">
-                      <div className="border-top mx-auto" style={{ width: '180px' }}></div>
-                      <div className="mt-1"><strong>Aprobado por:</strong></div>
-                      <div className="text-muted">{procSeleccionado.responsable}</div>
+
+                    {/* ALCANCE */}
+                    <div className="mb-4">
+                      <h6 className="fw-bold text-dark border-bottom pb-1 uppercase font-heading"><i className="bi bi-chevron-right text-success small"></i> Alcance</h6>
+                      <p className="text-justify ps-2">{procSeleccionado.alcance}</p>
                     </div>
+
+                    {/* RESPONSABLE */}
+                    <div className="mb-4">
+                      <h6 className="fw-bold text-dark border-bottom pb-1 uppercase font-heading"><i className="bi bi-chevron-right text-success small"></i> Responsables</h6>
+                      <p className="text-justify ps-2">{procSeleccionado.responsablesDoc}</p>
+                    </div>
+
+                    {/* DEFINICIONES */}
+                    <div className="mb-4">
+                      <h6 className="fw-bold text-dark border-bottom pb-1 uppercase font-heading"><i className="bi bi-chevron-right text-success small"></i> Definiciones</h6>
+                      <div className="ps-2" style={{ whiteSpace: 'pre-wrap' }}>
+                        {procSeleccionado.definiciones}
+                      </div>
+                    </div>
+
+                    {/* DESARROLLO DEL PROGRAMA */}
+                    <div className="mb-4">
+                      <h6 className="fw-bold text-dark border-bottom pb-1 uppercase font-heading"><i className="bi bi-chevron-right text-success small"></i> Desarrollo del Programa</h6>
+                      <div className="ps-2 text-justify" style={{ whiteSpace: 'pre-wrap' }}>
+                        {procSeleccionado.desarrollo}
+                      </div>
+                    </div>
+
+                    {/* CONTROL DE REGISTROS */}
+                    <div className="mb-4">
+                      <h6 className="fw-bold text-dark border-bottom pb-1 uppercase font-heading"><i className="bi bi-chevron-right text-success small"></i> 5. Control de Registros</h6>
+                      <div className="table-responsive ps-2 mt-2">
+                        <table className="table table-sm table-bordered align-middle text-center" style={{ fontSize: '10px', fontFamily: 'sans-serif' }}>
+                          <thead className="table-light">
+                            <tr>
+                              <th>REGISTRO</th>
+                              <th>CÓDIGO</th>
+                              <th>RESPONSABLE ALMACENAMIENTO</th>
+                              <th>TIEMPO RETENCIÓN</th>
+                              <th>DESTINO FINAL</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {procSeleccionado.registrosControl?.map((reg, idx) => (
+                              <tr key={idx}>
+                                <td className="text-start font-monospace">{reg.nombre}</td>
+                                <td><span className="badge bg-secondary-subtle text-secondary">{reg.codigo}</span></td>
+                                <td>{reg.responsable}</td>
+                                <td>{reg.retencion}</td>
+                                <td>{reg.destino}</td>
+                              </tr>
+                            )) || (
+                              <tr>
+                                <td colSpan="5" className="text-muted">No se registran controles vinculados.</td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* CONTROL DE CAMBIOS */}
+                    <div className="mb-4">
+                      <h6 className="fw-bold text-dark border-bottom pb-1 uppercase font-heading"><i className="bi bi-chevron-right text-success small"></i> 6. Control de Cambios</h6>
+                      <div className="table-responsive ps-2 mt-2">
+                        <table className="table table-sm table-bordered align-middle text-center" style={{ fontSize: '10px', fontFamily: 'sans-serif' }}>
+                          <thead className="table-light">
+                            <tr>
+                              <th>FECHA DE VIGENCIA Y VERSIÓN</th>
+                              <th>CARACTERÍSTICAS DE LOS CAMBIOS</th>
+                              <th>RESPONSABLES</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {procSeleccionado.controlCambios?.map((cam, idx) => (
+                              <tr key={idx}>
+                                <td className="fw-bold text-success">{cam.fecha}</td>
+                                <td className="text-start">{cam.descripcion}</td>
+                                <td>{cam.responsable}</td>
+                              </tr>
+                            )) || (
+                              <tr>
+                                <td colSpan="3" className="text-muted">Primera versión del documento.</td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
                   </div>
 
                 </div>
               </div>
 
               <div className="modal-footer justify-content-between">
-                <span className="small text-muted"><i className="bi bi-info-circle me-1"></i>Este documento cuenta con firma digital y es inmutable.</span>
+                <span className="small text-muted"><i className="bi bi-info-circle me-1"></i>Documento oficial bajo estándares de auditoría ISO 22000.</span>
                 <div className="d-flex gap-2">
                   <button type="button" className="btn btn-secondary btn-sm" onClick={() => setProcSeleccionado(null)}>Cerrar</button>
                   <button type="button" className="btn btn-success btn-sm" onClick={() => window.print()}>
@@ -620,7 +865,6 @@ function Procedimientos({
                         <tr key={rowIndex} style={{ height: '35px' }}>
                           {formSeleccionado.columnas.map((_, colIndex) => (
                             <td key={colIndex}>
-                              {/* Celdas especiales según columnas */}
                               {formSeleccionado.id === 'f-plg' && colIndex === 0 && (
                                 <div className="text-center fw-bold text-muted">{rowIndex + 1}</div>
                               )}
