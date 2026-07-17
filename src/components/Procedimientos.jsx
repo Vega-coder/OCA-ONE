@@ -589,8 +589,8 @@ function Procedimientos({
           </div>
         </div>
 
-        {/* BLOQUE 3 (Inferior): POE de [carpetaActiva] */}
-        {procedimientoOficial && (
+        {/* BLOQUE 3 (Inferior): POE de [carpetaActiva] - SÓLO para Limpieza y Desinfección */}
+        {carpetaActiva === 'Limpieza y Desinfección' && procedimientoOficial && (
           <div className="card gipa-card p-4 border-0 shadow-sm border-top border-5 border-success">
             <h4 className="card-title font-heading mb-1 text-dark">
               <i className="bi bi-file-earmark-medical me-2"></i>POE de {carpetaActiva}
