@@ -194,10 +194,13 @@ function Procedimientos({
     }, 4000);
   };
 
-  // Filtrar procedimientos en la categoría activa
-  const procedimientosEnCarpeta = procedimientos.filter(p => p.categoria === carpetaActiva);
+  // 1. Procedimientos creados dinámicamente por el usuario en esta carpeta (ID > 4)
+  const procedimientosCreados = procedimientos.filter(p => p.categoria === carpetaActiva && p.id > 4);
 
-  // Filtrar formatos vacíos en la categoría activa
+  // 2. Procedimiento oficial por defecto de la carpeta (ID <= 4)
+  const procedimientoOficial = procedimientos.find(p => p.categoria === carpetaActiva && p.id <= 4);
+
+  // 3. Formatos vacíos en la categoría activa
   const formatosEnCarpeta = formatosImprimibles.filter(f => f.categoria === carpetaActiva);
 
   return (
@@ -220,7 +223,7 @@ function Procedimientos({
 
       <div className="d-flex flex-column gap-4">
         
-        {/* Card de Manuales POES */}
+        {/* BLOQUE 1 (Superior): Procedimientos en: [carpetaActiva] */}
         <div className="card gipa-card p-4 border-0 shadow-sm">
           <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
             <div>
@@ -230,16 +233,12 @@ function Procedimientos({
               <p className="text-muted small mb-0">Listado oficial de manuales de procedimiento ISO vigentes.</p>
             </div>
             
-            {/* CONDICIONAL DE BOTÓN SUPERIOR: 
-                - Limpieza y Desinfección -> Redactar Procedimiento
-                - Otros -> Redactar Registro
-            */}
-            {carpetaActiva === 'Limpieza y Desinfección' ? (
+            {/* Botón condicional: Sólo "Limpieza y Desinfección" tiene "Redactar Procedimiento" */}
+            {carpetaActiva === 'Limpieza y Desinfección' && (
               <button 
                 className="btn btn-sm btn-outline-success d-flex align-items-center gap-1"
                 onClick={() => {
                   setMostrarCrearPoes(prev => !prev);
-                  setMostrarCrearFormato(false);
                 }}
               >
                 {mostrarCrearPoes ? (
@@ -248,24 +247,9 @@ function Procedimientos({
                   <span><i className="bi bi-plus-circle me-1"></i> Redactar Procedimiento</span>
                 )}
               </button>
-            ) : (
-              <button 
-                className="btn btn-sm btn-outline-success d-flex align-items-center gap-1"
-                onClick={() => {
-                  setMostrarCrearFormato(prev => !prev);
-                  setMostrarCrearPoes(false);
-                }}
-              >
-                {mostrarCrearFormato ? (
-                  <span><i className="bi bi-x-circle me-1"></i> Cerrar Formulario</span>
-                ) : (
-                  <span><i className="bi bi-plus-circle me-1"></i> Redactar Registro</span>
-                )}
-              </button>
             )}
           </div>
 
-          {/* Formulario 1: Redactar Procedimiento (Solo para Limpieza y Desinfección) */}
           {mostrarCrearPoes && carpetaActiva === 'Limpieza y Desinfección' && (
             <form onSubmit={handleCrearProcedimiento} className="border p-4 rounded bg-light bg-opacity-25 fade-in-view mb-3" style={{ fontSize: '13px' }}>
               <h5 className="fw-bold font-heading text-success mb-3"><i className="bi bi-file-earmark-plus me-1"></i>Redactar Nuevo Procedimiento Calidad (ISO-SGC)</h5>
@@ -420,7 +404,65 @@ function Procedimientos({
             </form>
           )}
 
-          {/* Formulario 2: Redactar Registro (Disponible para las demás categorías) */}
+          {/* Listado de Procedimientos Creados por el Usuario */}
+          <div className="d-flex flex-column gap-3">
+            {procedimientosCreados.length === 0 ? (
+              <div className="text-center py-4 text-muted small">
+                <i className="bi bi-file-earmark-lock me-1"></i>
+                No hay manuales de procedimiento adicionales cargados en esta carpeta.
+              </div>
+            ) : (
+              procedimientosCreados.map(proc => (
+                <div key={proc.id} className="border rounded-3 p-3 bg-body shadow-sm d-flex justify-content-between align-items-center">
+                  <div>
+                    <div className="d-flex align-items-center mb-1">
+                      <span className="badge bg-secondary-subtle text-secondary me-2">{proc.codigo}</span>
+                      <span className="badge bg-success-subtle text-success">V.{proc.version}</span>
+                    </div>
+                    <h5 className="fw-bold mb-1 text-dark" style={{ fontSize: '15px' }}>{proc.titulo}</h5>
+                    <div className="text-muted small">Aprobado el: {proc.fechaAprobacion} | Elaborado por: {proc.responsable}</div>
+                  </div>
+                  <div>
+                    <button 
+                      className="btn btn-success btn-sm d-flex align-items-center gap-1"
+                      onClick={() => setProcSeleccionado(proc)}
+                    >
+                      <i className="bi bi-file-earmark-pdf"></i> Ver PDF
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* BLOQUE 2 (Medio): Formatos Imprimibles, Registros Asociados */}
+        <div className="card gipa-card p-4 border-0 shadow-sm border-top border-5 border-success">
+          <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+            <div>
+              <h4 className="card-title font-heading mb-1 text-success">
+                <i className="bi bi-printer-fill me-2"></i>Formatos Imprimibles, Registros Asociados
+              </h4>
+              <p className="text-muted small mb-0">Descarga e imprime los formatos oficiales vacíos para registrar manualmente las actividades en planta.</p>
+            </div>
+            
+            {/* Botón condicional: Las categorías que NO son Limpieza tienen "Redactar Registro" */}
+            {carpetaActiva !== 'Limpieza y Desinfección' && (
+              <button 
+                className="btn btn-sm btn-outline-success d-flex align-items-center gap-1"
+                onClick={() => {
+                  setMostrarCrearFormato(prev => !prev);
+                }}
+              >
+                {mostrarCrearFormato ? (
+                  <span><i className="bi bi-x-circle me-1"></i> Cerrar Formulario</span>
+                ) : (
+                  <span><i className="bi bi-plus-circle me-1"></i> Redactar Registro</span>
+                )}
+              </button>
+            )}
+          </div>
+
           {mostrarCrearFormato && (
             <form onSubmit={handleCrearFormatoRegistro} className="border p-4 rounded bg-light bg-opacity-25 fade-in-view mb-3">
               <h5 className="fw-bold font-heading text-success mb-3"><i className="bi bi-file-earmark-plus me-1"></i>Diseñar Nuevo Formato de Registro Vacío</h5>
@@ -515,45 +557,6 @@ function Procedimientos({
             </form>
           )}
 
-          {/* Listado de Procedimientos */}
-          <div className="d-flex flex-column gap-3">
-            {procedimientosEnCarpeta.length === 0 ? (
-              <div className="text-center py-5 text-muted">
-                <i className="bi bi-file-earmark-lock display-3 text-secondary opacity-25 d-block mb-2"></i>
-                No hay manuales de procedimiento cargados en esta carpeta.
-              </div>
-            ) : (
-              procedimientosEnCarpeta.map(proc => (
-                <div key={proc.id} className="border rounded-3 p-3 bg-body shadow-sm d-flex justify-content-between align-items-center">
-                  <div>
-                    <div className="d-flex align-items-center mb-1">
-                      <span className="badge bg-secondary-subtle text-secondary me-2">{proc.codigo}</span>
-                      <span className="badge bg-success-subtle text-success">V.{proc.version}</span>
-                    </div>
-                    <h5 className="fw-bold mb-1 text-dark" style={{ fontSize: '16px' }}>{proc.titulo}</h5>
-                    <div className="text-muted small">Aprobado el: {proc.fechaAprobacion} | Elaborado por: {proc.responsable}</div>
-                  </div>
-                  <div>
-                    <button 
-                      className="btn btn-success d-flex align-items-center gap-1"
-                      onClick={() => setProcSeleccionado(proc)}
-                    >
-                      <i className="bi bi-file-earmark-pdf"></i> Ver PDF
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* SECCIÓN: Plantillas y Formatos Imprimibles (Registros Asociados) */}
-        <div className="card gipa-card p-4 border-0 shadow-sm border-top border-5 border-success">
-          <h4 className="card-title font-heading mb-1 text-success">
-            <i className="bi bi-printer-fill me-2"></i>Plantillas y Formatos Imprimibles (Registros Asociados)
-          </h4>
-          <p className="text-muted small mb-4">Descarga e imprime los formatos oficiales vacíos para registrar manualmente las actividades en planta.</p>
-
           <div className="d-flex flex-column gap-3">
             {formatosEnCarpeta.length === 0 ? (
               <div className="text-center py-4 text-muted">
@@ -572,7 +575,7 @@ function Procedimientos({
                   </div>
                   <div>
                     <button 
-                      className="btn btn-outline-success d-flex align-items-center gap-1"
+                      className="btn btn-outline-success btn-sm px-3 d-flex align-items-center gap-2"
                       onClick={() => setFormSeleccionado(form)}
                     >
                       <i className="bi bi-printer"></i> Previsualizar / Imprimir PDF
@@ -583,6 +586,36 @@ function Procedimientos({
             )}
           </div>
         </div>
+
+        {/* BLOQUE 3 (Inferior): POE de [carpetaActiva] */}
+        {procedimientoOficial && (
+          <div className="card gipa-card p-4 border-0 shadow-sm border-top border-5 border-success">
+            <h4 className="card-title font-heading mb-1 text-dark">
+              <i className="bi bi-file-earmark-medical me-2"></i>POE de {carpetaActiva}
+            </h4>
+            <p className="text-muted small mb-4">Documento oficial, manual base de auditoría y controles operacionales.</p>
+            
+            <div className="border rounded-3 p-3 bg-body shadow-sm d-flex justify-content-between align-items-center">
+              <div>
+                <div className="d-flex align-items-center mb-1">
+                  <span className="badge bg-secondary-subtle text-secondary me-2">{procedimientoOficial.codigo}</span>
+                  <span className="badge bg-success-subtle text-success">V.{procedimientoOficial.version}</span>
+                </div>
+                <h5 className="fw-bold mb-1 text-dark" style={{ fontSize: '16px' }}>{procedimientoOficial.titulo}</h5>
+                <div className="text-muted small">Aprobado el: {procedimientoOficial.fechaAprobacion} | Elaborado por: {procedimientoOficial.responsable}</div>
+              </div>
+              <div>
+                <button 
+                  className="btn btn-success d-flex align-items-center gap-2 px-3 py-2"
+                  onClick={() => setProcSeleccionado(procedimientoOficial)}
+                  style={{ fontWeight: '600' }}
+                >
+                  <i className="bi bi-printer"></i> Previsualización / Imprimir PDF
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
 
