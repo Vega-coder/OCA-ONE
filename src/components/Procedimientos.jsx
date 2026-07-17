@@ -18,9 +18,9 @@ function Procedimientos({
   const [nuevoCodigo, setNuevoCodigo] = useState('');
   const [nuevaVersion, setNuevaVersion] = useState('1.0.0');
   const [nuevoResponsable, setNuevoResponsable] = useState('Carlos Gómez');
+  const [nuevoAprobado, setNuevoAprobado] = useState('Carlos Gómez');
   const [nuevoObjetivo, setNuevoObjetivo] = useState('');
   const [nuevoAlcance, setNuevoAlcance] = useState('');
-  const [nuevoResponsablesDoc, setNuevoResponsablesDoc] = useState('Supervisor de Calidad y Auxiliares');
   const [nuevaDefiniciones, setNuevaDefiniciones] = useState('');
   const [nuevoDesarrollo, setNuevoDesarrollo] = useState('');
   
@@ -111,9 +111,10 @@ function Procedimientos({
       categoria: carpetaActiva,
       version: nuevaVersion,
       responsable: nuevoResponsable,
+      aprobado: nuevoAprobado,
       objetivo: nuevoObjetivo.trim(),
-      alcance: nuevoAlcance.trim() || 'Aplica para todas las actividades que se realizan en la planta de proceso y empaque.',
-      responsablesDoc: nuevoResponsablesDoc.trim() || 'Todo el personal que labora en la planta de proceso y empaque.',
+      alcance: nuevoAlcance.trim() || 'Este procedimiento aplica para todas las actividades que se realizan en la planta de proceso y empaque.',
+      responsablesDoc: 'Todo el personal que labora en la planta de proceso y empaque.',
       definiciones: nuevaDefiniciones.trim() || 'POES: Procedimientos Operativos Estandarizados de Sanitización.',
       desarrollo: nuevoDesarrollo.trim(),
       registrosControl: regControlNombre.trim() ? [
@@ -279,8 +280,9 @@ function Procedimientos({
                 </div>
               </div>
 
+              {/* Separando Elaborado por / Aprobado por sin Responsable de Cumplimiento */}
               <div className="row g-2 mb-3">
-                <div className="col-6 col-md-3">
+                <div className="col-4 col-md-2">
                   <label className="form-label fw-semibold small">Versión</label>
                   <input 
                     type="text" 
@@ -290,8 +292,8 @@ function Procedimientos({
                     required 
                   />
                 </div>
-                <div className="col-6 col-md-3">
-                  <label className="form-label fw-semibold small">Elaborado/Aprobado por</label>
+                <div className="col-8 col-md-5">
+                  <label className="form-label fw-semibold small">Elaborado por</label>
                   <input 
                     type="text" 
                     className="form-control form-control-sm" 
@@ -300,13 +302,13 @@ function Procedimientos({
                     required 
                   />
                 </div>
-                <div className="col-12 col-md-6">
-                  <label className="form-label fw-semibold small">Responsable del Cumplimiento</label>
+                <div className="col-12 col-md-5">
+                  <label className="form-label fw-semibold small">Aprobado por</label>
                   <input 
                     type="text" 
                     className="form-control form-control-sm" 
-                    value={nuevoResponsablesDoc} 
-                    onChange={(e) => setNuevoResponsablesDoc(e.target.value)} 
+                    value={nuevoAprobado} 
+                    onChange={(e) => setNuevoAprobado(e.target.value)} 
                     required 
                   />
                 </div>
@@ -702,7 +704,7 @@ function Procedimientos({
                           </td>
                           <td style={{ width: '50%' }} className="p-3">
                             <strong className="d-block mb-4">Aprobado por:</strong>
-                            <div className="fw-bold text-dark">{procSeleccionado.responsable}</div>
+                            <div className="fw-bold text-dark">{procSeleccionado.aprobado || procSeleccionado.responsable}</div>
                             <div className="text-muted small">Director de Operaciones SGC</div>
                           </td>
                         </tr>
