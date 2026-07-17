@@ -3,12 +3,8 @@ import React, { useState } from 'react';
 function Procedimientos({ 
   procedimientos, 
   onAgregar, 
-  saneamientoLogs, 
-  alergenosLogs, 
   carpetaActiva, 
-  setCarpetaActiva, 
-  activeSubView,
-  onAgregarSaneamiento
+  setCarpetaActiva
 }) {
   const [procSeleccionado, setProcSeleccionado] = useState(null);
   const [formSeleccionado, setFormSeleccionado] = useState(null);
@@ -70,52 +66,6 @@ function Procedimientos({
     }
   ];
 
-  // Estados del Formulario del Checklist Operativo (Registros Asociados)
-  const [checklistsData, setChecklistsData] = useState({
-    'Limpieza y Desinfección': [
-      { id: 'lim-1', tarea: 'Limpieza de Mesas y Superficies de Trabajo', completado: true },
-      { id: 'lim-2', tarea: 'Desinfección de Equipos de Envasado A/B', completado: true },
-      { id: 'lim-3', tarea: 'Limpieza de Utensilios de Mezcla y Tolvas', completado: true },
-      { id: 'lim-4', tarea: 'Higienización de Pisos y Canales de Efluentes', completado: false },
-      { id: 'lim-5', tarea: 'Verificación de cloro residual en contacto (200 ppm)', completado: true }
-    ],
-    'Control de Plagas': [
-      { id: 'pla-1', tarea: 'Inspección de las 15 estaciones de cebado externas', completado: true },
-      { id: 'pla-2', tarea: 'Verificación de trampas de luz UV en zona de empaque', completado: true },
-      { id: 'pla-3', tarea: 'Control de malezas en perímetro externo', completado: false }
-    ],
-    'Residuos Sólidos y Líquidos': [
-      { id: 'res-1', tarea: 'Clasificación de residuos sólidos en canecas de color', completado: true },
-      { id: 'res-2', tarea: 'Limpieza de trampa de grasas principal', completado: true },
-      { id: 'res-3', tarea: 'Vaciado de tolvas de recolección de merma', completado: true }
-    ],
-    'Agua Potable': [
-      { id: 'agu-1', tarea: 'Medición de Cloro Libre Residual (0.3 - 2.0 ppm)', completado: true },
-      { id: 'agu-2', tarea: 'Medición de pH en grifo de salida (6.5 - 8.5)', completado: true },
-      { id: 'agu-3', tarea: 'Inspección física e integridad de tapas del tanque', completado: true }
-    ]
-  });
-
-  const [obsChecklist, setObsChecklist] = useState('');
-  const [supervisorChecklist, setSupervisorChecklist] = useState('Carlos Gómez');
-  const [alertaChecklistExito, setAlertaChecklistExito] = useState(false);
-
-  // Datos mock de evidencias de soporte externas (Plagas, Residuos, Agua)
-  const evidenciasSoporte = {
-    'Control de Plagas': [
-      { id: 101, documento: 'Certificado de Control de Vectores #209', fecha: '2026-07-01', proveedor: 'Plagas Limpias SAS', estado: 'Conforme (Vence: 2026-08-01)' },
-      { id: 102, documento: 'Ficha Técnica del Cebo Raticida Roden-Kill', fecha: '2026-05-12', proveedor: 'Químicos del Campo', estado: 'Aprobado (Uso Alimentario)' }
-    ],
-    'Residuos Sólidos y Líquidos': [
-      { id: 201, documento: 'Manifiesto de Disposición de Aceites #AC-908', fecha: '2026-07-10', proveedor: 'EcoGrasas S.A.', estado: 'Recibido 120 Litros' },
-      { id: 202, documento: 'Acta de Retiro de Residuos Especiales #55', fecha: '2026-07-05', proveedor: 'Limpieza Total ESP', estado: 'Conforme (350 Kg)' }
-    ],
-    'Agua Potable': [
-      { id: 301, documento: 'Certificado de Lavado y Desinfección de Tanques', fecha: '2026-06-15', proveedor: 'Tanques Sanos', estado: 'Vigente (Vence: 2026-12-15)' },
-      { id: 302, documento: 'Análisis Microbiológico de Red Interna', fecha: '2026-06-20', proveedor: 'Lab de Aguas de Antioquia', estado: 'Apto (Agua Potable)' }
-    ]
-  };
-
   const handleCrearProcedimiento = (e) => {
     e.preventDefault();
 
@@ -143,43 +93,6 @@ function Procedimientos({
     }, 4000);
   };
 
-  const handleToggleTarea = (id) => {
-    setChecklistsData(prev => ({
-      ...prev,
-      [carpetaActiva]: prev[carpetaActiva].map(t => 
-        t.id === id ? { ...t, completado: !t.completado } : t
-      )
-    }));
-  };
-
-  const handleGuardarChecklist = (e) => {
-    e.preventDefault();
-    
-    const tareas = checklistsData[carpetaActiva];
-    const todasCompletadas = tareas.every(t => t.completado);
-    
-    if (carpetaActiva === 'Limpieza y Desinfección') {
-      const nuevoRegistro = {
-        fecha: new Date().toISOString().split('T')[0],
-        hora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-        area: 'Planta General (Checklist)',
-        supervisor: supervisorChecklist,
-        tipo: 'Rutinaria',
-        producto: 'Cloro 200ppm / Detergente',
-        conforme: todasCompletadas,
-        observacion: obsChecklist || (todasCompletadas ? 'Checklist completado sin novedades' : 'Faltaron tareas por completar')
-      };
-      
-      onAgregarSaneamiento(nuevoRegistro);
-    }
-
-    setObsChecklist('');
-    setAlertaChecklistExito(true);
-    setTimeout(() => {
-      setAlertaChecklistExito(false);
-    }, 4000);
-  };
-
   // Filtrar procedimientos en la categoría activa
   const procedimientosEnCarpeta = procedimientos.filter(p => p.categoria === carpetaActiva);
 
@@ -196,332 +109,175 @@ function Procedimientos({
         </div>
       )}
 
-      {/* Alerta de Registro de Checklist Exitoso */}
-      {alertaChecklistExito && (
-        <div className="alert alert-success alert-dismissible fade show shadow border-0 mb-4" role="alert" style={{ borderRadius: '10px' }}>
-          <strong><i className="bi bi-journal-check me-2"></i>¡Registro de Saneamiento Guardado!</strong> Se ha generado el registro operacional de inocuidad correspondiente.
-          <button type="button" className="btn-close" onClick={() => setAlertaChecklistExito(false)} aria-label="Close"></button>
-        </div>
-      )}
-
-      {/* Vista de PROCEDIMIENTO (PDF) */}
-      {activeSubView === 'procedimiento' && (
-        <div className="d-flex flex-column gap-4">
-          
-          {/* Card de Manuales POES */}
-          <div className="card gipa-card p-4 border-0 shadow-sm">
-            <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-              <div>
-                <h4 className="card-title font-heading mb-1 text-dark">
-                  <i className="bi bi-file-earmark-pdf-fill text-danger me-2"></i>Procedimientos en: {carpetaActiva}
-                </h4>
-                <p className="text-muted small mb-0">Listado oficial de manuales POES y especificaciones de calidad vigentes.</p>
-              </div>
-              <button 
-                className="btn btn-sm btn-outline-success"
-                onClick={() => setMostrarCrearForm(prev => !prev)}
-              >
-                {mostrarCrearForm ? (
-                  <span><i className="bi bi-x-circle me-1"></i> Cerrar Editor</span>
-                ) : (
-                  <span><i className="bi bi-plus-circle me-1"></i> Redactar POES</span>
-                )}
-              </button>
+      <div className="d-flex flex-column gap-4">
+        
+        {/* Card de Manuales POES */}
+        <div className="card gipa-card p-4 border-0 shadow-sm">
+          <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+            <div>
+              <h4 className="card-title font-heading mb-1 text-dark">
+                <i className="bi bi-file-earmark-pdf-fill text-danger me-2"></i>Procedimientos en: {carpetaActiva}
+              </h4>
+              <p className="text-muted small mb-0">Listado oficial de manuales POES y especificaciones de calidad vigentes.</p>
             </div>
+            <button 
+              className="btn btn-sm btn-outline-success"
+              onClick={() => setMostrarCrearForm(prev => !prev)}
+            >
+              {mostrarCrearForm ? (
+                <span><i className="bi bi-x-circle me-1"></i> Cerrar Editor</span>
+              ) : (
+                <span><i className="bi bi-plus-circle me-1"></i> Redactar POES</span>
+              )}
+            </button>
+          </div>
 
-            {mostrarCrearForm ? (
-              // Formulario para Crear / Redactar un procedimiento
-              <form onSubmit={handleCrearProcedimiento} className="border p-4 rounded bg-light bg-opacity-25 fade-in-view">
-                <h5 className="fw-bold font-heading text-success mb-3"><i className="bi bi-file-earmark-plus me-1"></i>Redactar Nuevo Procedimiento (POES)</h5>
+          {mostrarCrearForm ? (
+            // Formulario para Crear / Redactar un procedimiento
+            <form onSubmit={handleCrearProcedimiento} className="border p-4 rounded bg-light bg-opacity-25 fade-in-view">
+              <h5 className="fw-bold font-heading text-success mb-3"><i className="bi bi-file-earmark-plus me-1"></i>Redactar Nuevo Procedimiento (POES)</h5>
+              
+              <div className="mb-3">
+                <label className="form-label fw-semibold small">Título del Documento</label>
+                <input 
+                  type="text" 
+                  className="form-control form-control-sm" 
+                  value={nuevoTitulo} 
+                  onChange={(e) => setNuevoTitulo(e.target.value)} 
+                  placeholder="Ej: Manual de desratización y fumigación" 
+                  required 
+                />
+              </div>
+
+              <div className="row g-2 mb-3">
+                <div className="col-12 col-md-6">
+                  <label className="form-label fw-semibold small">Categoría del Plan</label>
+                  <select className="form-select form-select-sm" value={nuevaCategoria} onChange={(e) => setNuevaCategoria(e.target.value)} required>
+                    <option value="Limpieza y Desinfección">Limpieza y Desinfección</option>
+                    <option value="Control de Plagas">Control de Plagas</option>
+                    <option value="Residuos Sólidos y Líquidos">Residuos Sólidos y Líquidos</option>
+                    <option value="Agua Potable">Agua Potable</option>
+                  </select>
+                </div>
                 
-                <div className="mb-3">
-                  <label className="form-label fw-semibold small">Título del Documento</label>
+                <div className="col-6 col-md-3">
+                  <label className="form-label fw-semibold small">Versión</label>
                   <input 
                     type="text" 
-                    className="form-control form-control-sm" 
-                    value={nuevoTitulo} 
-                    onChange={(e) => setNuevoTitulo(e.target.value)} 
-                    placeholder="Ej: Manual de desratización y fumigación" 
+                    className="form-control form-control-sm text-center" 
+                    value={nuevaVersion} 
+                    onChange={(e) => setNuevaVersion(e.target.value)} 
+                    placeholder="1.0.0" 
                     required 
                   />
                 </div>
 
-                <div className="row g-2 mb-3">
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold small">Categoría del Plan</label>
-                    <select className="form-select form-select-sm" value={nuevaCategoria} onChange={(e) => setNuevaCategoria(e.target.value)} required>
-                      <option value="Limpieza y Desinfección">Limpieza y Desinfección</option>
-                      <option value="Control de Plagas">Control de Plagas</option>
-                      <option value="Residuos Sólidos y Líquidos">Residuos Sólidos y Líquidos</option>
-                      <option value="Agua Potable">Agua Potable</option>
-                    </select>
-                  </div>
-                  
-                  <div className="col-6 col-md-3">
-                    <label className="form-label fw-semibold small">Versión</label>
-                    <input 
-                      type="text" 
-                      className="form-control form-control-sm text-center" 
-                      value={nuevaVersion} 
-                      onChange={(e) => setNuevaVersion(e.target.value)} 
-                      placeholder="1.0.0" 
-                      required 
-                    />
-                  </div>
-
-                  <div className="col-6 col-md-3">
-                    <label className="form-label fw-semibold small">Responsable</label>
-                    <input 
-                      type="text" 
-                      className="form-control form-control-sm" 
-                      value={nuevoResponsable} 
-                      onChange={(e) => setNuevoResponsable(e.target.value)} 
-                      required 
-                    />
-                  </div>
+                <div className="col-6 col-md-3">
+                  <label className="form-label fw-semibold small">Responsable</label>
+                  <input 
+                    type="text" 
+                    className="form-control form-control-sm" 
+                    value={nuevoResponsable} 
+                    onChange={(e) => setNuevoResponsable(e.target.value)} 
+                    required 
+                  />
                 </div>
-
-                <div className="mb-3">
-                  <label className="form-label fw-semibold small">Contenido del Procedimiento (Instrucciones)</label>
-                  <textarea 
-                    className="form-control form-control-sm font-monospace" 
-                    rows="8" 
-                    value={nuevoContenido} 
-                    onChange={(e) => setNuevoContenido(e.target.value)}
-                    placeholder="Escribe el manual detallado (Objetivo, Alcance, Instrucciones paso a paso, Controles...)"
-                    style={{ fontSize: '13px' }}
-                    required
-                  ></textarea>
-                </div>
-
-                <div className="d-flex justify-content-end gap-2">
-                  <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setMostrarCrearForm(false)}>
-                    Cancelar
-                  </button>
-                  <button type="submit" className="btn btn-sm btn-success">
-                    <i className="bi bi-save me-1"></i> Publicar Documento
-                  </button>
-                </div>
-              </form>
-            ) : (
-              // Listado de Procedimientos
-              <div className="d-flex flex-column gap-3">
-                {procedimientosEnCarpeta.length === 0 ? (
-                  <div className="text-center py-5 text-muted">
-                    <i className="bi bi-file-earmark-lock display-3 text-secondary opacity-25 d-block mb-2"></i>
-                    No hay manuales de procedimiento cargados en esta carpeta.
-                  </div>
-                ) : (
-                  procedimientosEnCarpeta.map(proc => (
-                    <div key={proc.id} className="border rounded-3 p-3 bg-body shadow-sm d-flex justify-content-between align-items-center">
-                      <div>
-                        <div className="d-flex align-items-center mb-1">
-                          <span className="badge bg-secondary-subtle text-secondary me-2">{proc.codigo}</span>
-                          <span className="badge bg-success-subtle text-success">V.{proc.version}</span>
-                        </div>
-                        <h5 className="fw-bold mb-1 text-dark" style={{ fontSize: '16px' }}>{proc.titulo}</h5>
-                        <div className="text-muted small">Aprobado el: {proc.fechaAprobacion} | Supervisor: {proc.responsable}</div>
-                      </div>
-                      <div>
-                        <button 
-                          className="btn btn-success d-flex align-items-center gap-1"
-                          onClick={() => setProcSeleccionado(proc)}
-                        >
-                          <i className="bi bi-file-earmark-pdf"></i> Ver PDF
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
               </div>
-            )}
-          </div>
 
-          {/* NUEVA SECCIÓN: Plantillas y Formatos Imprimibles (Registros Asociados) */}
-          <div className="card gipa-card p-4 border-0 shadow-sm border-top border-5 border-success">
-            <h4 className="card-title font-heading mb-1 text-success">
-              <i className="bi bi-printer-fill me-2"></i>Plantillas y Formatos Imprimibles (Registros Asociados)
-            </h4>
-            <p className="text-muted small mb-4">Descarga e imprime los formatos oficiales vacíos para registrar manualmente las actividades en planta.</p>
+              <div className="mb-3">
+                <label className="form-label fw-semibold small">Contenido del Procedimiento (Instrucciones)</label>
+                <textarea 
+                  className="form-control form-control-sm font-monospace" 
+                  rows="8" 
+                  value={nuevoContenido} 
+                  onChange={(e) => setNuevoContenido(e.target.value)}
+                  placeholder="Escribe el manual detallado (Objetivo, Alcance, Instrucciones paso a paso, Controles...)"
+                  style={{ fontSize: '13px' }}
+                  required
+                ></textarea>
+              </div>
 
+              <div className="d-flex justify-content-end gap-2">
+                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setMostrarCrearForm(false)}>
+                  Cancelar
+                </button>
+                <button type="submit" className="btn btn-sm btn-success">
+                  <i className="bi bi-save me-1"></i> Publicar Documento
+                </button>
+              </div>
+            </form>
+          ) : (
+            // Listado de Procedimientos
             <div className="d-flex flex-column gap-3">
-              {formatosEnCarpeta.length === 0 ? (
-                <div className="text-center py-4 text-muted">
-                  Sin formatos imprimibles cargados para esta carpeta.
+              {procedimientosEnCarpeta.length === 0 ? (
+                <div className="text-center py-5 text-muted">
+                  <i className="bi bi-file-earmark-lock display-3 text-secondary opacity-25 d-block mb-2"></i>
+                  No hay manuales de procedimiento cargados en esta carpeta.
                 </div>
               ) : (
-                formatosEnCarpeta.map(form => (
-                  <div key={form.id} className="border rounded-3 p-3 bg-body d-flex justify-content-between align-items-center hover-shadow transition-all">
+                procedimientosEnCarpeta.map(proc => (
+                  <div key={proc.id} className="border rounded-3 p-3 bg-body shadow-sm d-flex justify-content-between align-items-center">
                     <div>
                       <div className="d-flex align-items-center mb-1">
-                        <span className="badge bg-success-subtle text-success me-2">{form.codigo}</span>
-                        <span className="badge bg-dark-subtle text-dark">Plantilla Vacía</span>
+                        <span className="badge bg-secondary-subtle text-secondary me-2">{proc.codigo}</span>
+                        <span className="badge bg-success-subtle text-success">V.{proc.version}</span>
                       </div>
-                      <h5 className="fw-bold mb-1 text-dark" style={{ fontSize: '15px' }}>{form.titulo}</h5>
-                      <p className="text-muted mb-0 small"><i className="bi bi-info-circle me-1"></i>{form.nota}</p>
+                      <h5 className="fw-bold mb-1 text-dark" style={{ fontSize: '16px' }}>{proc.titulo}</h5>
+                      <div className="text-muted small">Aprobado el: {proc.fechaAprobacion} | Supervisor: {proc.responsable}</div>
                     </div>
                     <div>
                       <button 
-                        className="btn btn-outline-success d-flex align-items-center gap-1"
-                        onClick={() => setFormSeleccionado(form)}
+                        className="btn btn-success d-flex align-items-center gap-1"
+                        onClick={() => setProcSeleccionado(proc)}
                       >
-                        <i className="bi bi-printer"></i> Previsualizar / Imprimir PDF
+                        <i className="bi bi-file-earmark-pdf"></i> Ver PDF
                       </button>
                     </div>
                   </div>
                 ))
               )}
             </div>
-          </div>
-
+          )}
         </div>
-      )}
 
-      {/* Vista de REGISTROS ASOCIADOS (Checklist Operativo e Historial) */}
-      {activeSubView === 'registros' && (
-        <div className="row g-4">
-          
-          {/* Columna Izquierda: Checklist Interactivo */}
-          <div className="col-12 col-xl-6">
-            <div className="card gipa-card p-4 border-0 shadow-sm h-100">
-              <h4 className="card-title font-heading mb-1 text-success">
-                <i className="bi bi-journal-check me-2"></i>Llenar Checklist: {carpetaActiva}
-              </h4>
-              <p className="text-muted small mb-4">Aplica el checklist correspondiente al procedimiento para registrar las actividades en la bitácora oficial.</p>
+        {/* SECCIÓN: Plantillas y Formatos Imprimibles (Registros Asociados) */}
+        <div className="card gipa-card p-4 border-0 shadow-sm border-top border-5 border-success">
+          <h4 className="card-title font-heading mb-1 text-success">
+            <i className="bi bi-printer-fill me-2"></i>Plantillas y Formatos Imprimibles (Registros Asociados)
+          </h4>
+          <p className="text-muted small mb-4">Descarga e imprime los formatos oficiales vacíos para registrar manualmente las actividades en planta.</p>
 
-              <form onSubmit={handleGuardarChecklist}>
-                
-                {/* Listado de Tareas del Checklist */}
-                <div className="d-flex flex-column gap-3 mb-4">
-                  {checklistsData[carpetaActiva]?.map(t => (
-                    <div key={t.id} className="p-3 border rounded-3 bg-light bg-opacity-25 d-flex align-items-center">
-                      <div className="form-check d-flex align-items-center w-100">
-                        <input 
-                          className="form-check-input me-3" 
-                          type="checkbox" 
-                          id={`check-${t.id}`}
-                          checked={t.completado}
-                          onChange={() => handleToggleTarea(t.id)}
-                          style={{ width: '20px', height: '20px', cursor: 'pointer' }}
-                        />
-                        <label 
-                          className={`form-check-label flex-grow-1 text-dark fs-6 ${t.completado ? 'text-decoration-line-through text-muted' : ''}`} 
-                          htmlFor={`check-${t.id}`}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          {t.tarea}
-                        </label>
-                      </div>
+          <div className="d-flex flex-column gap-3">
+            {formatosEnCarpeta.length === 0 ? (
+              <div className="text-center py-4 text-muted">
+                Sin formatos imprimibles cargados para esta carpeta.
+              </div>
+            ) : (
+              formatosEnCarpeta.map(form => (
+                <div key={form.id} className="border rounded-3 p-3 bg-body d-flex justify-content-between align-items-center hover-shadow transition-all">
+                  <div>
+                    <div className="d-flex align-items-center mb-1">
+                      <span className="badge bg-success-subtle text-success me-2">{form.codigo}</span>
+                      <span className="badge bg-dark-subtle text-dark">Plantilla Vacía</span>
                     </div>
-                  )) || (
-                    <div className="text-center py-4 text-muted small">
-                      Sin checklist estructurado para esta categoría.
-                    </div>
-                  )}
-                </div>
-
-                {/* Supervisor y Observaciones */}
-                <div className="row g-2 mb-3">
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold small">Supervisor/Firma</label>
-                    <input 
-                      type="text" 
-                      className="form-control form-control-sm" 
-                      value={supervisorChecklist} 
-                      onChange={(e) => setSupervisorChecklist(e.target.value)} 
-                      required 
-                    />
+                    <h5 className="fw-bold mb-1 text-dark" style={{ fontSize: '15px' }}>{form.titulo}</h5>
+                    <p className="text-muted mb-0 small"><i className="bi bi-info-circle me-1"></i>{form.nota}</p>
                   </div>
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold small">Observaciones adicionales</label>
-                    <input 
-                      type="text" 
-                      className="form-control form-control-sm" 
-                      placeholder="Detalles sobre hallazgos..." 
-                      value={obsChecklist} 
-                      onChange={(e) => setObsChecklist(e.target.value)}
-                    />
+                  <div>
+                    <button 
+                      className="btn btn-outline-success d-flex align-items-center gap-1"
+                      onClick={() => setFormSeleccionado(form)}
+                    >
+                      <i className="bi bi-printer"></i> Previsualizar / Imprimir PDF
+                    </button>
                   </div>
                 </div>
-
-                <div className="d-grid mt-4">
-                  <button type="submit" className="btn btn-success">
-                    <i className="bi bi-shield-check me-2"></i> Firmar y Guardar Registro en Planta
-                  </button>
-                </div>
-
-              </form>
-            </div>
+              ))
+            )}
           </div>
-
-          {/* Columna Derecha: Historial de Registros en Planta */}
-          <div className="col-12 col-xl-6">
-            <div className="card gipa-card p-4 border-0 shadow-sm h-100">
-              <h4 className="card-title font-heading mb-1 text-dark">
-                <i className="bi bi-clock-history me-2"></i>Historial de Registros Guardados
-              </h4>
-              <p className="text-muted small mb-4">Registros de control de calidad almacenados recientemente.</p>
-
-              {carpetaActiva === 'Limpieza y Desinfección' ? (
-                // Historial Real de Limpieza y Desinfección
-                <div className="table-responsive">
-                  <table className="table table-hover align-middle" style={{ fontSize: '13px' }}>
-                    <thead className="table-light">
-                      <tr>
-                        <th>Fecha/Hora</th>
-                        <th>Área Evaluada</th>
-                        <th>Estado</th>
-                        <th>Supervisor</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {saneamientoLogs.slice().reverse().map(log => (
-                        <tr key={log.id}>
-                          <td>
-                            <div className="fw-semibold">{log.fecha}</div>
-                            <div className="text-muted small">{log.hora}</div>
-                          </td>
-                          <td>
-                            <div className="fw-bold">{log.area}</div>
-                            <div className="text-muted small text-truncate" style={{ maxWidth: '180px' }}>{log.observacion}</div>
-                          </td>
-                          <td>
-                            {log.conforme ? (
-                              <span className="badge bg-success-subtle text-success">Conforme</span>
-                            ) : (
-                              <span className="badge bg-danger-subtle text-danger">Falla</span>
-                            )}
-                          </td>
-                          <td className="text-muted">{log.supervisor}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                // Historial Mock para Plagas, Residuos, Agua
-                <div className="d-flex flex-column gap-3">
-                  {evidenciasSoporte[carpetaActiva]?.map(ev => (
-                    <div key={ev.id} className="p-3 border rounded-3 bg-light bg-opacity-25 d-flex justify-content-between align-items-center">
-                      <div>
-                        <strong className="text-dark d-block mb-1" style={{ fontSize: '14px' }}>{ev.documento}</strong>
-                        <span className="text-muted small">Fecha: {ev.fecha} | Organización: {ev.proveedor}</span>
-                      </div>
-                      <span className="badge bg-success-subtle text-success">{ev.estado}</span>
-                    </div>
-                  )) || (
-                    <div className="text-center py-5 text-muted">
-                      <i className="bi bi-folder-x display-4 d-block mb-2"></i>
-                      No hay registros archivados en esta subcategoría.
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
         </div>
-      )}
+
+      </div>
 
       {/* Visor Modal de PDF Simulado (Para Procedimientos Textuales) */}
       {procSeleccionado && (
@@ -686,7 +442,6 @@ function Procedimientos({
                         <tr key={rowIndex} style={{ height: '35px' }}>
                           {formSeleccionado.columnas.map((_, colIndex) => (
                             <td key={colIndex}>
-                              {/* Celdas especiales según columnas */}
                               {formSeleccionado.id === 'f-plg' && colIndex === 0 && (
                                 <div className="text-center fw-bold text-muted">{rowIndex + 1}</div>
                               )}
