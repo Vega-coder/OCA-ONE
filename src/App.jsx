@@ -13,6 +13,12 @@ function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme-v4') || 'light');
   const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
   const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
+  const [expandedCategories, setExpandedCategories] = useState({
+    'Limpieza y Desinfección': true,
+    'Control de Plagas': false,
+    'Residuos Sólidos y Líquidos': false,
+    'Agua Potable': false
+  });
   
   // Base de datos de Procedimientos (Control Documental)
   const [procedimientos, setProcedimientos] = useState(() => {
@@ -321,19 +327,46 @@ function App() {
                   { name: 'Control de Plagas', icon: 'bi-bug-fill text-warning' },
                   { name: 'Residuos Sólidos y Líquidos', icon: 'bi-trash-fill text-success' },
                   { name: 'Agua Potable', icon: 'bi-water text-primary' }
-                ].map(cat => (
-                  <li key={cat.name} className="mb-1">
-                    <button 
-                      className={`nav-link-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeCategory === cat.name ? 'active-sub' : 'text-white'}`}
-                      onClick={() => {
-                        setCurrentView('procedimientos');
-                        setActiveCategory(cat.name);
-                      }}
-                    >
-                      <i className={`bi ${cat.icon} me-2`}></i> {cat.name}
-                    </button>
-                  </li>
-                ))}
+                ].map(cat => {
+                  const isCatExpanded = expandedCategories[cat.name];
+                  return (
+                    <li key={cat.name} className="mb-1">
+                      <button 
+                        className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'procedimientos' && activeCategory === cat.name ? 'fw-bold' : ''}`}
+                        onClick={() => {
+                          setCurrentView('procedimientos');
+                          setActiveCategory(cat.name);
+                          setExpandedCategories(prev => ({
+                            ...prev,
+                            [cat.name]: !prev[cat.name]
+                          }));
+                        }}
+                      >
+                        <span>
+                          <i className={`bi ${cat.icon} me-2`}></i> {cat.name}
+                        </span>
+                        <i className={`bi bi-chevron-down arrow-rotate ${isCatExpanded ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
+                      </button>
+                      
+                      {/* Nivel 3: Sub-submenú (Sólo la subcategoría Procedimiento) */}
+                      {isCatExpanded && (
+                        <ul className="sidebar-sub-submenu">
+                          <li>
+                            <button
+                              className={`nav-link-sub-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeCategory === cat.name ? 'active-sub-sub' : 'text-white'}`}
+                              onClick={() => {
+                                setCurrentView('procedimientos');
+                                setActiveCategory(cat.name);
+                              }}
+                            >
+                              <i className="bi bi-file-earmark-pdf me-1"></i> Procedimiento
+                            </button>
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </li>
