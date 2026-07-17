@@ -28,8 +28,14 @@ function Procedimientos({
   const [regControlNombre, setRegControlNombre] = useState('');
   const [regControlCodigo, setRegControlCodigo] = useState('');
   const [regControlResp, setRegControlResp] = useState('Aseguramiento de Calidad');
-  const [regControlReten, setRegControlReten] = useState('1 año');
-  const [regControlDest, setRegControlDest] = useState('Destrucción');
+  const [regControlReten, setRegControlReten] = useState('1 year');
+  const [regControlDest, setRegControlDest] = useState('Destruction');
+
+  // Estados para Control de Cambios del nuevo procedimiento
+  const [cambioFecha, setCambioFecha] = useState('Julio 2026');
+  const [cambioVersion, setCambioVersion] = useState('1.0.0');
+  const [cambioDescripcion, setCambioDescripcion] = useState('Creación del documento');
+  const [cambioResponsable, setCambioResponsable] = useState('Carlos Gómez');
 
   // Estados del Formulario para Crear Formato de Registro (Imprimibles)
   const [regTitulo, setRegTitulo] = useState('');
@@ -136,9 +142,9 @@ function Procedimientos({
       ],
       controlCambios: [
         {
-          fecha: `Julio 2026 Versión ${nuevaVersion}`,
-          descripcion: 'Creación del documento bajo estructura ISO',
-          responsable: nuevoResponsable
+          fecha: `${cambioFecha} Versión ${cambioVersion}`,
+          descripcion: cambioDescripcion.trim() || 'Creación del documento',
+          responsable: cambioResponsable.trim() || nuevoResponsable
         }
       ]
     };
@@ -152,6 +158,7 @@ function Procedimientos({
     setNuevoDesarrollo('');
     setRegControlNombre('');
     setRegControlCodigo('');
+    setCambioDescripcion('Creación del documento');
     setMostrarCrearPoes(false);
     setAlertaExito(true);
 
@@ -391,6 +398,57 @@ function Procedimientos({
                       <option value="Jefe de Producción">Jefe de Producción</option>
                       <option value="Mantenimiento">Mantenimiento</option>
                     </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Control de Cambios del documento */}
+              <div className="border p-3 rounded mb-3 bg-white">
+                <h6 className="fw-bold text-success mb-2 small"><i className="bi bi-clock-history"></i> 6. CONTROL DE CAMBIOS (Historial de versión inicial)</h6>
+                <div className="row g-2">
+                  <div className="col-6 col-md-3">
+                    <label className="form-label fw-semibold small">Fecha del Cambio</label>
+                    <input 
+                      type="text" 
+                      className="form-control form-control-sm" 
+                      placeholder="Ej: Julio 2026" 
+                      value={cambioFecha}
+                      onChange={(e) => setCambioFecha(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col-6 col-md-2">
+                    <label className="form-label fw-semibold small">Versión</label>
+                    <input 
+                      type="text" 
+                      className="form-control form-control-sm text-center" 
+                      placeholder="Ej: 1.0.0" 
+                      value={cambioVersion}
+                      onChange={(e) => setCambioVersion(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col-12 col-md-4">
+                    <label className="form-label fw-semibold small">Características de los Cambios</label>
+                    <input 
+                      type="text" 
+                      className="form-control form-control-sm" 
+                      placeholder="Ej: Creación del documento" 
+                      value={cambioDescripcion}
+                      onChange={(e) => setCambioDescripcion(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col-12 col-md-3">
+                    <label className="form-label fw-semibold small">Responsable del Cambio</label>
+                    <input 
+                      type="text" 
+                      className="form-control form-control-sm" 
+                      placeholder="Ej: Ing Luis Salcedo" 
+                      value={cambioResponsable}
+                      onChange={(e) => setCambioResponsable(e.target.value)}
+                      required
+                    />
                   </div>
                 </div>
               </div>
