@@ -23,7 +23,7 @@ function Dashboard({ saneamiento, variables, manipuladores, alertas, accionesCap
   return (
     <div className="fade-in-view">
       {/* Banner de Bienvenida */}
-      <div className="card border-0 bg-success text-white p-4 mb-4 rounded-3 shadow-sm position-relative overflow-hidden">
+      <div className="card border-0 text-white p-4 mb-4 shadow-sm position-relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0d9488 0%, #10b981 50%, #0284c7 100%)', borderRadius: '18px', boxShadow: '0 10px 25px -5px rgba(13, 148, 136, 0.25)' }}>
         <div className="position-relative z-1" style={{ zIndex: 2 }}>
           <h2 className="display-6 fw-bold font-heading mb-1">¡Buen día, Carlos!</h2>
           <p className="mb-0 opacity-90 fs-5">
