@@ -336,12 +336,12 @@ function App() {
       {/* Sidebar de Navegación */}
       <aside className="gipa-sidebar d-flex flex-column flex-shrink-0 p-3 text-white" style={{ width: '280px' }}>
         <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-          <span className="fs-4 fw-extrabold text-success me-2">
-            <i className="bi bi-shield-check"></i>
-          </span>
+          <div className="icon-badge icon-badge-emerald me-2" style={{ width: '36px', height: '36px' }}>
+            <i className="bi bi-shield-check fs-5"></i>
+          </div>
           <span className="fs-4 fw-bold tracking-tight">OCA <span className="text-success fw-normal">ONE</span></span>
         </div>
-        <hr className="bg-secondary" />
+        <hr className="bg-secondary opacity-25" />
         
         <ul className="nav nav-pills flex-column mb-auto">
           {/* Procedimientos y Archivos (DE PRIMERO) */}
@@ -353,8 +353,11 @@ function App() {
                 setIsProcedimientosOpen(!isProcedimientosOpen);
               }}
             >
-              <span>
-                <i className="bi bi-folder2-open me-2"></i> Procedimientos y Archivos
+              <span className="d-flex align-items-center">
+                <div className="icon-badge icon-badge-cyan me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                  <i className="bi bi-folder2-open"></i>
+                </div>
+                Procedimientos y Archivos
               </span>
               <i className={`bi bi-chevron-down arrow-rotate ${isProcedimientosOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
             </button>
@@ -363,10 +366,10 @@ function App() {
             {isProcedimientosOpen && (
               <ul className="sidebar-submenu">
                 {[
-                  { name: 'Limpieza y Desinfección', icon: 'bi-droplet-fill text-info' },
-                  { name: 'Control de Plagas', icon: 'bi-bug-fill text-warning' },
-                  { name: 'Residuos Sólidos y Líquidos', icon: 'bi-trash-fill text-success' },
-                  { name: 'Agua Potable', icon: 'bi-water text-primary' }
+                  { name: 'Limpieza y Desinfección', icon: 'bi-droplet-fill', badgeStyle: 'icon-badge-sky' },
+                  { name: 'Control de Plagas', icon: 'bi-bug-fill', badgeStyle: 'icon-badge-amber' },
+                  { name: 'Residuos Sólidos y Líquidos', icon: 'bi-trash-fill', badgeStyle: 'icon-badge-emerald' },
+                  { name: 'Agua Potable', icon: 'bi-water', badgeStyle: 'icon-badge-indigo' }
                 ].map(cat => {
                   const isCatExpanded = expandedCategories[cat.name];
                   return (
@@ -382,8 +385,11 @@ function App() {
                           }));
                         }}
                       >
-                        <span>
-                          <i className={`bi ${cat.icon} me-2`}></i> {cat.name}
+                        <span className="d-flex align-items-center">
+                          <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                            <i className={`bi ${cat.icon}`}></i>
+                          </div>
+                          {cat.name}
                         </span>
                         <i className={`bi bi-chevron-down arrow-rotate ${isCatExpanded ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
                       </button>
@@ -393,13 +399,13 @@ function App() {
                         <ul className="sidebar-sub-submenu">
                           <li>
                             <button
-                              className={`nav-link-sub-sub w-100 btn border-0 text-start ${currentView === 'procedimientos' && activeCategory === cat.name ? 'active-sub-sub' : 'text-white'}`}
+                              className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'procedimientos' && activeCategory === cat.name ? 'active-sub-sub' : 'text-white'}`}
                               onClick={() => {
                                 setCurrentView('procedimientos');
                                 setActiveCategory(cat.name);
                               }}
                             >
-                              <i className="bi bi-file-earmark-pdf me-1"></i> Procedimiento
+                              <i className="bi bi-file-earmark-pdf me-2 text-danger"></i> Procedimiento
                             </button>
                           </li>
                         </ul>
@@ -412,34 +418,48 @@ function App() {
           </li>
           <li className="mb-1">
             <button 
-              className={`nav-link text-start w-100 btn border-0 ${currentView === 'dashboard' ? 'active' : 'text-white'}`}
+              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'dashboard' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('dashboard')}
             >
-              <i className="bi bi-speedometer2 me-2"></i> Dashboard
+              <div className="icon-badge icon-badge-cyan me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                <i className="bi bi-grid-1x2-fill"></i>
+              </div>
+              Dashboard
             </button>
           </li>
           <li className="mb-1">
             <button 
-              className={`nav-link text-start w-100 btn border-0 ${currentView === 'saneamiento' ? 'active' : 'text-white'}`}
+              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'saneamiento' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('saneamiento')}
             >
-              <i className="bi bi-bucket me-2"></i> Saneamiento e Higiene
+              <div className="icon-badge icon-badge-emerald me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                <i className="bi bi-droplet-half"></i>
+              </div>
+              Saneamiento e Higiene
             </button>
           </li>
           <li className="mb-1">
             <button 
-              className={`nav-link text-start w-100 btn border-0 ${currentView === 'variables' ? 'active' : 'text-white'}`}
+              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'variables' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('variables')}
             >
-              <i className="bi bi-thermometer-half me-2"></i> Variables Críticas
+              <div className="icon-badge icon-badge-indigo me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                <i className="bi bi-sliders"></i>
+              </div>
+              Variables Críticas
             </button>
           </li>
           <li className="mb-1">
             <button 
-              className={`nav-link text-start w-100 btn border-0 ${currentView === 'capa' ? 'active' : 'text-white'}`}
+              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center justify-content-between ${currentView === 'capa' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('capa')}
             >
-              <i className="bi bi-clipboard-x me-2"></i> Acciones CAPA
+              <span className="d-flex align-items-center">
+                <div className="icon-badge icon-badge-rose me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                  <i className="bi bi-patch-exclamation-fill"></i>
+                </div>
+                Acciones CAPA
+              </span>
               {accionesCapa.filter(c => c.estado === 'Abierto').length > 0 && (
                 <span className="badge bg-danger ms-2">
                   {accionesCapa.filter(c => c.estado === 'Abierto').length}
@@ -449,30 +469,39 @@ function App() {
           </li>
           <li className="mb-1">
             <button 
-              className={`nav-link text-start w-100 btn border-0 ${currentView === 'trazabilidad' ? 'active' : 'text-white'}`}
+              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'trazabilidad' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('trazabilidad')}
             >
-              <i className="bi bi-bezier2 me-2"></i> Trazabilidad de Lotes
+              <div className="icon-badge icon-badge-amber me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                <i className="bi bi-diagram-3-fill"></i>
+              </div>
+              Trazabilidad de Lotes
             </button>
           </li>
           <li className="mb-1">
             <button 
-              className={`nav-link text-start w-100 btn border-0 ${currentView === 'alergenos-recall' ? 'active' : 'text-white'}`}
+              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'alergenos-recall' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('alergenos-recall')}
             >
-              <i className="bi bi-shield-exclamation me-2"></i> Alérgenos y Retiros
+              <div className="icon-badge icon-badge-rose me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                <i className="bi bi-shield-lock-fill"></i>
+              </div>
+              Alérgenos y Retiros
             </button>
           </li>
           <li className="mb-1">
             <button 
-              className={`nav-link text-start w-100 btn border-0 ${currentView === 'capacitaciones' ? 'active' : 'text-white'}`}
+              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'capacitaciones' ? 'active' : 'text-white'}`}
               onClick={() => setCurrentView('capacitaciones')}
             >
-              <i className="bi bi-people me-2"></i> Manipuladores y BPM
+              <div className="icon-badge icon-badge-sky me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                <i className="bi bi-person-badge-fill"></i>
+              </div>
+              Manipuladores y BPM
             </button>
           </li>
         </ul>
-        <hr className="bg-secondary" />
+        <hr className="bg-secondary opacity-25" />
         <div className="text-secondary small">
           <p className="mb-1"><i className="bi bi-building me-1"></i> Optimus Latinoamérica</p>
           <p className="mb-0 text-muted" style={{ fontSize: '11px' }}>v2.0.0 - Edición Profesional</p>
