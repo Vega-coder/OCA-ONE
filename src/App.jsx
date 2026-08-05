@@ -597,6 +597,7 @@ function App() {
               alergenosLogs={registrosAlergenos}
               carpetaActiva={activeCategory}
               setCarpetaActiva={setActiveCategory}
+              tenantId={activeTenant.id}
             />
           )}
           {currentView === 'dashboard' && (
@@ -613,6 +614,7 @@ function App() {
             <Saneamiento 
               registros={registrosSaneamiento} 
               onAgregar={handleAgregarSaneamiento}
+              departamentos={departamentos}
             />
           )}
           {currentView === 'variables' && (

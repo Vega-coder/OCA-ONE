@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Saneamiento({ registros, onAgregar }) {
+function Saneamiento({ registros, onAgregar, departamentos = [] }) {
   const [area, setArea] = useState('Cuarto Frío 1');
   const [tipo, setTipo] = useState('Rutinaria');
   const [producto, setProducto] = useState('Cloro 200ppm');
@@ -40,6 +40,11 @@ function Saneamiento({ registros, onAgregar }) {
     }, 4000);
   };
 
+  // Lista de áreas dinámicas
+  const listaAreas = departamentos && departamentos.length > 0 
+    ? departamentos.map(d => d.nombre)
+    : ["Cuarto Frío 1", "Cuarto Frío 2", "Línea de Envasado A", "Pasteurizador B", "Almacén MP", "Zona de Mezclas"];
+
   // Filtrar registros
   const registrosFiltrados = registros.filter(reg => {
     const coincideArea = filtroArea === 'Todos' || reg.area === filtroArea;
@@ -70,14 +75,11 @@ function Saneamiento({ registros, onAgregar }) {
             <form onSubmit={handleSubmit}>
               {/* Área */}
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Área o Equipo</label>
+                <label className="form-label fw-semibold small">Área o Equipo (Departamento)</label>
                 <select className="form-select" value={area} onChange={(e) => setArea(e.target.value)} required>
-                  <option value="Cuarto Frío 1">Cuarto Frío 1</option>
-                  <option value="Cuarto Frío 2">Cuarto Frío 2</option>
-                  <option value="Línea de Envasado A">Línea de Envasado A</option>
-                  <option value="Pasteurizador B">Pasteurizador B</option>
-                  <option value="Almacén MP">Almacén MP</option>
-                  <option value="Zona de Mezclas">Zona de Mezclas</option>
+                  {listaAreas.map((aName, idx) => (
+                    <option key={idx} value={aName}>{aName}</option>
+                  ))}
                 </select>
               </div>
 

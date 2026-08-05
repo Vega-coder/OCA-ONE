@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { fetchFormatosFromDb, saveFormatoToDb } from '../lib/dataService';
 
 function Procedimientos({ 
   procedimientos, 
   onAgregar, 
   carpetaActiva, 
-  setCarpetaActiva
+  setCarpetaActiva,
+  tenantId = 'tenant-opt-01'
 }) {
   const [procSeleccionado, setProcSeleccionado] = useState(null);
   const [formSeleccionado, setFormSeleccionado] = useState(null);
@@ -48,56 +50,63 @@ function Procedimientos({
   const [alertaExito, setAlertaExito] = useState(false);
   const [alertaRegExito, setAlertaRegExito] = useState(false);
 
-  // Base de datos de Formatos/Plantillas de Registros en Blanco (Imprimibles) con persistencia en localStorage
-  const [formatosImprimibles, setFormatosImprimibles] = useState(() => {
-    const saved = localStorage.getItem('OCA-formatos-v4');
-    return saved ? JSON.parse(saved) : [
-      {
-        id: 'f-lim',
-        codigo: 'F-LIM-01',
-        titulo: 'Formato de Inspección y Registro de Higiene Diario',
-        categoria: 'Limpieza y Desinfección',
-        version: '1.0.0',
-        responsable: 'Carlos Gómez',
-        columnas: ['Área o Equipo', 'Tipo de Limpieza', 'Químico Utilizado', 'Estado (Conforme / No Conforme)', 'Firma Operador'],
-        filasVacias: 10,
-        nota: 'Rellenar diariamente al inicio y cierre de cada jornada de producción en planta.'
-      },
-      {
-        id: 'f-plg',
-        codigo: 'F-PLG-01',
-        titulo: 'Planilla de Monitoreo de Estaciones de Cebado Externas',
-        categoria: 'Control de Plagas',
-        version: '1.0.2',
-        responsable: 'Carlos Gómez',
-        columnas: ['Nº Estación', 'Ubicación Planta', 'Consumo Cebo (%)', 'Estado Físico Trampa', 'Operario Firma'],
-        filasVacias: 15,
-        nota: 'Inspeccionar semanalmente todas las estaciones periféricas numeradas.'
-      },
-      {
-        id: 'f-res',
-        codigo: 'F-RES-01',
-        titulo: 'Bitácora Diaria de Clasificación y Retiro de Residuos',
-        categoria: 'Residuos Sólidos y Líquidos',
-        version: '1.1.0',
-        responsable: 'Carlos Gómez',
-        columnas: ['Fecha', 'Tipo de Residuo (Org/Plast/Pelig)', 'Cantidad (Kg / Litros)', 'Operario Entrega', 'Firma Receptor'],
-        filasVacias: 10,
-        nota: 'Registrar cada retiro de basuras y despachos de aceites quemados al proveedor.'
-      },
-      {
-        id: 'f-agu',
-        codigo: 'F-AGU-01',
-        titulo: 'Planilla Diaria de Medición de Cloro Libre y pH',
-        categoria: 'Agua Potable',
-        version: '1.0.0',
-        responsable: 'Carlos Gómez',
-        columnas: ['Día del Mes', 'Cloro Libre (ppm) [0.3 - 2.0]', 'pH [6.5 - 8.5]', 'Hora Registro', 'Firma Supervisor'],
-        filasVacias: 15,
-        nota: 'Medir en la salida del tanque principal antes de iniciar las operaciones.'
+  // Base de datos dinámica de Formatos/Plantillas de Registros en Blanco (Imprimibles)
+  const [formatosImprimibles, setFormatosImprimibles] = useState([
+    {
+      id: 'f-lim',
+      codigo: 'F-LIM-01',
+      titulo: 'Formato de Inspección y Registro de Higiene Diario',
+      categoria: 'Limpieza y Desinfección',
+      version: '1.0.0',
+      responsable: 'Carlos Gómez',
+      columnas: ['Área o Equipo', 'Tipo de Limpieza', 'Químico Utilizado', 'Estado (Conforme / No Conforme)', 'Firma Operador'],
+      filasVacias: 10,
+      nota: 'Rellenar diariamente al inicio y cierre de cada jornada de producción en planta.'
+    },
+    {
+      id: 'f-plg',
+      codigo: 'F-PLG-01',
+      titulo: 'Planilla de Monitoreo de Estaciones de Cebado Externas',
+      categoria: 'Control de Plagas',
+      version: '1.0.2',
+      responsable: 'Carlos Gómez',
+      columnas: ['Nº Estación', 'Ubicación Planta', 'Consumo Cebo (%)', 'Estado Físico Trampa', 'Operario Firma'],
+      filasVacias: 15,
+      nota: 'Inspeccionar semanalmente todas las estaciones periféricas numeradas.'
+    },
+    {
+      id: 'f-res',
+      codigo: 'F-RES-01',
+      titulo: 'Bitácora Diaria de Clasificación y Retiro de Residuos',
+      categoria: 'Residuos Sólidos y Líquidos',
+      version: '1.1.0',
+      responsable: 'Carlos Gómez',
+      columnas: ['Fecha', 'Tipo de Residuo (Org/Plast/Pelig)', 'Cantidad (Kg / Litros)', 'Operario Entrega', 'Firma Receptor'],
+      filasVacias: 10,
+      nota: 'Registrar cada retiro de basuras y despachos de aceites quemados al proveedor.'
+    },
+    {
+      id: 'f-agu',
+      codigo: 'F-AGU-01',
+      titulo: 'Planilla Diaria de Medición de Cloro Libre y pH',
+      categoria: 'Agua Potable',
+      version: '1.0.0',
+      responsable: 'Carlos Gómez',
+      columnas: ['Día del Mes', 'Cloro Libre Residual (ppm)', 'pH', 'Hora Registro', 'Firma Supervisor'],
+      filasVacias: 15,
+      nota: 'Medición diaria en la salida del tanque principal de almacenamiento.'
+    }
+  ]);
+
+  useEffect(() => {
+    async function loadFormatos() {
+      const dbFormatos = await fetchFormatosFromDb(tenantId);
+      if (dbFormatos && dbFormatos.length > 0) {
+        setFormatosImprimibles(dbFormatos);
       }
-    ];
-  });
+    }
+    loadFormatos();
+  }, [tenantId]);
 
   useEffect(() => {
     localStorage.setItem('OCA-formatos-v4', JSON.stringify(formatosImprimibles));
@@ -190,6 +199,7 @@ function Procedimientos({
     };
 
     setFormatosImprimibles(prev => [...prev, nuevoFormato]);
+    saveFormatoToDb(nuevoFormato, tenantId);
     setRegTitulo('');
     setRegCodigo('');
     setRegColumnas('Fecha, Detalle, Conforme, Firma');
