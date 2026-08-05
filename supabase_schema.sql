@@ -1,6 +1,6 @@
 -- ============================================================
 -- ARQUITECTURA MULTI-TENANT CON EMPRESA, SUCURSAL/TIENDA, DEPARTAMENTO E INDUSTRIA (OCA ONE)
--- Basado en el modelo de dominio Systime
+-- Basado en el modelo de dominio Systime - IDEMPOTENTE (DROP POLICY IF EXISTS)
 -- Ejecutar en Supabase SQL Editor
 -- ============================================================
 
@@ -209,6 +209,20 @@ ALTER TABLE registros_alergenos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE manipuladores ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mediciones_variables ENABLE ROW LEVEL SECURITY;
 
+-- Eliminar políticas previas si ya existen para evitar el error 42710 (policy already exists)
+DROP POLICY IF EXISTS "Permitir todo a anon en industrias" ON industrias;
+DROP POLICY IF EXISTS "Permitir todo a anon en tenants" ON tenants;
+DROP POLICY IF EXISTS "Permitir todo a anon en tiendas" ON tiendas;
+DROP POLICY IF EXISTS "Permitir todo a anon en departamentos" ON departamentos;
+DROP POLICY IF EXISTS "Permitir todo a anon en procedimientos" ON procedimientos;
+DROP POLICY IF EXISTS "Permitir todo a anon en formatos" ON formatos_imprimibles;
+DROP POLICY IF EXISTS "Permitir todo a anon en saneamiento" ON registros_saneamiento;
+DROP POLICY IF EXISTS "Permitir todo a anon en capa" ON acciones_capa;
+DROP POLICY IF EXISTS "Permitir todo a anon en alergenos" ON registros_alergenos;
+DROP POLICY IF EXISTS "Permitir todo a anon en manipuladores" ON manipuladores;
+DROP POLICY IF EXISTS "Permitir todo a anon en mediciones" ON mediciones_variables;
+
+-- Crear las políticas de acceso sin duplicación
 CREATE POLICY "Permitir todo a anon en industrias" ON industrias FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Permitir todo a anon en tenants" ON tenants FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Permitir todo a anon en tiendas" ON tiendas FOR ALL USING (true) WITH CHECK (true);
