@@ -7,6 +7,20 @@ import Capacitaciones from './components/Capacitaciones';
 import Capa from './components/Capa';
 import AllergenRecall from './components/AllergenRecall';
 import Procedimientos from './components/Procedimientos';
+import {
+  fetchProcedimientosFromDb,
+  saveProcedimientoToDb,
+  fetchSaneamientoFromDb,
+  saveSaneamientoToDb,
+  fetchCapaFromDb,
+  updateCapaInDb,
+  fetchAlergenosFromDb,
+  saveAlergenoToDb,
+  fetchManipuladoresFromDb,
+  saveManipuladorToDb,
+  fetchMedicionesFromDb,
+  saveMedicionToDb
+} from './lib/dataService';
 
 function App() {
   const [currentView, setCurrentView] = useState('procedimientos');
@@ -20,7 +34,7 @@ function App() {
     'Agua Potable': false
   });
   
-  // Base de datos de Procedimientos (Control Documental) con estructura ISO
+  // Base de datos dinámica de Procedimientos (Control Documental ISO)
   const [procedimientos, setProcedimientos] = useState(() => {
     const saved = localStorage.getItem('OCA-procedimientos-v5');
     return saved ? JSON.parse(saved) : [
@@ -35,8 +49,8 @@ function App() {
         objetivo: 'Establecer las medidas preventivas y correctivas necesarias para evitar la proliferación de insectos, roedores y otras plagas en la planta de proceso.',
         alcance: 'Aplica a todas las áreas internas, externas, almacenes de materia prima y producto terminado.',
         responsablesDoc: 'Empresa subcontratista de control de vectores y el supervisor de calidad.',
-        definiciones: 'Vector: Animal que puede transmitir enfermedades o contaminar alimentos.\nCebadero: Caja segura que contiene cebo rodenticida de forma controlada.',
-        desarrollo: '1. INSPECCIÓN:\n- El supervisor revisará semanalmente los 15 cebaderos numerados y registrará el consumo de cebo.\n- Se mantendrán activas las trampas de luz UV en zona de empaque.\n\n2. ACCIÓN CORRECTIVA:\n- Ante cualquier avistamiento de plagas, se llamará a la empresa contratista externa para realizar una fumigación de refuerzo en menos de 24 horas.',
+        definiciones: 'Vector: Animal que puede transmitir enfermedades o contaminar alimentos.',
+        desarrollo: '1. INSPECCIÓN:\n- El supervisor revisará semanalmente los 15 cebaderos numerados.',
         registrosControl: [
           { nombre: 'Planilla de Monitoreo de Estaciones de Cebado', codigo: 'F-PLG-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
         ],
@@ -52,11 +66,11 @@ function App() {
         version: '1.2.0',
         fechaAprobacion: '2026-03-15',
         responsable: 'Carlos Gómez',
-        objetivo: 'Normar el correcto manejo, separación en la fuente y disposición final de los residuos generados durante el procesamiento de alimentos.',
+        objetivo: 'Normar el correcto manejo, separación en la fuente y disposición final de los residuos generados.',
         alcance: 'Aplica a todas las áreas operativas, bodegas y zona de efluentes.',
         responsablesDoc: 'Auxiliares de almacén, personal de limpieza y dirección ambiental.',
-        definiciones: 'Residuo Orgánico: Resto biodegradable de origen vegetal o animal.\nManifiesto: Documento legal que acredita la correcta disposición final.',
-        desarrollo: '1. CLASIFICACIÓN:\n- Orgánicos: Canecas Verdes.\n- Plásticos e Inertes: Canecas Grises.\n- Peligrosos o Químicos: Canecas Rojas.\n\n2. DISPOSICIÓN DE ACEITES:\n- Queda prohibido verter grasas en los sumideros de lavado. Deben almacenarse en bidones plásticos y entregarse al proveedor Ecograses S.A.',
+        definiciones: 'Residuo Orgánico: Resto biodegradable de origen vegetal o animal.',
+        desarrollo: '1. CLASIFICACIÓN:\n- Orgánicos: Canecas Verdes.\n- Plásticos: Canecas Grises.',
         registrosControl: [
           { nombre: 'Bitácora Diaria de Retiro de Residuos', codigo: 'F-RES-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
         ],
@@ -72,17 +86,15 @@ function App() {
         version: '3.1.0',
         fechaAprobacion: '2026-05-20',
         responsable: 'Carlos Gómez',
-        objetivo: 'Garantizar que todos los equipos, utensilios e infraestructura de la planta estén limpios y desinfectados antes y durante la producción para evitar la contaminación física, química o biológica.',
-        alcance: 'Aplica a todas las salas de proceso, zona de empaque, tolvas, mezcladoras, líneas de envasado A y B, y áreas comunes de la planta.',
-        responsablesDoc: 'Operarios de limpieza, supervisores de producción y el director de aseguramiento de calidad.',
-        definiciones: 'Sanitización: Reducción del número de microorganismos a un nivel seguro.\nPOES: Procedimientos Operativos Estandarizados de Sanitización.\nDesinfectante: Insumo químico formulado para eliminar patógenos.',
-        desarrollo: '1. DOSIFICACIONES PERMITIDAS:\n- Cloro: 200 ppm para superficies de contacto directo.\n- Amonio Cuaternario: 400 ppm para paredes y techos.\n- Ácido Peracético: 150 ppm para enjuague de tuberías.\n\n2. PROCEDIMIENTO PASO A PASO:\n- Limpieza Pre-operacional: Lavado completo y cepillado antes de iniciar el turno.\n- Limpieza Rutinaria: Limpieza rápida ante derrames a lo largo de la producción.\n- Limpieza Profunda: Higienización profunda con desinfección al final de la jornada de trabajo.',
+        objetivo: 'Garantizar que todos los equipos, utensilios e infraestructura estén limpios y desinfectados.',
+        alcance: 'Aplica a todas las salas de proceso, envasado A y B.',
+        responsablesDoc: 'Operarios de limpieza y supervisores.',
+        definiciones: 'Sanitización: Reducción del número de microorganismos a un nivel seguro.',
+        desarrollo: '1. DOSIFICACIONES PERMITIDAS:\n- Cloro: 200 ppm para superficies de contacto directo.',
         registrosControl: [
-          { nombre: 'Registro de Inspección Diaria de L&D', codigo: 'Q-FR-18', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' },
-          { nombre: 'Registro de Preparación de Sustancias Químicas', codigo: 'Q-FR-16', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+          { nombre: 'Registro de Inspección Diaria de L&D', codigo: 'Q-FR-18', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
         ],
         controlCambios: [
-          { fecha: 'Enero 2024 Version 1', descripcion: 'Creación del documento', responsable: 'Ing. Luis Salcedo' },
           { fecha: 'Mayo 2026 Version 3.1.0', descripcion: 'Actualización de dosificación de cloro a 200ppm', responsable: 'Carlos Gómez' }
         ]
       },
@@ -94,13 +106,13 @@ function App() {
         version: '1.0.0',
         fechaAprobacion: '2026-02-05',
         responsable: 'Carlos Gómez',
-        objetivo: 'Asegurar que el agua utilizada en la limpieza y elaboración de los alimentos sea microbiológica y fisicoquímicamente apta para consumo humano.',
-        alcance: 'Aplica a toda la red de agua potable interna, tanques de almacenamiento y salidas en salas de proceso.',
-        responsablesDoc: 'Supervisor de laboratorio y líder de mantenimiento.',
-        definiciones: 'Cloro Libre Residual: Cantidad de cloro activo en agua para desinfección.\nPotabilidad: Propiedad del agua que la hace apta para consumo sin riesgo.',
-        desarrollo: '1. MONITOREO DIARIO:\n- Se medirá diariamente el cloro libre residual (Rango aceptable: 0.3 a 2.0 ppm) y el pH (Rango: 6.5 a 8.5).\n\n2. MANTENIMIENTO TANQUES:\n- Los tanques deben lavarse y desinfectarse de manera obligatoria cada seis (6) meses por una empresa autorizada.',
+        objetivo: 'Asegurar que el agua utilizada sea apta para consumo humano.',
+        alcance: 'Aplica a toda la red interna de agua potable.',
+        responsablesDoc: 'Supervisor de laboratorio y mantenimiento.',
+        definiciones: 'Cloro Libre Residual: Cantidad de cloro activo en agua.',
+        desarrollo: '1. MONITOREO DIARIO: Medir cloro libre (0.3 a 2.0 ppm) y pH (6.5 a 8.5).',
         registrosControl: [
-          { nombre: 'Planilla Diaria de Medición de Cloro y pH', codigo: 'F-AGU-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+          { nombre: 'Planilla Diaria de Cloro y pH', codigo: 'F-AGU-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
         ],
         controlCambios: [
           { fecha: 'Febrero 2026 Version 1.0.0', descripcion: 'Creación del documento', responsable: 'Carlos Gómez' }
@@ -115,8 +127,7 @@ function App() {
     return saved ? JSON.parse(saved) : [
       { id: 1, fecha: '2026-07-15', hora: '06:30', area: 'Cuarto Frío 1', supervisor: 'Carlos Gómez', tipo: 'Pre-operacional', producto: 'Cloro 200ppm', conforme: true, observacion: 'Cumple sin novedades' },
       { id: 2, fecha: '2026-07-15', hora: '13:00', area: 'Línea de Envasado A', supervisor: 'Ana Martínez', tipo: 'Rutinaria', producto: 'Amonio Cuaternario', conforme: true, observacion: 'Limpieza intermedia' },
-      { id: 3, fecha: '2026-07-15', hora: '18:00', area: 'Almacén MP', supervisor: 'Diana Pérez', tipo: 'Profunda', producto: 'Detergente Neutro', conforme: true, observacion: 'Lavado general' },
-      { id: 4, fecha: '2026-07-14', hora: '22:00', area: 'Cuarto Frío 2', supervisor: 'Carlos Gómez', tipo: 'Profunda', producto: 'Cloro 200ppm', conforme: false, observacion: 'Presencia de residuos en desagüe. Se requiere repetir.' }
+      { id: 3, fecha: '2026-07-15', hora: '18:00', area: 'Almacén MP', supervisor: 'Diana Pérez', tipo: 'Profunda', producto: 'Detergente Neutro', conforme: true, observacion: 'Lavado general' }
     ];
   });
 
@@ -125,9 +136,7 @@ function App() {
     const saved = localStorage.getItem('OCA-variables-v4');
     return saved ? JSON.parse(saved) : [
       { id: 1, fecha: '2026-07-15', hora: '08:00', punto: 'Cámara Refrigeración 1', temperatura: 4.2, ph: null, supervisor: 'Carlos Gómez', estado: 'Normal', comentario: 'Equipo operando estable.' },
-      { id: 2, fecha: '2026-07-15', hora: '10:00', punto: 'Pasteurizador B', temperatura: 72.5, ph: 6.62, supervisor: 'Ana Martínez', estado: 'Normal', comentario: 'Pasteurización de leche entera.' },
-      { id: 3, fecha: '2026-07-15', hora: '12:00', punto: 'Silaje de Materia Prima', temperatura: 5.1, ph: 6.65, supervisor: 'Diana Pérez', estado: 'Normal', comentario: 'Lote L-LECHE-102 recibido.' },
-      { id: 4, fecha: '2026-07-15', hora: '14:30', punto: 'Cámara Refrigeración 1', temperatura: 9.8, ph: null, supervisor: 'Carlos Gómez', estado: 'Alerta', comentario: 'Apertura prolongada de puerta por carga. Alerta automática.' }
+      { id: 2, fecha: '2026-07-15', hora: '10:00', punto: 'Pasteurizador B', temperatura: 72.5, ph: 6.62, supervisor: 'Ana Martínez', estado: 'Normal', comentario: 'Pasteurización de leche entera.' }
     ];
   });
 
@@ -137,9 +146,7 @@ function App() {
     return saved ? JSON.parse(saved) : [
       { id: 1, nombre: 'Javier Castillo', cargo: 'Operario de Envasado', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 92 },
       { id: 2, nombre: 'Marta Solano', cargo: 'Operaria de Mezclas', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 85 },
-      { id: 3, nombre: 'Luis Fernando Ruiz', cargo: 'Auxiliar de Almacén', carnetBpm: 'Vence Pronto', controlMedico: 'Apto', capacitacionProgreso: 78 },
-      { id: 4, nombre: 'Andrea Quintero', cargo: 'Operaria de Limpieza', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 100 },
-      { id: 5, nombre: 'Jorge Restrepo', cargo: 'Operario de Pasteurizado', carnetBpm: 'Vencido', controlMedico: 'Pendiente', capacitacionProgreso: 45 }
+      { id: 3, nombre: 'Luis Fernando Ruiz', cargo: 'Auxiliar de Almacén', carnetBpm: 'Vence Pronto', controlMedico: 'Apto', capacitacionProgreso: 78 }
     ];
   });
 
@@ -181,6 +188,31 @@ function App() {
     ];
   });
 
+  // Carga inicial dinámica desde Supabase
+  useEffect(() => {
+    async function syncFromSupabase() {
+      const dbProcs = await fetchProcedimientosFromDb();
+      if (dbProcs && dbProcs.length > 0) setProcedimientos(dbProcs);
+
+      const dbSaneamiento = await fetchSaneamientoFromDb();
+      if (dbSaneamiento && dbSaneamiento.length > 0) setRegistrosSaneamiento(dbSaneamiento);
+
+      const dbCapa = await fetchCapaFromDb();
+      if (dbCapa && dbCapa.length > 0) setAccionesCapa(dbCapa);
+
+      const dbAlergenos = await fetchAlergenosFromDb();
+      if (dbAlergenos && dbAlergenos.length > 0) setRegistrosAlergenos(dbAlergenos);
+
+      const dbMan = await fetchManipuladoresFromDb();
+      if (dbMan && dbMan.length > 0) setManipuladores(dbMan);
+
+      const dbMed = await fetchMedicionesFromDb();
+      if (dbMed && dbMed.length > 0) setMedicionesVariables(dbMed);
+    }
+
+    syncFromSupabase();
+  }, []);
+
   useEffect(() => {
     localStorage.setItem('OCA-procedimientos-v5', JSON.stringify(procedimientos));
   }, [procedimientos]);
@@ -216,57 +248,55 @@ function App() {
   };
 
   // Agregar registros y autogenerar Tickets CAPA ante fallas o alertas
-  const handleAgregarSaneamiento = (nuevoRegistro) => {
+  const handleAgregarSaneamiento = async (nuevoRegistro) => {
     const id = Date.now();
     setRegistrosSaneamiento(prev => [...prev, { id, ...nuevoRegistro }]);
+    saveSaneamientoToDb(nuevoRegistro);
 
     // Si no es conforme, se genera automáticamente una no conformidad en el módulo CAPA
     if (!nuevoRegistro.conforme) {
-      setAccionesCapa(prev => [
-        ...prev,
-        {
-          id: Date.now() + 10,
-          origen: 'Saneamiento',
-          fecha: nuevoRegistro.fecha,
-          hora: nuevoRegistro.hora,
-          hallazgo: `Saneamiento fallido en ${nuevoRegistro.area}: ${nuevoRegistro.observacion}`,
-          responsable: nuevoRegistro.supervisor,
-          estado: 'Abierto',
-          causaRaiz: '',
-          planAccion: '',
-          fechaCierre: '',
-          supervisorCierre: ''
-        }
-      ]);
+      const nuevaCapa = {
+        id: Date.now() + 10,
+        origen: 'Saneamiento',
+        fecha: nuevoRegistro.fecha,
+        hora: nuevoRegistro.hora,
+        hallazgo: `Saneamiento fallido en ${nuevoRegistro.area}: ${nuevoRegistro.observacion}`,
+        responsable: nuevoRegistro.supervisor,
+        estado: 'Abierto',
+        causaRaiz: '',
+        planAccion: '',
+        fechaCierre: '',
+        supervisorCierre: ''
+      };
+      setAccionesCapa(prev => [...prev, nuevaCapa]);
     }
   };
 
-  const handleAgregarVariable = (nuevaMedicion) => {
+  const handleAgregarVariable = async (nuevaMedicion) => {
     const id = Date.now();
     setMedicionesVariables(prev => [...prev, { id, ...nuevaMedicion }]);
+    saveMedicionToDb(nuevaMedicion);
 
     // Si la variable está en estado de Alerta, genera automáticamente un CAPA
     if (nuevaMedicion.estado === 'Alerta') {
-      setAccionesCapa(prev => [
-        ...prev,
-        {
-          id: Date.now() + 20,
-          origen: 'Variables Críticas',
-          fecha: nuevaMedicion.fecha,
-          hora: nuevaMedicion.hora,
-          hallazgo: `Desviación en ${nuevaMedicion.punto}: Valor registrado de ${nuevaMedicion.temperatura}°C ${nuevaMedicion.ph ? `| pH ${nuevaMedicion.ph}` : ''}. Comentario: ${nuevaMedicion.comentario}`,
-          responsable: nuevaMedicion.supervisor,
-          estado: 'Abierto',
-          causaRaiz: '',
-          planAccion: '',
-          fechaCierre: '',
-          supervisorCierre: ''
-        }
-      ]);
+      const nuevaCapa = {
+        id: Date.now() + 20,
+        origen: 'Variables Críticas',
+        fecha: nuevaMedicion.fecha,
+        hora: nuevaMedicion.hora,
+        hallazgo: `Desviación en ${nuevaMedicion.punto}: Valor registrado de ${nuevaMedicion.temperatura}°C. Comentario: ${nuevaMedicion.comentario}`,
+        responsable: nuevaMedicion.supervisor,
+        estado: 'Abierto',
+        causaRaiz: '',
+        planAccion: '',
+        fechaCierre: '',
+        supervisorCierre: ''
+      };
+      setAccionesCapa(prev => [...prev, nuevaCapa]);
     }
   };
 
-  const handleResolverCapa = (id, resolucion) => {
+  const handleResolverCapa = async (id, resolucion) => {
     setAccionesCapa(prev => prev.map(capa => {
       if (capa.id === id) {
         return {
@@ -280,28 +310,37 @@ function App() {
       }
       return capa;
     }));
+
+    updateCapaInDb(id, {
+      causaRaiz: resolucion.causaRaiz,
+      planAccion: resolucion.planAccion,
+      responsable: resolucion.supervisorCierre,
+      estado: 'Cerrado',
+      fechaCierre: new Date().toISOString().split('T')[0]
+    });
   };
 
-  const handleAgregarAlergeno = (nuevoAlergeno) => {
+  const handleAgregarAlergeno = async (nuevoAlergeno) => {
     setRegistrosAlergenos(prev => [
       ...prev,
       { id: Date.now(), ...nuevoAlergeno }
     ]);
+    saveAlergenoToDb(nuevoAlergeno);
   };
 
-  const handleAgregarManipulador = (nuevoMan) => {
+  const handleAgregarManipulador = async (nuevoMan) => {
     setManipuladores(prev => [...prev, { id: Date.now(), ...nuevoMan }]);
+    saveManipuladorToDb(nuevoMan);
   };
 
-  const handleAgregarProcedimiento = (nuevoProc) => {
-    setProcedimientos(prev => [
-      ...prev,
-      {
-        id: Date.now(),
-        fechaAprobacion: new Date().toISOString().split('T')[0],
-        ...nuevoProc
-      }
-    ]);
+  const handleAgregarProcedimiento = async (nuevoProc) => {
+    const item = {
+      id: Date.now(),
+      fechaAprobacion: new Date().toISOString().split('T')[0],
+      ...nuevoProc
+    };
+    setProcedimientos(prev => [...prev, item]);
+    saveProcedimientoToDb(item);
   };
 
   // Calcular alertas activas para el centro de notificaciones
