@@ -616,3 +616,52 @@ export async function saveMedicionToDb(med, tenantId = 'tenant-opt-01') {
     return null;
   }
 }
+
+// --- 11. HISTORIAL DE VERSIONES DOCUMENTALES (TRAZABILIDAD ISO / HACCP) ---
+export async function fetchVersionHistoryFromDb(tenantId = 'tenant-opt-01', codigo = null) {
+  try {
+    let query = supabase.from('version_history').select('*').eq('tenant_id', tenantId);
+    if (codigo) query = query.eq('codigo', codigo);
+
+    const { data, error } = await query.order('id', { ascending: false });
+
+    if (error) {
+      console.warn('Supabase fetchVersionHistory warning:', error.message);
+      return null;
+    }
+    return data || null;
+  } catch (err) {
+    console.error('Error fetching version history:', err);
+    return null;
+  }
+}
+
+export async function saveVersionHistoryToDb(ver, tenantId = 'tenant-opt-01') {
+  try {
+    const payload = {
+      tenant_id: tenantId,
+      procedimiento_id: ver.procedimientoId || null,
+      codigo: ver.codigo,
+      titulo: ver.titulo,
+      version: ver.version,
+      fecha_cambio: ver.fechaCambio || new Date().toISOString().split('T')[0],
+      responsable: ver.responsable || 'Carlos Gómez',
+      descripcion_cambio: ver.descripcionCambio,
+      contenido_backup: ver.contenidoBackup || {}
+    };
+
+    const { data, error } = await supabase
+      .from('version_history')
+      .insert([payload])
+      .select();
+
+    if (error) {
+      console.warn('Supabase saveVersionHistory warning:', error.message);
+      return null;
+    }
+    return data ? data[0] : null;
+  } catch (err) {
+    console.error('Error saving version history:', err);
+    return null;
+  }
+}

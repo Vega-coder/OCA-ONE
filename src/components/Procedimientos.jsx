@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { fetchFormatosFromDb, saveFormatoToDb } from '../lib/dataService';
+import { fetchFormatosFromDb, saveFormatoToDb, fetchVersionHistoryFromDb } from '../lib/dataService';
+import { canUserDownloadProcedure } from '../lib/permissions';
 
 function Procedimientos({ 
   procedimientos, 
   onAgregar, 
   carpetaActiva, 
   setCarpetaActiva,
-  tenantId = 'tenant-opt-01'
+  tenantId = 'tenant-opt-01',
+  userRole = 'super-admin'
 }) {
   const [procSeleccionado, setProcSeleccionado] = useState(null);
   const [formSeleccionado, setFormSeleccionado] = useState(null);
+  const [historialDoc, setHistorialDoc] = useState(null);
+  const [listaHistorial, setListaHistorial] = useState([]);
   
   // Mostrar formulario correspondiente
   const [mostrarCrearPoes, setMostrarCrearPoes] = useState(false);
@@ -210,6 +214,31 @@ function Procedimientos({
     setTimeout(() => {
       setAlertaRegExito(false);
     }, 4000);
+  };
+
+  const handleVerHistorial = async (proc) => {
+    setHistorialDoc(proc);
+    const dbHistorial = await fetchVersionHistoryFromDb(tenantId, proc.codigo);
+    if (dbHistorial && dbHistorial.length > 0) {
+      setListaHistorial(dbHistorial);
+    } else {
+      const fallbacks = (proc.controlCambios || []).map((c, i) => ({
+        id: i,
+        version: proc.version,
+        fecha_cambio: c.fecha || proc.fechaAprobacion,
+        responsable: c.responsable || proc.responsable,
+        descripcion_cambio: c.descripcion
+      }));
+      setListaHistorial(fallbacks.length > 0 ? fallbacks : [
+        {
+          id: 1,
+          version: proc.version || '1.0.0',
+          fecha_cambio: proc.fechaAprobacion || '2026-01-10',
+          responsable: proc.responsable || 'Carlos Gómez',
+          descripcion_cambio: 'Creación y aprobación inicial del documento operativo.'
+        }
+      ]);
+    }
   };
 
   // 1. Procedimientos creados dinámicamente por el usuario en esta carpeta (ID > 4)
@@ -674,13 +703,19 @@ function Procedimientos({
                 <h5 className="fw-bold mb-1 text-dark" style={{ fontSize: '16px' }}>{procedimientoOficial.titulo}</h5>
                 <div className="text-muted small">Aprobado el: {procedimientoOficial.fechaAprobacion} | Elaborado por: {procedimientoOficial.responsable}</div>
               </div>
-              <div>
+              <div className="d-flex gap-2">
+                <button 
+                  className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 px-3 py-2 fw-semibold"
+                  onClick={() => handleVerHistorial(procedimientoOficial)}
+                >
+                  <i className="bi bi-clock-history text-primary"></i> Historial de Versiones
+                </button>
                 <button 
                   className="btn btn-success d-flex align-items-center gap-2 px-3 py-2"
                   onClick={() => setProcSeleccionado(procedimientoOficial)}
                   style={{ fontWeight: '600' }}
                 >
-                  <i className="bi bi-printer"></i> Previsualización / Imprimir PDF
+                  <i className="bi bi-eye-fill"></i> Previsualizar Documento
                 </button>
               </div>
             </div>
@@ -883,12 +918,18 @@ function Procedimientos({
               </div>
 
               <div className="modal-footer justify-content-between">
-                <span className="small text-muted"><i className="bi bi-info-circle me-1"></i>Documento oficial bajo estándares de auditoría ISO 22000.</span>
+                <span className="small text-muted"><i className="bi bi-shield-check me-1 text-success"></i>Trazabilidad ISO 22000 / HACCP | Rol Actual: <strong>{userRole}</strong></span>
                 <div className="d-flex gap-2">
                   <button type="button" className="btn btn-secondary btn-sm" onClick={() => setProcSeleccionado(null)}>Cerrar</button>
-                  <button type="button" className="btn btn-success btn-sm" onClick={() => window.print()}>
-                    <i className="bi bi-printer me-1"></i> Imprimir / PDF
-                  </button>
+                  {canUserDownloadProcedure(userRole) ? (
+                    <button type="button" className="btn btn-success btn-sm" onClick={() => window.print()}>
+                      <i className="bi bi-printer me-1"></i> Imprimir / Descargar PDF
+                    </button>
+                  ) : (
+                    <button type="button" className="btn btn-outline-secondary btn-sm opacity-75" disabled title="Descarga restringida por rol (Solo Super Administrador)">
+                      <i className="bi bi-lock-fill me-1 text-warning"></i> Descarga Restringida por Rol
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -1008,6 +1049,75 @@ function Procedimientos({
                     <i className="bi bi-printer me-1"></i> Imprimir Formato
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Visor Modal de Historial de Versiones y Trazabilidad Documental ISO 9001 */}
+      {historialDoc && (
+        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
+          <div className="modal-dialog modal-lg modal-dialog-centered">
+            <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '16px' }}>
+              <div className="modal-header bg-primary text-white border-0" style={{ borderTopLeftRadius: '16px', borderTopRightRadius: '16px' }}>
+                <h5 className="modal-title font-heading fw-bold">
+                  <i className="bi bi-clock-history me-2"></i>Historial de Versiones y Trazabilidad Documental
+                </h5>
+                <button type="button" className="btn-close btn-close-white" onClick={() => setHistorialDoc(null)}></button>
+              </div>
+              <div className="modal-body p-4">
+                <div className="d-flex align-items-center justify-content-between mb-3 bg-light p-3 rounded-3 border">
+                  <div>
+                    <span className="badge bg-primary-subtle text-primary me-2">{historialDoc.codigo}</span>
+                    <strong className="text-dark">{historialDoc.titulo}</strong>
+                  </div>
+                  <span className="badge bg-success">Versión Actual: {historialDoc.version}</span>
+                </div>
+
+                <p className="text-muted small mb-3">
+                  Registro cronológico inmutable de todas las revisiones, modificaciones y aprobaciones históricas de este documento oficial según la norma ISO 9001 / HACCP.
+                </p>
+
+                <div className="table-responsive">
+                  <table className="table table-hover align-middle border" style={{ fontSize: '13px' }}>
+                    <thead className="table-light">
+                      <tr>
+                        <th>VERSIÓN</th>
+                        <th>FECHA VIGENCIA</th>
+                        <th>RESPONSABLE</th>
+                        <th>DESCRIPCIÓN DE CAMBIOS</th>
+                        <th>ESTADO</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {listaHistorial.map((h, idx) => (
+                        <tr key={idx} className={idx === 0 ? 'table-success bg-opacity-10 fw-semibold' : ''}>
+                          <td>
+                            <span className={`badge ${idx === 0 ? 'bg-success' : 'bg-secondary'}`}>
+                              v{h.version}
+                            </span>
+                          </td>
+                          <td><i className="bi bi-calendar-event me-1 text-muted"></i>{h.fecha_cambio}</td>
+                          <td>{h.responsable}</td>
+                          <td>{h.descripcion_cambio}</td>
+                          <td>
+                            {idx === 0 ? (
+                              <span className="badge bg-success-subtle text-success"><i className="bi bi-check-circle me-1"></i>Vigente</span>
+                            ) : (
+                              <span className="badge bg-secondary-subtle text-secondary">Obsoleto (Archivado)</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="modal-footer border-top-0 p-3 bg-light" style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}>
+                <button type="button" className="btn btn-primary btn-sm px-4" onClick={() => setHistorialDoc(null)}>
+                  Cerrar Historial
+                </button>
               </div>
             </div>
           </div>

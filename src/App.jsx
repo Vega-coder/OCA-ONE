@@ -29,9 +29,12 @@ import {
   saveMedicionToDb
 } from './lib/dataService';
 
+import { ROLES_DEFINITIONS, getRoleDefinition } from './lib/permissions';
+
 function App() {
   const [currentView, setCurrentView] = useState('procedimientos');
   const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme-v4') || 'light');
+  const [userRole, setUserRole] = useState(() => localStorage.getItem('OCA-user-role-v1') || 'super-admin');
   const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
   const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
   const [expandedCategories, setExpandedCategories] = useState({
@@ -528,6 +531,41 @@ function App() {
                 </ul>
               </div>
 
+              {/* Selector de Rol del Usuario (RBAC) */}
+              <div className="dropdown me-3">
+                <button 
+                  className={`btn btn-sm dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 fw-semibold text-white ${getRoleDefinition(userRole).badgeClass}`} 
+                  type="button" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false"
+                  style={{ borderRadius: '10px' }}
+                  title="Cambiar rol para simular permisos"
+                >
+                  <i className={`bi ${getRoleDefinition(userRole).icon}`}></i>
+                  <span>{getRoleDefinition(userRole).nombre}</span>
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '310px', borderRadius: '12px' }}>
+                  <li className="dropdown-header fw-bold text-dark border-bottom pb-2">Seleccionar Rol del Usuario (RBAC)</li>
+                  {ROLES_DEFINITIONS.map(r => (
+                    <li key={r.id}>
+                      <button 
+                        className={`dropdown-item d-flex align-items-start gap-2 py-2 rounded-2 ${userRole === r.id ? 'active fw-bold' : ''}`}
+                        onClick={() => {
+                          setUserRole(r.id);
+                          localStorage.setItem('OCA-user-role-v1', r.id);
+                        }}
+                      >
+                        <i className={`bi ${r.icon} mt-1`}></i>
+                        <div>
+                          <div style={{ fontSize: '13px' }}>{r.nombre}</div>
+                          <small className="text-muted d-block" style={{ fontSize: '10.5px', whiteSpace: 'normal', lineHeight: '1.2' }}>{r.descripcion}</small>
+                        </div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
               {/* Tema claro/oscuro */}
               <button 
                 className="btn btn-outline-secondary me-3 border-0 rounded-circle" 
@@ -598,6 +636,7 @@ function App() {
               carpetaActiva={activeCategory}
               setCarpetaActiva={setActiveCategory}
               tenantId={activeTenant.id}
+              userRole={userRole}
             />
           )}
           {currentView === 'dashboard' && (
