@@ -1,15 +1,34 @@
 import { supabase } from './supabaseClient';
 
 // ============================================================
-// SERVICIO DE DATOS MULTI-TENANT (MULTI-INQUILINO/EMPRESA)
+// SERVICIO DE DATOS MULTI-TENANT (EMPRESA, SUCURSAL/TIENDA, DEPARTAMENTO E INDUSTRIA)
 // ============================================================
 
-// --- 0. GESTIÓN DE EMPRESAS / TENANTS ---
+// --- 0. CATÁLOGO DE INDUSTRIAS ---
+export async function fetchIndustriasFromDb() {
+  try {
+    const { data, error } = await supabase
+      .from('industrias')
+      .select('*')
+      .order('nombre', { ascending: true });
+
+    if (error) {
+      console.warn('Supabase fetchIndustrias warning:', error.message);
+      return null;
+    }
+    return data || null;
+  } catch (err) {
+    console.error('Error fetching industrias:', err);
+    return null;
+  }
+}
+
+// --- 1. GESTIÓN DE EMPRESAS / TENANTS ---
 export async function fetchTenantsFromDb() {
   try {
     const { data, error } = await supabase
       .from('tenants')
-      .select('*')
+      .select('*, industrias(nombre)')
       .order('nombre', { ascending: true });
 
     if (error) {
@@ -27,8 +46,10 @@ export async function saveTenantToDb(tenant) {
   try {
     const payload = {
       id: tenant.id || `tenant-${Date.now()}`,
+      industria_id: tenant.industriaId || 'ind-lacteos',
       nombre: tenant.nombre,
       nit: tenant.nit || 'Sin NIT',
+      ciudad: tenant.ciudad || 'Bogotá D.C.',
       plan: tenant.plan || 'Edición Profesional',
       activo: true
     };
@@ -49,7 +70,99 @@ export async function saveTenantToDb(tenant) {
   }
 }
 
-// --- 1. PROCEDIMIENTOS (Filtrado por tenant_id) ---
+// --- 2. GESTIÓN DE TIENDAS / PLANTAS / SUCURSALES ---
+export async function fetchTiendasFromDb(tenantId = 'tenant-opt-01') {
+  try {
+    const { data, error } = await supabase
+      .from('tiendas')
+      .select('*')
+      .eq('tenant_id', tenantId)
+      .order('nombre', { ascending: true });
+
+    if (error) {
+      console.warn('Supabase fetchTiendas warning:', error.message);
+      return null;
+    }
+    return data || null;
+  } catch (err) {
+    console.error('Error fetching tiendas:', err);
+    return null;
+  }
+}
+
+export async function saveTiendaToDb(tienda, tenantId = 'tenant-opt-01') {
+  try {
+    const payload = {
+      id: tienda.id || `store-${Date.now()}`,
+      tenant_id: tenantId,
+      nombre: tienda.nombre,
+      codigo_tienda: tienda.codigoTienda || 'PLT-01',
+      ciudad: tienda.ciudad || 'Bogotá D.C.',
+      direccion: tienda.direccion || ''
+    };
+
+    const { data, error } = await supabase
+      .from('tiendas')
+      .insert([payload])
+      .select();
+
+    if (error) {
+      console.warn('Supabase saveTienda warning:', error.message);
+      return null;
+    }
+    return data ? data[0] : null;
+  } catch (err) {
+    console.error('Error saving tienda:', err);
+    return null;
+  }
+}
+
+// --- 3. GESTIÓN DE DEPARTAMENTOS / ÁREAS ---
+export async function fetchDepartamentosFromDb(tenantId = 'tenant-opt-01', tiendaId = null) {
+  try {
+    let query = supabase.from('departamentos').select('*').eq('tenant_id', tenantId);
+    if (tiendaId) query = query.eq('tienda_id', tiendaId);
+
+    const { data, error } = await query.order('nombre', { ascending: true });
+
+    if (error) {
+      console.warn('Supabase fetchDepartamentos warning:', error.message);
+      return null;
+    }
+    return data || null;
+  } catch (err) {
+    console.error('Error fetching departamentos:', err);
+    return null;
+  }
+}
+
+export async function saveDepartamentoToDb(dep, tenantId = 'tenant-opt-01', tiendaId = 'store-opt-main') {
+  try {
+    const payload = {
+      id: dep.id || `dep-${Date.now()}`,
+      tenant_id: tenantId,
+      tienda_id: tiendaId,
+      nombre: dep.nombre,
+      descripcion: dep.descripcion || ''
+    };
+
+    const { data, error } = await supabase
+      .from('departamentos')
+      .insert([payload])
+      .select();
+
+    if (error) {
+      console.warn('Supabase saveDepartamento warning:', error.message);
+      return null;
+    }
+    return data ? data[0] : null;
+  } catch (err) {
+    console.error('Error saving departamento:', err);
+    return null;
+  }
+}
+
+// --- 4. PROCEDIMIENTOS (Filtrado por tenant_id) ---
 export async function fetchProcedimientosFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
@@ -67,6 +180,8 @@ export async function fetchProcedimientosFromDb(tenantId = 'tenant-opt-01') {
       return data.map(item => ({
         id: item.id,
         tenantId: item.tenant_id,
+        tiendaId: item.tienda_id,
+        departamentoId: item.departamento_id,
         codigo: item.codigo,
         titulo: item.titulo,
         categoria: item.categoria,
@@ -126,7 +241,7 @@ export async function saveProcedimientoToDb(proc, tenantId = 'tenant-opt-01') {
   }
 }
 
-// --- 2. FORMATOS IMPRIMIBLES ---
+// --- 5. FORMATOS IMPRIMIBLES ---
 export async function fetchFormatosFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
@@ -192,7 +307,7 @@ export async function saveFormatoToDb(formato, tenantId = 'tenant-opt-01') {
   }
 }
 
-// --- 3. REGISTROS DE SANEAMIENTO ---
+// --- 6. REGISTROS DE SANEAMIENTO ---
 export async function fetchSaneamientoFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
@@ -257,7 +372,7 @@ export async function saveSaneamientoToDb(registro, tenantId = 'tenant-opt-01') 
   }
 }
 
-// --- 4. ACCIONES CAPA ---
+// --- 7. ACCIONES CAPA ---
 export async function fetchCapaFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
@@ -319,7 +434,7 @@ export async function updateCapaInDb(id, updates) {
   }
 }
 
-// --- 5. ALÉRGENOS ---
+// --- 8. ALÉRGENOS ---
 export async function fetchAlergenosFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
@@ -378,7 +493,7 @@ export async function saveAlergenoToDb(reg, tenantId = 'tenant-opt-01') {
   }
 }
 
-// --- 6. MANIPULADORES Y BPM ---
+// --- 9. MANIPULADORES Y BPM ---
 export async function fetchManipuladoresFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
@@ -439,7 +554,7 @@ export async function saveManipuladorToDb(man, tenantId = 'tenant-opt-01') {
   }
 }
 
-// --- 7. MEDICIONES DE VARIABLES CRÍTICAS ---
+// --- 10. MEDICIONES DE VARIABLES CRÍTICAS ---
 export async function fetchMedicionesFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase

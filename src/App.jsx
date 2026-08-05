@@ -8,8 +8,13 @@ import Capa from './components/Capa';
 import AllergenRecall from './components/AllergenRecall';
 import Procedimientos from './components/Procedimientos';
 import {
+  fetchIndustriasFromDb,
   fetchTenantsFromDb,
   saveTenantToDb,
+  fetchTiendasFromDb,
+  saveTiendaToDb,
+  fetchDepartamentosFromDb,
+  saveDepartamentoToDb,
   fetchProcedimientosFromDb,
   saveProcedimientoToDb,
   fetchSaneamientoFromDb,
@@ -36,21 +41,27 @@ function App() {
     'Agua Potable': false
   });
   
-  // Estado Multi-Tenant (Inquilinos / Empresas Clientes)
+  // Estado Multi-Tenant (Empresas, Industrias, Plantas/Tiendas y Departamentos)
+  const [industrias, setIndustrias] = useState([]);
   const [tenants, setTenants] = useState([
-    { id: 'tenant-opt-01', nombre: 'Optimus Latinoamérica', nit: '900.123.456-7', plan: 'Edición Profesional' },
-    { id: 'tenant-lacteos-02', nombre: 'Lácteos del Valle S.A.S.', nit: '800.987.654-1', plan: 'Plan Gold HACCP' },
-    { id: 'tenant-carnes-03', nombre: 'Frigoríficos y Procesados Norte', nit: '901.456.789-3', plan: 'Enterprise' }
+    { id: 'tenant-opt-01', nombre: 'Optimus Latinoamérica', nit: '900.123.456-7', plan: 'Edición Profesional', industriaId: 'ind-lacteos' },
+    { id: 'tenant-lacteos-02', nombre: 'Lácteos del Valle S.A.S.', nit: '800.987.654-1', plan: 'Plan Gold HACCP', industriaId: 'ind-lacteos' },
+    { id: 'tenant-carnes-03', nombre: 'Frigoríficos y Procesados Norte', nit: '901.456.789-3', plan: 'Enterprise', industriaId: 'ind-carnicos' }
   ]);
   const [activeTenant, setActiveTenant] = useState(() => {
     const saved = localStorage.getItem('OCA-active-tenant-v1');
-    return saved ? JSON.parse(saved) : { id: 'tenant-opt-01', nombre: 'Optimus Latinoamérica', nit: '900.123.456-7', plan: 'Edición Profesional' };
+    return saved ? JSON.parse(saved) : { id: 'tenant-opt-01', nombre: 'Optimus Latinoamérica', nit: '900.123.456-7', plan: 'Edición Profesional', industriaId: 'ind-lacteos' };
   });
+
+  const [tiendas, setTiendas] = useState([]);
+  const [activeTienda, setActiveTienda] = useState(null);
+  const [departamentos, setDepartamentos] = useState([]);
 
   const [mostrarCrearTenant, setMostrarCrearTenant] = useState(false);
   const [nuevoTenantNombre, setNuevoTenantNombre] = useState('');
   const [nuevoTenantNit, setNuevoTenantNit] = useState('');
   const [nuevoTenantPlan, setNuevoTenantPlan] = useState('Edición Profesional');
+  const [nuevoTenantIndustria, setNuevoTenantIndustria] = useState('ind-lacteos');
 
   // Base de datos dinámica de Procedimientos (Control Documental ISO)
   const [procedimientos, setProcedimientos] = useState([]);
@@ -60,11 +71,26 @@ function App() {
   const [accionesCapa, setAccionesCapa] = useState([]);
   const [registrosAlergenos, setRegistrosAlergenos] = useState([]);
 
-  // Carga inicial y cambio dinámico según el tenant activo
+  // Carga inicial y cambio dinámico según la empresa activa
   useEffect(() => {
     async function syncFromSupabase() {
+      const dbInds = await fetchIndustriasFromDb();
+      if (dbInds) setIndustrias(dbInds);
+
       const dbTenants = await fetchTenantsFromDb();
       if (dbTenants && dbTenants.length > 0) setTenants(dbTenants);
+
+      const dbTiendas = await fetchTiendasFromDb(activeTenant.id);
+      if (dbTiendas && dbTiendas.length > 0) {
+        setTiendas(dbTiendas);
+        setActiveTienda(dbTiendas[0]);
+      } else {
+        setTiendas([{ id: 'store-default', nombre: 'Planta Principal', codigo_tienda: 'PLT-01' }]);
+        setActiveTienda({ id: 'store-default', nombre: 'Planta Principal', codigo_tienda: 'PLT-01' });
+      }
+
+      const dbDeps = await fetchDepartamentosFromDb(activeTenant.id);
+      if (dbDeps) setDepartamentos(dbDeps);
 
       const dbProcs = await fetchProcedimientosFromDb(activeTenant.id);
       if (dbProcs) setProcedimientos(dbProcs);
