@@ -1,15 +1,61 @@
 import { supabase } from './supabaseClient';
 
 // ============================================================
-// SERVICIO DE DATOS DINÁMICOS CON SUPABASE PARA OCA ONE
+// SERVICIO DE DATOS MULTI-TENANT (MULTI-INQUILINO/EMPRESA)
 // ============================================================
 
-// --- 1. PROCEDIMIENTOS (Control Documental ISO) ---
-export async function fetchProcedimientosFromDb() {
+// --- 0. GESTIÓN DE EMPRESAS / TENANTS ---
+export async function fetchTenantsFromDb() {
+  try {
+    const { data, error } = await supabase
+      .from('tenants')
+      .select('*')
+      .order('nombre', { ascending: true });
+
+    if (error) {
+      console.warn('Supabase fetchTenants warning:', error.message);
+      return null;
+    }
+    return data || null;
+  } catch (err) {
+    console.error('Error fetching tenants:', err);
+    return null;
+  }
+}
+
+export async function saveTenantToDb(tenant) {
+  try {
+    const payload = {
+      id: tenant.id || `tenant-${Date.now()}`,
+      nombre: tenant.nombre,
+      nit: tenant.nit || 'Sin NIT',
+      plan: tenant.plan || 'Edición Profesional',
+      activo: true
+    };
+
+    const { data, error } = await supabase
+      .from('tenants')
+      .insert([payload])
+      .select();
+
+    if (error) {
+      console.warn('Supabase saveTenant warning:', error.message);
+      return null;
+    }
+    return data ? data[0] : null;
+  } catch (err) {
+    console.error('Error saving tenant:', err);
+    return null;
+  }
+}
+
+// --- 1. PROCEDIMIENTOS (Filtrado por tenant_id) ---
+export async function fetchProcedimientosFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
       .from('procedimientos')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('id', { ascending: true });
 
     if (error) {
@@ -20,6 +66,7 @@ export async function fetchProcedimientosFromDb() {
     if (data && data.length > 0) {
       return data.map(item => ({
         id: item.id,
+        tenantId: item.tenant_id,
         codigo: item.codigo,
         titulo: item.titulo,
         categoria: item.categoria,
@@ -43,9 +90,10 @@ export async function fetchProcedimientosFromDb() {
   }
 }
 
-export async function saveProcedimientoToDb(proc) {
+export async function saveProcedimientoToDb(proc, tenantId = 'tenant-opt-01') {
   try {
     const payload = {
+      tenant_id: tenantId,
       codigo: proc.codigo,
       titulo: proc.titulo,
       categoria: proc.categoria,
@@ -78,12 +126,13 @@ export async function saveProcedimientoToDb(proc) {
   }
 }
 
-// --- 2. FORMATOS IMPRIMIBLES (Plantillas en blanco) ---
-export async function fetchFormatosFromDb() {
+// --- 2. FORMATOS IMPRIMIBLES ---
+export async function fetchFormatosFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
       .from('formatos_imprimibles')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('created_at', { ascending: true });
 
     if (error) {
@@ -94,6 +143,7 @@ export async function fetchFormatosFromDb() {
     if (data && data.length > 0) {
       return data.map(item => ({
         id: item.id,
+        tenantId: item.tenant_id,
         codigo: item.codigo,
         titulo: item.titulo,
         categoria: item.categoria,
@@ -111,10 +161,11 @@ export async function fetchFormatosFromDb() {
   }
 }
 
-export async function saveFormatoToDb(formato) {
+export async function saveFormatoToDb(formato, tenantId = 'tenant-opt-01') {
   try {
     const payload = {
       id: formato.id || `f-custom-${Date.now()}`,
+      tenant_id: tenantId,
       codigo: formato.codigo,
       titulo: formato.titulo,
       categoria: formato.categoria,
@@ -142,11 +193,12 @@ export async function saveFormatoToDb(formato) {
 }
 
 // --- 3. REGISTROS DE SANEAMIENTO ---
-export async function fetchSaneamientoFromDb() {
+export async function fetchSaneamientoFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
       .from('registros_saneamiento')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('id', { ascending: true });
 
     if (error) {
@@ -157,6 +209,7 @@ export async function fetchSaneamientoFromDb() {
     if (data && data.length > 0) {
       return data.map(item => ({
         id: item.id,
+        tenantId: item.tenant_id,
         fecha: item.fecha,
         hora: item.hora,
         area: item.area,
@@ -174,9 +227,10 @@ export async function fetchSaneamientoFromDb() {
   }
 }
 
-export async function saveSaneamientoToDb(registro) {
+export async function saveSaneamientoToDb(registro, tenantId = 'tenant-opt-01') {
   try {
     const payload = {
+      tenant_id: tenantId,
       fecha: registro.fecha || new Date().toISOString().split('T')[0],
       hora: registro.hora || new Date().toTimeString().split(' ')[0].substring(0, 5),
       area: registro.area,
@@ -204,11 +258,12 @@ export async function saveSaneamientoToDb(registro) {
 }
 
 // --- 4. ACCIONES CAPA ---
-export async function fetchCapaFromDb() {
+export async function fetchCapaFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
       .from('acciones_capa')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('id', { ascending: true });
 
     if (error) {
@@ -219,6 +274,7 @@ export async function fetchCapaFromDb() {
     if (data && data.length > 0) {
       return data.map(item => ({
         id: item.id,
+        tenantId: item.tenant_id,
         fecha: item.fecha,
         hallazgo: item.hallazgo,
         origen: item.origen,
@@ -264,11 +320,12 @@ export async function updateCapaInDb(id, updates) {
 }
 
 // --- 5. ALÉRGENOS ---
-export async function fetchAlergenosFromDb() {
+export async function fetchAlergenosFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
       .from('registros_alergenos')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('id', { ascending: true });
 
     if (error) {
@@ -279,6 +336,7 @@ export async function fetchAlergenosFromDb() {
     if (data && data.length > 0) {
       return data.map(item => ({
         id: item.id,
+        tenantId: item.tenant_id,
         fecha: item.fecha,
         linea: item.linea,
         alergenoEvaluado: item.alergeno_evaluado,
@@ -293,9 +351,10 @@ export async function fetchAlergenosFromDb() {
   }
 }
 
-export async function saveAlergenoToDb(reg) {
+export async function saveAlergenoToDb(reg, tenantId = 'tenant-opt-01') {
   try {
     const payload = {
+      tenant_id: tenantId,
       fecha: reg.fecha || new Date().toISOString().split('T')[0],
       linea: reg.linea,
       alergeno_evaluado: reg.alergenoEvaluado,
@@ -320,11 +379,12 @@ export async function saveAlergenoToDb(reg) {
 }
 
 // --- 6. MANIPULADORES Y BPM ---
-export async function fetchManipuladoresFromDb() {
+export async function fetchManipuladoresFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
       .from('manipuladores')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('id', { ascending: true });
 
     if (error) {
@@ -335,6 +395,7 @@ export async function fetchManipuladoresFromDb() {
     if (data && data.length > 0) {
       return data.map(item => ({
         id: item.id,
+        tenantId: item.tenant_id,
         nombre: item.nombre,
         cedula: item.cedula,
         cargo: item.cargo,
@@ -350,9 +411,10 @@ export async function fetchManipuladoresFromDb() {
   }
 }
 
-export async function saveManipuladorToDb(man) {
+export async function saveManipuladorToDb(man, tenantId = 'tenant-opt-01') {
   try {
     const payload = {
+      tenant_id: tenantId,
       nombre: man.nombre,
       cedula: man.cedula,
       cargo: man.cargo,
@@ -378,11 +440,12 @@ export async function saveManipuladorToDb(man) {
 }
 
 // --- 7. MEDICIONES DE VARIABLES CRÍTICAS ---
-export async function fetchMedicionesFromDb() {
+export async function fetchMedicionesFromDb(tenantId = 'tenant-opt-01') {
   try {
     const { data, error } = await supabase
       .from('mediciones_variables')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('id', { ascending: true });
 
     if (error) {
@@ -393,6 +456,7 @@ export async function fetchMedicionesFromDb() {
     if (data && data.length > 0) {
       return data.map(item => ({
         id: item.id,
+        tenantId: item.tenant_id,
         fecha: item.fecha,
         hora: item.hora,
         variable: item.variable,
@@ -409,9 +473,10 @@ export async function fetchMedicionesFromDb() {
   }
 }
 
-export async function saveMedicionToDb(med) {
+export async function saveMedicionToDb(med, tenantId = 'tenant-opt-01') {
   try {
     const payload = {
+      tenant_id: tenantId,
       fecha: med.fecha || new Date().toISOString().split('T')[0],
       hora: med.hora || new Date().toTimeString().split(' ')[0].substring(0, 5),
       variable: med.variable,

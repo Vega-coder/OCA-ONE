@@ -8,6 +8,8 @@ import Capa from './components/Capa';
 import AllergenRecall from './components/AllergenRecall';
 import Procedimientos from './components/Procedimientos';
 import {
+  fetchTenantsFromDb,
+  saveTenantToDb,
   fetchProcedimientosFromDb,
   saveProcedimientoToDb,
   fetchSaneamientoFromDb,
@@ -34,184 +36,61 @@ function App() {
     'Agua Potable': false
   });
   
+  // Estado Multi-Tenant (Inquilinos / Empresas Clientes)
+  const [tenants, setTenants] = useState([
+    { id: 'tenant-opt-01', nombre: 'Optimus Latinoamérica', nit: '900.123.456-7', plan: 'Edición Profesional' },
+    { id: 'tenant-lacteos-02', nombre: 'Lácteos del Valle S.A.S.', nit: '800.987.654-1', plan: 'Plan Gold HACCP' },
+    { id: 'tenant-carnes-03', nombre: 'Frigoríficos y Procesados Norte', nit: '901.456.789-3', plan: 'Enterprise' }
+  ]);
+  const [activeTenant, setActiveTenant] = useState(() => {
+    const saved = localStorage.getItem('OCA-active-tenant-v1');
+    return saved ? JSON.parse(saved) : { id: 'tenant-opt-01', nombre: 'Optimus Latinoamérica', nit: '900.123.456-7', plan: 'Edición Profesional' };
+  });
+
+  const [mostrarCrearTenant, setMostrarCrearTenant] = useState(false);
+  const [nuevoTenantNombre, setNuevoTenantNombre] = useState('');
+  const [nuevoTenantNit, setNuevoTenantNit] = useState('');
+  const [nuevoTenantPlan, setNuevoTenantPlan] = useState('Edición Profesional');
+
   // Base de datos dinámica de Procedimientos (Control Documental ISO)
-  const [procedimientos, setProcedimientos] = useState(() => {
-    const saved = localStorage.getItem('OCA-procedimientos-v5');
-    return saved ? JSON.parse(saved) : [
-      {
-        id: 1,
-        codigo: 'POES-PLG-001',
-        titulo: 'Procedimiento Operativo de Control de Plagas',
-        categoria: 'Control de Plagas',
-        version: '2.0.0',
-        fechaAprobacion: '2026-01-10',
-        responsable: 'Carlos Gómez',
-        objetivo: 'Establecer las medidas preventivas y correctivas necesarias para evitar la proliferación de insectos, roedores y otras plagas en la planta de proceso.',
-        alcance: 'Aplica a todas las áreas internas, externas, almacenes de materia prima y producto terminado.',
-        responsablesDoc: 'Empresa subcontratista de control de vectores y el supervisor de calidad.',
-        definiciones: 'Vector: Animal que puede transmitir enfermedades o contaminar alimentos.',
-        desarrollo: '1. INSPECCIÓN:\n- El supervisor revisará semanalmente los 15 cebaderos numerados.',
-        registrosControl: [
-          { nombre: 'Planilla de Monitoreo de Estaciones de Cebado', codigo: 'F-PLG-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
-        ],
-        controlCambios: [
-          { fecha: 'Enero 2026 Version 2.0.0', descripcion: 'Actualización general de cebaderos externos', responsable: 'Carlos Gómez' }
-        ]
-      },
-      {
-        id: 2,
-        codigo: 'POES-RES-002',
-        titulo: 'Manual de Gestión de Residuos Sólidos y Líquidos',
-        categoria: 'Residuos Sólidos y Líquidos',
-        version: '1.2.0',
-        fechaAprobacion: '2026-03-15',
-        responsable: 'Carlos Gómez',
-        objetivo: 'Normar el correcto manejo, separación en la fuente y disposición final de los residuos generados.',
-        alcance: 'Aplica a todas las áreas operativas, bodegas y zona de efluentes.',
-        responsablesDoc: 'Auxiliares de almacén, personal de limpieza y dirección ambiental.',
-        definiciones: 'Residuo Orgánico: Resto biodegradable de origen vegetal o animal.',
-        desarrollo: '1. CLASIFICACIÓN:\n- Orgánicos: Canecas Verdes.\n- Plásticos: Canecas Grises.',
-        registrosControl: [
-          { nombre: 'Bitácora Diaria de Retiro de Residuos', codigo: 'F-RES-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
-        ],
-        controlCambios: [
-          { fecha: 'Marzo 2026 Version 1.2.0', descripcion: 'Inclusión de entrega de aceites quemados', responsable: 'Carlos Gómez' }
-        ]
-      },
-      {
-        id: 3,
-        codigo: 'POES-LIM-003',
-        titulo: 'Plan Maestro de Limpieza y Desinfección',
-        categoria: 'Limpieza y Desinfección',
-        version: '3.1.0',
-        fechaAprobacion: '2026-05-20',
-        responsable: 'Carlos Gómez',
-        objetivo: 'Garantizar que todos los equipos, utensilios e infraestructura estén limpios y desinfectados.',
-        alcance: 'Aplica a todas las salas de proceso, envasado A y B.',
-        responsablesDoc: 'Operarios de limpieza y supervisores.',
-        definiciones: 'Sanitización: Reducción del número de microorganismos a un nivel seguro.',
-        desarrollo: '1. DOSIFICACIONES PERMITIDAS:\n- Cloro: 200 ppm para superficies de contacto directo.',
-        registrosControl: [
-          { nombre: 'Registro de Inspección Diaria de L&D', codigo: 'Q-FR-18', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
-        ],
-        controlCambios: [
-          { fecha: 'Mayo 2026 Version 3.1.0', descripcion: 'Actualización de dosificación de cloro a 200ppm', responsable: 'Carlos Gómez' }
-        ]
-      },
-      {
-        id: 4,
-        codigo: 'POES-AGU-004',
-        titulo: 'Procedimiento de Control y Potabilidad de Agua',
-        categoria: 'Agua Potable',
-        version: '1.0.0',
-        fechaAprobacion: '2026-02-05',
-        responsable: 'Carlos Gómez',
-        objetivo: 'Asegurar que el agua utilizada sea apta para consumo humano.',
-        alcance: 'Aplica a toda la red interna de agua potable.',
-        responsablesDoc: 'Supervisor de laboratorio y mantenimiento.',
-        definiciones: 'Cloro Libre Residual: Cantidad de cloro activo en agua.',
-        desarrollo: '1. MONITOREO DIARIO: Medir cloro libre (0.3 a 2.0 ppm) y pH (6.5 a 8.5).',
-        registrosControl: [
-          { nombre: 'Planilla Diaria de Cloro y pH', codigo: 'F-AGU-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
-        ],
-        controlCambios: [
-          { fecha: 'Febrero 2026 Version 1.0.0', descripcion: 'Creación del documento', responsable: 'Carlos Gómez' }
-        ]
-      }
-    ];
-  });
+  const [procedimientos, setProcedimientos] = useState([]);
+  const [registrosSaneamiento, setRegistrosSaneamiento] = useState([]);
+  const [medicionesVariables, setMedicionesVariables] = useState([]);
+  const [manipuladores, setManipuladores] = useState([]);
+  const [accionesCapa, setAccionesCapa] = useState([]);
+  const [registrosAlergenos, setRegistrosAlergenos] = useState([]);
 
-  // Base de datos de Saneamiento
-  const [registrosSaneamiento, setRegistrosSaneamiento] = useState(() => {
-    const saved = localStorage.getItem('OCA-saneamiento-v4');
-    return saved ? JSON.parse(saved) : [
-      { id: 1, fecha: '2026-07-15', hora: '06:30', area: 'Cuarto Frío 1', supervisor: 'Carlos Gómez', tipo: 'Pre-operacional', producto: 'Cloro 200ppm', conforme: true, observacion: 'Cumple sin novedades' },
-      { id: 2, fecha: '2026-07-15', hora: '13:00', area: 'Línea de Envasado A', supervisor: 'Ana Martínez', tipo: 'Rutinaria', producto: 'Amonio Cuaternario', conforme: true, observacion: 'Limpieza intermedia' },
-      { id: 3, fecha: '2026-07-15', hora: '18:00', area: 'Almacén MP', supervisor: 'Diana Pérez', tipo: 'Profunda', producto: 'Detergente Neutro', conforme: true, observacion: 'Lavado general' }
-    ];
-  });
-
-  // Base de datos de Variables Críticas (PCC)
-  const [medicionesVariables, setMedicionesVariables] = useState(() => {
-    const saved = localStorage.getItem('OCA-variables-v4');
-    return saved ? JSON.parse(saved) : [
-      { id: 1, fecha: '2026-07-15', hora: '08:00', punto: 'Cámara Refrigeración 1', temperatura: 4.2, ph: null, supervisor: 'Carlos Gómez', estado: 'Normal', comentario: 'Equipo operando estable.' },
-      { id: 2, fecha: '2026-07-15', hora: '10:00', punto: 'Pasteurizador B', temperatura: 72.5, ph: 6.62, supervisor: 'Ana Martínez', estado: 'Normal', comentario: 'Pasteurización de leche entera.' }
-    ];
-  });
-
-  // Base de datos de Manipuladores
-  const [manipuladores, setManipuladores] = useState(() => {
-    const saved = localStorage.getItem('OCA-manipuladores-v4');
-    return saved ? JSON.parse(saved) : [
-      { id: 1, nombre: 'Javier Castillo', cargo: 'Operario de Envasado', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 92 },
-      { id: 2, nombre: 'Marta Solano', cargo: 'Operaria de Mezclas', carnetBpm: 'Vigente', controlMedico: 'Apto', capacitacionProgreso: 85 },
-      { id: 3, nombre: 'Luis Fernando Ruiz', cargo: 'Auxiliar de Almacén', carnetBpm: 'Vence Pronto', controlMedico: 'Apto', capacitacionProgreso: 78 }
-    ];
-  });
-
-  // Base de datos de Acciones CAPA (Desviaciones)
-  const [accionesCapa, setAccionesCapa] = useState(() => {
-    const saved = localStorage.getItem('OCA-capa-v4');
-    return saved ? JSON.parse(saved) : [
-      { 
-        id: 1, 
-        origen: 'Saneamiento', 
-        fecha: '2026-07-14', 
-        hora: '22:00', 
-        hallazgo: 'Saneamiento fallido en Cuarto Frío 2: Presencia de residuos orgánicos en desagüe.', 
-        responsable: 'Carlos Gómez', 
-        estado: 'Abierto', 
-        causaRaiz: '', 
-        planAccion: '', 
-        fechaCierre: '', 
-        supervisorCierre: '' 
-      }
-    ];
-  });
-
-  // Base de datos de registros de cambio de alérgenos
-  const [registrosAlergenos, setRegistrosAlergenos] = useState(() => {
-    const saved = localStorage.getItem('OCA-alergenos-v4');
-    return saved ? JSON.parse(saved) : [
-      { 
-        id: 1, 
-        fecha: '2026-07-15', 
-        hora: '07:30', 
-        linea: 'Línea de Envasado A', 
-        alergenoPrevio: 'Maní', 
-        alergenoObjetivo: 'Ninguno (Libre de alérgenos)', 
-        tipoPrueba: 'Lateral Flow (Hisopado rápido)', 
-        resultado: 'Negativo (Línea Liberada)', 
-        supervisor: 'Carlos Gómez' 
-      }
-    ];
-  });
-
-  // Carga inicial dinámica desde Supabase
+  // Carga inicial y cambio dinámico según el tenant activo
   useEffect(() => {
     async function syncFromSupabase() {
-      const dbProcs = await fetchProcedimientosFromDb();
-      if (dbProcs && dbProcs.length > 0) setProcedimientos(dbProcs);
+      const dbTenants = await fetchTenantsFromDb();
+      if (dbTenants && dbTenants.length > 0) setTenants(dbTenants);
 
-      const dbSaneamiento = await fetchSaneamientoFromDb();
-      if (dbSaneamiento && dbSaneamiento.length > 0) setRegistrosSaneamiento(dbSaneamiento);
+      const dbProcs = await fetchProcedimientosFromDb(activeTenant.id);
+      if (dbProcs) setProcedimientos(dbProcs);
 
-      const dbCapa = await fetchCapaFromDb();
-      if (dbCapa && dbCapa.length > 0) setAccionesCapa(dbCapa);
+      const dbSaneamiento = await fetchSaneamientoFromDb(activeTenant.id);
+      if (dbSaneamiento) setRegistrosSaneamiento(dbSaneamiento);
 
-      const dbAlergenos = await fetchAlergenosFromDb();
-      if (dbAlergenos && dbAlergenos.length > 0) setRegistrosAlergenos(dbAlergenos);
+      const dbCapa = await fetchCapaFromDb(activeTenant.id);
+      if (dbCapa) setAccionesCapa(dbCapa);
 
-      const dbMan = await fetchManipuladoresFromDb();
-      if (dbMan && dbMan.length > 0) setManipuladores(dbMan);
+      const dbAlergenos = await fetchAlergenosFromDb(activeTenant.id);
+      if (dbAlergenos) setRegistrosAlergenos(dbAlergenos);
 
-      const dbMed = await fetchMedicionesFromDb();
-      if (dbMed && dbMed.length > 0) setMedicionesVariables(dbMed);
+      const dbMan = await fetchManipuladoresFromDb(activeTenant.id);
+      if (dbMan) setManipuladores(dbMan);
+
+      const dbMed = await fetchMedicionesFromDb(activeTenant.id);
+      if (dbMed) setMedicionesVariables(dbMed);
     }
 
     syncFromSupabase();
-  }, []);
+  }, [activeTenant.id]);
+
+  useEffect(() => {
+    localStorage.setItem('OCA-active-tenant-v1', JSON.stringify(activeTenant));
+  }, [activeTenant]);
 
   useEffect(() => {
     localStorage.setItem('OCA-procedimientos-v5', JSON.stringify(procedimientos));
@@ -247,13 +126,32 @@ function App() {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
 
+  const handleCrearTenant = async (e) => {
+    e.preventDefault();
+    if (!nuevoTenantNombre.trim()) return;
+
+    const nuevo = {
+      id: `tenant-${Date.now()}`,
+      nombre: nuevoTenantNombre.trim(),
+      nit: nuevoTenantNit.trim() || 'Sin NIT',
+      plan: nuevoTenantPlan,
+      activo: true
+    };
+
+    setTenants(prev => [...prev, nuevo]);
+    setActiveTenant(nuevo);
+    saveTenantToDb(nuevo);
+    setNuevoTenantNombre('');
+    setNuevoTenantNit('');
+    setMostrarCrearTenant(false);
+  };
+
   // Agregar registros y autogenerar Tickets CAPA ante fallas o alertas
   const handleAgregarSaneamiento = async (nuevoRegistro) => {
     const id = Date.now();
     setRegistrosSaneamiento(prev => [...prev, { id, ...nuevoRegistro }]);
-    saveSaneamientoToDb(nuevoRegistro);
+    saveSaneamientoToDb(nuevoRegistro, activeTenant.id);
 
-    // Si no es conforme, se genera automáticamente una no conformidad en el módulo CAPA
     if (!nuevoRegistro.conforme) {
       const nuevaCapa = {
         id: Date.now() + 10,
@@ -275,9 +173,8 @@ function App() {
   const handleAgregarVariable = async (nuevaMedicion) => {
     const id = Date.now();
     setMedicionesVariables(prev => [...prev, { id, ...nuevaMedicion }]);
-    saveMedicionToDb(nuevaMedicion);
+    saveMedicionToDb(nuevaMedicion, activeTenant.id);
 
-    // Si la variable está en estado de Alerta, genera automáticamente un CAPA
     if (nuevaMedicion.estado === 'Alerta') {
       const nuevaCapa = {
         id: Date.now() + 20,
@@ -325,12 +222,12 @@ function App() {
       ...prev,
       { id: Date.now(), ...nuevoAlergeno }
     ]);
-    saveAlergenoToDb(nuevoAlergeno);
+    saveAlergenoToDb(nuevoAlergeno, activeTenant.id);
   };
 
   const handleAgregarManipulador = async (nuevoMan) => {
     setManipuladores(prev => [...prev, { id: Date.now(), ...nuevoMan }]);
-    saveManipuladorToDb(nuevoMan);
+    saveManipuladorToDb(nuevoMan, activeTenant.id);
   };
 
   const handleAgregarProcedimiento = async (nuevoProc) => {
@@ -340,7 +237,7 @@ function App() {
       ...nuevoProc
     };
     setProcedimientos(prev => [...prev, item]);
-    saveProcedimientoToDb(item);
+    saveProcedimientoToDb(item, activeTenant.id);
   };
 
   // Calcular alertas activas para el centro de notificaciones
@@ -542,8 +439,8 @@ function App() {
         </ul>
         <hr className="bg-secondary opacity-25" />
         <div className="text-secondary small">
-          <p className="mb-1"><i className="bi bi-building me-1"></i> Optimus Latinoamérica</p>
-          <p className="mb-0 text-muted" style={{ fontSize: '11px' }}>v2.0.0 - Edición Profesional</p>
+          <p className="mb-1 fw-bold text-white"><i className="bi bi-building me-1 text-success"></i> {activeTenant.nombre}</p>
+          <p className="mb-0 text-muted" style={{ fontSize: '11px' }}>NIT: {activeTenant.nit} | {activeTenant.plan}</p>
         </div>
       </aside>
 
@@ -564,6 +461,47 @@ function App() {
             </h1>
             
             <div className="d-flex align-items-center ms-auto">
+              {/* Selector Multi-Tenant de Empresa */}
+              <div className="dropdown me-3">
+                <button 
+                  className="btn btn-sm btn-outline-success dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 fw-semibold" 
+                  type="button" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false"
+                  style={{ borderRadius: '10px' }}
+                >
+                  <i className="bi bi-building-fill text-success"></i>
+                  <span>{activeTenant.nombre}</span>
+                  <span className="badge bg-success-subtle text-success ms-1" style={{ fontSize: '10px' }}>{activeTenant.plan}</span>
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '280px', borderRadius: '12px' }}>
+                  <li className="dropdown-header fw-bold text-dark border-bottom pb-2">Seleccionar Inquilino / Empresa</li>
+                  {tenants.map(t => (
+                    <li key={t.id}>
+                      <button 
+                        className={`dropdown-item d-flex justify-content-between align-items-center py-2 rounded-2 ${activeTenant.id === t.id ? 'active fw-bold' : ''}`}
+                        onClick={() => setActiveTenant(t)}
+                      >
+                        <div>
+                          <div style={{ fontSize: '13px' }}>{t.nombre}</div>
+                          <small className="text-muted" style={{ fontSize: '10px' }}>NIT: {t.nit}</small>
+                        </div>
+                        {activeTenant.id === t.id && <i className="bi bi-check-circle-fill ms-2"></i>}
+                      </button>
+                    </li>
+                  ))}
+                  <li><hr className="dropdown-divider my-2" /></li>
+                  <li>
+                    <button 
+                      className="dropdown-item text-success fw-semibold d-flex align-items-center gap-2 py-2"
+                      onClick={() => setMostrarCrearTenant(true)}
+                    >
+                      <i className="bi bi-plus-circle"></i> Registrar Nueva Empresa (Inquilino)
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
               {/* Tema claro/oscuro */}
               <button 
                 className="btn btn-outline-secondary me-3 border-0 rounded-circle" 
@@ -680,10 +618,76 @@ function App() {
           )}
         </div>
 
+        {/* Modal de Registro de Nueva Empresa / Inquilino */}
+        {mostrarCrearTenant && (
+          <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '16px' }}>
+                <div className="modal-header bg-success text-white border-0" style={{ borderTopLeftRadius: '16px', borderTopRightRadius: '16px' }}>
+                  <h5 className="modal-title font-heading fw-bold">
+                    <i className="bi bi-building-add me-2"></i>Registrar Nueva Empresa (Inquilino)
+                  </h5>
+                  <button type="button" className="btn-close btn-close-white" onClick={() => setMostrarCrearTenant(false)}></button>
+                </div>
+                <form onSubmit={handleCrearTenant}>
+                  <div className="modal-body p-4">
+                    <p className="text-muted small mb-3">
+                      Crea un espacio de trabajo aislado (Multi-Tenant) para un nuevo cliente o planta. Todas sus listas de control, POES y bitácoras estarán 100% segregados.
+                    </p>
+                    <div className="mb-3">
+                      <label className="form-label fw-semibold small">Nombre de la Empresa o Planta</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Ej: Alimentos Procesados del Caribe S.A.S." 
+                        value={nuevoTenantNombre}
+                        onChange={(e) => setNuevoTenantNombre(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="row g-2 mb-3">
+                      <div className="col-6">
+                        <label className="form-label fw-semibold small">NIT / Identificación Fiscal</label>
+                        <input 
+                          type="text" 
+                          className="form-control" 
+                          placeholder="Ej: 901.888.777-2" 
+                          value={nuevoTenantNit}
+                          onChange={(e) => setNuevoTenantNit(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-6">
+                        <label className="form-label fw-semibold small">Plan Licenciado</label>
+                        <select 
+                          className="form-select" 
+                          value={nuevoTenantPlan} 
+                          onChange={(e) => setNuevoTenantPlan(e.target.value)}
+                        >
+                          <option value="Edición Profesional">Edición Profesional</option>
+                          <option value="Plan Gold HACCP">Plan Gold HACCP</option>
+                          <option value="Enterprise Multi-Planta">Enterprise Multi-Planta</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="modal-footer border-top-0 p-3 bg-light" style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}>
+                    <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setMostrarCrearTenant(false)}>
+                      Cancelar
+                    </button>
+                    <button type="submit" className="btn btn-success btn-sm px-3">
+                      <i className="bi bi-check-circle me-1"></i> Crear Inquilino y Activar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Footer */}
         <footer className="footer mt-auto py-3 border-top bg-body-tertiary">
           <div className="container-fluid px-4 d-flex justify-content-between align-items-center text-muted small">
-            <span>&copy; 2026 OCA ONE. Edición Profesional - Optimus Latinoamérica.</span>
+            <span>&copy; 2026 OCA ONE. Multi-Tenant SaaS Engine - {activeTenant.nombre}.</span>
             <span>Seguridad Alimentaria: HACCP / ISO 22000 / BRCGS / IFS</span>
           </div>
         </footer>
