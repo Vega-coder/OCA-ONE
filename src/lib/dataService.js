@@ -756,3 +756,75 @@ export async function saveVersionHistoryToDb(ver, tenantId = 'tenant-opt-01') {
     return null;
   }
 }
+
+// --- 12. ROLES Y PERMISOS DINÁMICOS DE BASE DE DATOS (RBAC) ---
+export async function fetchRolesFromDb() {
+  try {
+    const { data, error } = await supabase
+      .from('roles')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) {
+      console.warn('Supabase fetchRoles warning:', error.message);
+      return null;
+    }
+
+    if (data && data.length > 0) {
+      return data.map(item => ({
+        id: item.id,
+        nombre: item.nombre,
+        badgeClass: item.badge_class || 'bg-secondary',
+        icon: item.icon || 'bi-person',
+        descripcion: item.descripcion,
+        canDownloadProcedures: item.can_download_procedures,
+        canEditDocuments: item.can_edit_documents,
+        canFillFormats: item.can_fill_formats,
+        canEditFormats: item.can_edit_formats,
+        canDownloadFormats: item.can_download_formats,
+        canViewFichasTecnicas: item.can_view_fichas_tecnicas,
+        canViewMSDS: item.can_view_msds,
+        allowedViews: item.allowed_views || []
+      }));
+    }
+    return null;
+  } catch (err) {
+    console.error('Error fetching roles:', err);
+    return null;
+  }
+}
+
+export async function saveRoleToDb(role) {
+  try {
+    const payload = {
+      id: role.id,
+      nombre: role.nombre,
+      badge_class: role.badgeClass || 'bg-secondary',
+      icon: role.icon || 'bi-person',
+      descripcion: role.descripcion,
+      can_download_procedures: role.canDownloadProcedures,
+      can_edit_documents: role.canEditDocuments,
+      can_fill_formats: role.canFillFormats,
+      can_edit_formats: role.canEditFormats,
+      can_download_formats: role.canDownloadFormats,
+      can_view_fichas_tecnicas: role.canViewFichasTecnicas,
+      can_view_msds: role.canViewMSDS,
+      allowed_views: role.allowedViews || []
+    };
+
+    const { data, error } = await supabase
+      .from('roles')
+      .upsert([payload])
+      .select();
+
+    if (error) {
+      console.warn('Supabase saveRole warning:', error.message);
+      return null;
+    }
+    return data ? data[0] : null;
+  } catch (err) {
+    console.error('Error saving role:', err);
+    return null;
+  }
+}
+

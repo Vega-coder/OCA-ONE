@@ -110,21 +110,22 @@ export const ROLES_DEFINITIONS = [
   }
 ];
 
-export function getRoleDefinition(roleId) {
-  return ROLES_DEFINITIONS.find(r => r.id === roleId) || ROLES_DEFINITIONS[0];
+export function getRoleDefinition(roleId, rolesList = null) {
+  const source = rolesList && rolesList.length > 0 ? rolesList : ROLES_DEFINITIONS;
+  return source.find(r => r.id === roleId) || source[0] || ROLES_DEFINITIONS[0];
 }
 
-export function canUserDownloadProcedure(roleId) {
-  const role = getRoleDefinition(roleId);
-  return role.canDownloadProcedures;
+export function canUserDownloadProcedure(roleId, rolesList = null) {
+  const role = getRoleDefinition(roleId, rolesList);
+  return role ? role.canDownloadProcedures : false;
 }
 
-export function canUserEditDocument(roleId) {
-  const role = getRoleDefinition(roleId);
-  return role.canEditDocuments;
+export function canUserEditDocument(roleId, rolesList = null) {
+  const role = getRoleDefinition(roleId, rolesList);
+  return role ? role.canEditDocuments : false;
 }
 
-export function isViewAllowedForRole(viewId, roleId) {
-  const role = getRoleDefinition(roleId);
-  return role.allowedViews ? role.allowedViews.includes(viewId) : true;
+export function isViewAllowedForRole(viewId, roleId, rolesList = null) {
+  const role = getRoleDefinition(roleId, rolesList);
+  return role && role.allowedViews ? role.allowedViews.includes(viewId) : true;
 }

@@ -18,6 +18,7 @@ function App() {
     toggleTheme,
     userRole,
     setUserRole,
+    rolesList,
     roleDefinition,
     isProcedimientosOpen,
     setIsProcedimientosOpen,
@@ -72,7 +73,7 @@ function App() {
         
         <ul className="nav nav-pills flex-column mb-auto">
           {/* Módulo Control de Calidad */}
-          {isViewAllowedForRole('procedimientos', userRole) && (
+          {isViewAllowedForRole('procedimientos', userRole, rolesList) && (
             <li className="nav-item mb-1">
               <button 
                 className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'procedimientos' ? 'active' : 'text-white'}`}
@@ -147,7 +148,7 @@ function App() {
           )}
 
           {/* Módulo Dashboard */}
-          {isViewAllowedForRole('dashboard', userRole) && (
+          {isViewAllowedForRole('dashboard', userRole, rolesList) && (
             <li className="mb-1">
               <button 
                 className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'dashboard' ? 'active' : 'text-white'}`}
@@ -162,7 +163,7 @@ function App() {
           )}
 
           {/* Módulo Saneamiento e Higiene */}
-          {isViewAllowedForRole('saneamiento', userRole) && (
+          {isViewAllowedForRole('saneamiento', userRole, rolesList) && (
             <li className="mb-1">
               <button 
                 className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'saneamiento' ? 'active' : 'text-white'}`}
@@ -177,7 +178,7 @@ function App() {
           )}
 
           {/* Módulo Variables Críticas */}
-          {isViewAllowedForRole('variables', userRole) && (
+          {isViewAllowedForRole('variables', userRole, rolesList) && (
             <li className="mb-1">
               <button 
                 className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'variables' ? 'active' : 'text-white'}`}
@@ -192,7 +193,7 @@ function App() {
           )}
 
           {/* Módulo Acciones CAPA */}
-          {isViewAllowedForRole('capa', userRole) && (
+          {isViewAllowedForRole('capa', userRole, rolesList) && (
             <li className="mb-1">
               <button 
                 className={`nav-link text-start w-100 btn border-0 d-flex align-items-center justify-content-between ${currentView === 'capa' ? 'active' : 'text-white'}`}
@@ -214,7 +215,7 @@ function App() {
           )}
 
           {/* Módulo Trazabilidad */}
-          {isViewAllowedForRole('trazabilidad', userRole) && (
+          {isViewAllowedForRole('trazabilidad', userRole, rolesList) && (
             <li className="mb-1">
               <button 
                 className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'trazabilidad' ? 'active' : 'text-white'}`}
@@ -229,7 +230,7 @@ function App() {
           )}
 
           {/* Módulo Alérgenos y Retiros */}
-          {isViewAllowedForRole('alergenos-recall', userRole) && (
+          {isViewAllowedForRole('alergenos-recall', userRole, rolesList) && (
             <li className="mb-1">
               <button 
                 className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'alergenos-recall' ? 'active' : 'text-white'}`}
@@ -244,7 +245,7 @@ function App() {
           )}
 
           {/* Módulo Manipuladores y BPM */}
-          {isViewAllowedForRole('capacitaciones', userRole) && (
+          {isViewAllowedForRole('capacitaciones', userRole, rolesList) && (
             <li className="mb-1">
               <button 
                 className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'capacitaciones' ? 'active' : 'text-white'}`}
@@ -338,7 +339,7 @@ function App() {
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '310px', borderRadius: '12px' }}>
                   <li className="dropdown-header fw-bold text-dark border-bottom pb-2">Seleccionar Rol del Usuario (RBAC)</li>
-                  {ROLES_DEFINITIONS.map(r => (
+                  {rolesList.map(r => (
                     <li key={r.id}>
                       <button 
                         className={`dropdown-item d-flex align-items-start gap-2 py-2 rounded-2 ${userRole === r.id ? 'active fw-bold' : ''}`}

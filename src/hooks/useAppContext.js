@@ -9,14 +9,16 @@ import {
 import {
   saveProcedimientoToDb,
   saveAlergenoToDb,
-  saveManipuladorToDb
+  saveManipuladorToDb,
+  fetchRolesFromDb
 } from '../lib/dataService';
-import { getRoleDefinition } from '../lib/permissions';
+import { getRoleDefinition, ROLES_DEFINITIONS } from '../lib/permissions';
 
 export function useAppEngine() {
   const [currentView, setCurrentView] = useState('procedimientos');
   const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme-v4') || 'light');
   const [userRole, setUserRole] = useState(() => localStorage.getItem('OCA-user-role-v1') || 'super-admin');
+  const [rolesList, setRolesList] = useState(ROLES_DEFINITIONS);
   const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
   const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
   const [expandedCategories, setExpandedCategories] = useState({
@@ -25,6 +27,17 @@ export function useAppEngine() {
     'Residuos Sólidos y Líquidos': false,
     'Agua Potable': false
   });
+
+  // Cargar Roles dinámicos desde Supabase DB
+  useEffect(() => {
+    async function loadDbRoles() {
+      const dbRoles = await fetchRolesFromDb();
+      if (dbRoles && dbRoles.length > 0) {
+        setRolesList(dbRoles);
+      }
+    }
+    loadDbRoles();
+  }, []);
 
   // Estado Multi-Tenant
   const [industrias, setIndustrias] = useState([]);
@@ -57,11 +70,11 @@ export function useAppEngine() {
 
   // Redirección de vista si la vista actual no está permitida para el rol seleccionado
   useEffect(() => {
-    const roleDef = getRoleDefinition(userRole);
+    const roleDef = getRoleDefinition(userRole, rolesList);
     if (roleDef && roleDef.allowedViews && !roleDef.allowedViews.includes(currentView)) {
       setCurrentView(roleDef.allowedViews[0] || 'procedimientos');
     }
-  }, [userRole, currentView]);
+  }, [userRole, currentView, rolesList]);
 
   // Sincronización limpia desde el Caso de Uso de Aplicación
   const syncCompanyData = useCallback(async () => {
@@ -201,7 +214,8 @@ export function useAppEngine() {
     toggleTheme,
     userRole,
     setUserRole,
-    roleDefinition: getRoleDefinition(userRole),
+    rolesList,
+    roleDefinition: getRoleDefinition(userRole, rolesList),
     isProcedimientosOpen,
     setIsProcedimientosOpen,
     activeCategory,
