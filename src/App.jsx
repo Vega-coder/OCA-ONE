@@ -309,7 +309,7 @@ function App() {
         <hr className="bg-secondary opacity-25" />
         
         <ul className="nav nav-pills flex-column mb-auto">
-          {/* Procedimientos y Archivos (DE PRIMERO) */}
+          {/* Módulo Control de Calidad (DE PRIMERO) */}
           <li className="nav-item mb-1">
             <button 
               className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'procedimientos' ? 'active' : 'text-white'}`}
@@ -320,9 +320,9 @@ function App() {
             >
               <span className="d-flex align-items-center">
                 <div className="icon-badge icon-badge-cyan me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                  <i className="bi bi-folder2-open"></i>
+                  <i className="bi bi-patch-check-fill"></i>
                 </div>
-                Procedimientos y Archivos
+                Control de Calidad
               </span>
               <i className={`bi bi-chevron-down arrow-rotate ${isProcedimientosOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
             </button>
@@ -479,7 +479,7 @@ function App() {
         <header className="navbar navbar-expand-lg border-bottom px-4 py-3 bg-body-tertiary sticky-top">
           <div className="container-fluid p-0">
             <h1 className="h3 mb-0 text-capitalize font-heading">
-              {currentView === 'procedimientos' && 'Control Documental de Saneamiento y Calidad'}
+              {currentView === 'procedimientos' && 'Módulo de Control de Calidad - Procedimientos, POES y Archivos'}
               {currentView === 'dashboard' && 'Dashboard de Calidad e Inocuidad'}
               {currentView === 'saneamiento' && 'Plan de Saneamiento e Higiene'}
               {currentView === 'variables' && 'Monitoreo de Variables Críticas (PCC)'}

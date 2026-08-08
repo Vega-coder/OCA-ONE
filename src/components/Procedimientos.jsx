@@ -268,6 +268,22 @@ function Procedimientos({
         </div>
       )}
 
+      {/* Banner Encabezado Módulo de Control de Calidad */}
+      <div className="d-flex align-items-center justify-content-between p-3 mb-4 rounded-3 border bg-body shadow-sm">
+        <div className="d-flex align-items-center gap-3">
+          <div className="icon-badge icon-badge-cyan" style={{ width: '42px', height: '42px', fontSize: '20px' }}>
+            <i className="bi bi-patch-check-fill"></i>
+          </div>
+          <div>
+            <div className="fw-bold font-heading text-dark" style={{ fontSize: '16px' }}>Módulo de Control de Calidad e Inocuidad (ISO 22000 / HACCP)</div>
+            <div className="text-muted small">Gestión unificada de Procedimientos, POES, Formatos Imprimibles y Bitácoras de Registro.</div>
+          </div>
+        </div>
+        <span className="badge bg-success-subtle text-success px-3 py-2 fw-semibold" style={{ fontSize: '12px' }}>
+          <i className="bi bi-folder-check me-1"></i> Carpeta: {carpetaActiva}
+        </span>
+      </div>
+
       <div className="d-flex flex-column gap-4">
         
         {/* BLOQUE 1 (Superior): Procedimientos en: [carpetaActiva] */}
