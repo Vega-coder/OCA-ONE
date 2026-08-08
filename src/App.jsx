@@ -7,11 +7,16 @@ import Capacitaciones from './components/Capacitaciones';
 import Capa from './components/Capa';
 import AllergenRecall from './components/AllergenRecall';
 import Procedimientos from './components/Procedimientos';
+import Login from './components/Login';
 import { useAppEngine } from './hooks/useAppContext';
 import { ROLES_DEFINITIONS, isViewAllowedForRole } from './lib/permissions';
 
 function App() {
   const {
+    currentUser,
+    usuariosDb,
+    handleLogin,
+    handleLogout,
     currentView,
     setCurrentView,
     theme,
@@ -53,6 +58,11 @@ function App() {
     handleAgregarManipulador,
     handleAgregarProcedimiento
   } = useAppEngine();
+
+  // Si no hay sesión activa, renderizar la pantalla de Login
+  if (!currentUser) {
+    return <Login onLogin={handleLogin} usuariosDemo={usuariosDb} />;
+  }
 
   return (
     <div className="d-flex min-vh-100 bg-body font-sans">
@@ -403,15 +413,42 @@ function App() {
                 </ul>
               </div>
 
-              {/* Perfil */}
-              <div className="d-flex align-items-center border-start ps-3">
-                <div className="text-end me-2 d-none d-md-block">
-                  <div className="fw-bold" style={{ fontSize: '14px' }}>Ing. Carlos G.</div>
-                  <div className="text-muted" style={{ fontSize: '12px' }}>{roleDefinition.nombre}</div>
-                </div>
-                <div className="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '40px', height: '40px' }}>
-                  CG
-                </div>
+              {/* Perfil del Usuario Autenticado */}
+              <div className="dropdown border-start ps-3">
+                <button 
+                  className="btn border-0 p-0 d-flex align-items-center dropdown-toggle text-start" 
+                  type="button" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false"
+                >
+                  <div className="text-end me-2 d-none d-md-block">
+                    <div className="fw-bold text-dark" style={{ fontSize: '13.5px' }}>{currentUser.nombre}</div>
+                    <div className="text-muted" style={{ fontSize: '11.5px' }}>{currentUser.cargo || roleDefinition.nombre}</div>
+                  </div>
+                  <div className="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style={{ width: '40px', height: '40px', fontSize: '14px' }}>
+                    {currentUser.nombre ? currentUser.nombre.split(' ').map(n => n[0]).join('').substring(0, 2) : 'US'}
+                  </div>
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '260px', borderRadius: '12px' }}>
+                  <li className="dropdown-header border-bottom pb-2">
+                    <div className="fw-bold text-dark">{currentUser.nombre}</div>
+                    <small className="text-muted">{currentUser.email}</small>
+                  </li>
+                  <li className="pt-2">
+                    <span className={`badge ${roleDefinition.badgeClass} w-100 py-1.5`} style={{ fontSize: '11px' }}>
+                      <i className={`bi ${roleDefinition.icon} me-1`}></i> Rol: {roleDefinition.nombre}
+                    </span>
+                  </li>
+                  <li><hr className="dropdown-divider my-2" /></li>
+                  <li>
+                    <button 
+                      className="dropdown-item text-danger fw-semibold d-flex align-items-center gap-2 py-2 rounded-2"
+                      onClick={handleLogout}
+                    >
+                      <i className="bi bi-box-arrow-right"></i> Cerrar Sesión
+                    </button>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

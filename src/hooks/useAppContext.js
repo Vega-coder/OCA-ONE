@@ -10,15 +10,31 @@ import {
   saveProcedimientoToDb,
   saveAlergenoToDb,
   saveManipuladorToDb,
-  fetchRolesFromDb
+  fetchRolesFromDb,
+  fetchUsuariosFromDb
 } from '../lib/dataService';
 import { getRoleDefinition, ROLES_DEFINITIONS } from '../lib/permissions';
 
 export function useAppEngine() {
   const [currentView, setCurrentView] = useState('procedimientos');
   const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme-v4') || 'light');
-  const [userRole, setUserRole] = useState(() => localStorage.getItem('OCA-user-role-v1') || 'super-admin');
+  
+  // Usuario Autenticado Real
+  const [currentUser, setCurrentUser] = useState(() => {
+    const saved = localStorage.getItem('OCA-current-user-v1');
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const [userRole, setUserRole] = useState(() => {
+    const savedUser = localStorage.getItem('OCA-current-user-v1');
+    if (savedUser) {
+      try { return JSON.parse(savedUser).rolId || 'super-admin'; } catch { return 'super-admin'; }
+    }
+    return localStorage.getItem('OCA-user-role-v1') || 'super-admin';
+  });
+
   const [rolesList, setRolesList] = useState(ROLES_DEFINITIONS);
+  const [usuariosDb, setUsuariosDb] = useState([]);
   const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
   const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
   const [expandedCategories, setExpandedCategories] = useState({
@@ -28,16 +44,36 @@ export function useAppEngine() {
     'Agua Potable': false
   });
 
-  // Cargar Roles dinámicos desde Supabase DB
+  // Cargar Roles y Usuarios dinámicos desde Supabase DB
   useEffect(() => {
-    async function loadDbRoles() {
-      const dbRoles = await fetchRolesFromDb();
-      if (dbRoles && dbRoles.length > 0) {
-        setRolesList(dbRoles);
-      }
+    async function loadDbAuth() {
+      const [dbRoles, dbUsers] = await Promise.all([
+        fetchRolesFromDb(),
+        fetchUsuariosFromDb()
+      ]);
+      if (dbRoles && dbRoles.length > 0) setRolesList(dbRoles);
+      if (dbUsers && dbUsers.length > 0) setUsuariosDb(dbUsers);
     }
-    loadDbRoles();
+    loadDbAuth();
   }, []);
+
+  const handleLogin = (user) => {
+    setCurrentUser(user);
+    setUserRole(user.rolId || 'super-admin');
+    localStorage.setItem('OCA-current-user-v1', JSON.stringify(user));
+    localStorage.setItem('OCA-user-role-v1', user.rolId || 'super-admin');
+    
+    // Asignar empresa si el usuario pertenece a un tenant específico
+    if (user.tenantId) {
+      const matchingTenant = tenants.find(t => t.id === user.tenantId);
+      if (matchingTenant) setActiveTenant(matchingTenant);
+    }
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem('OCA-current-user-v1');
+  };
 
   // Estado Multi-Tenant
   const [industrias, setIndustrias] = useState([]);
@@ -208,6 +244,10 @@ export function useAppEngine() {
   ];
 
   return {
+    currentUser,
+    usuariosDb,
+    handleLogin,
+    handleLogout,
     currentView,
     setCurrentView,
     theme,

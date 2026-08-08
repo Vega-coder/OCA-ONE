@@ -828,3 +828,62 @@ export async function saveRoleToDb(role) {
   }
 }
 
+// --- 13. AUTENTICACIÓN Y GESTIÓN DE USUARIOS REALES EN DB ---
+export async function fetchUsuariosFromDb() {
+  try {
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select('*')
+      .order('nombre', { ascending: true });
+
+    if (error) {
+      console.warn('Supabase fetchUsuarios warning:', error.message);
+      return null;
+    }
+
+    if (data && data.length > 0) {
+      return data.map(u => ({
+        id: u.id,
+        tenantId: u.tenant_id,
+        nombre: u.nombre,
+        email: u.email,
+        rolId: u.rol_id,
+        cargo: u.cargo || 'Usuario del Sistema',
+        activo: u.activo
+      }));
+    }
+    return null;
+  } catch (err) {
+    console.error('Error fetching usuarios:', err);
+    return null;
+  }
+}
+
+export async function authenticateUserInDb(email, password = '123456') {
+  try {
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select('*')
+      .eq('email', email.trim().toLowerCase())
+      .single();
+
+    if (error || !data) {
+      console.warn('Usuario no encontrado en Supabase:', email);
+      return null;
+    }
+
+    return {
+      id: data.id,
+      tenantId: data.tenant_id,
+      nombre: data.nombre,
+      email: data.email,
+      rolId: data.rol_id,
+      cargo: data.cargo || 'Usuario del Sistema'
+    };
+  } catch (err) {
+    console.error('Error authenticating user:', err);
+    return null;
+  }
+}
+
+
