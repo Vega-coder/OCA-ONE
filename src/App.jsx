@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Dashboard from './components/Dashboard';
 import Saneamiento from './components/Saneamiento';
 import VariablesCriticas from './components/VariablesCriticas';
@@ -7,305 +7,67 @@ import Capacitaciones from './components/Capacitaciones';
 import Capa from './components/Capa';
 import AllergenRecall from './components/AllergenRecall';
 import Procedimientos from './components/Procedimientos';
-import {
-  fetchIndustriasFromDb,
-  fetchTenantsFromDb,
-  saveTenantToDb,
-  fetchTiendasFromDb,
-  saveTiendaToDb,
-  fetchDepartamentosFromDb,
-  saveDepartamentoToDb,
-  fetchProcedimientosFromDb,
-  saveProcedimientoToDb,
-  fetchSaneamientoFromDb,
-  saveSaneamientoToDb,
-  fetchCapaFromDb,
-  updateCapaInDb,
-  fetchAlergenosFromDb,
-  saveAlergenoToDb,
-  fetchManipuladoresFromDb,
-  saveManipuladorToDb,
-  fetchMedicionesFromDb,
-  saveMedicionToDb
-} from './lib/dataService';
-
-import { ROLES_DEFINITIONS, getRoleDefinition } from './lib/permissions';
+import { useAppEngine } from './hooks/useAppContext';
+import { ROLES_DEFINITIONS } from './lib/permissions';
 
 function App() {
-  const [currentView, setCurrentView] = useState('procedimientos');
-  const [theme, setTheme] = useState(() => localStorage.getItem('OCA-theme-v4') || 'light');
-  const [userRole, setUserRole] = useState(() => localStorage.getItem('OCA-user-role-v1') || 'super-admin');
-  const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
-  const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
-  const [expandedCategories, setExpandedCategories] = useState({
-    'Limpieza y Desinfección': true,
-    'Control de Plagas': false,
-    'Residuos Sólidos y Líquidos': false,
-    'Agua Potable': false
-  });
-  
-  // Estado Multi-Tenant (Empresas, Industrias, Plantas/Tiendas y Departamentos)
-  const [industrias, setIndustrias] = useState([]);
-  const [tenants, setTenants] = useState([
-    { id: 'tenant-opt-01', nombre: 'Optimus Latinoamérica', nit: '900.123.456-7', plan: 'Edición Profesional', industriaId: 'ind-lacteos' },
-    { id: 'tenant-lacteos-02', nombre: 'Lácteos del Valle S.A.S.', nit: '800.987.654-1', plan: 'Plan Gold HACCP', industriaId: 'ind-lacteos' },
-    { id: 'tenant-carnes-03', nombre: 'Frigoríficos y Procesados Norte', nit: '901.456.789-3', plan: 'Enterprise', industriaId: 'ind-carnicos' }
-  ]);
-  const [activeTenant, setActiveTenant] = useState(() => {
-    const saved = localStorage.getItem('OCA-active-tenant-v1');
-    return saved ? JSON.parse(saved) : { id: 'tenant-opt-01', nombre: 'Optimus Latinoamérica', nit: '900.123.456-7', plan: 'Edición Profesional', industriaId: 'ind-lacteos' };
-  });
-
-  const [tiendas, setTiendas] = useState([]);
-  const [activeTienda, setActiveTienda] = useState(null);
-  const [departamentos, setDepartamentos] = useState([]);
-
-  const [mostrarCrearTenant, setMostrarCrearTenant] = useState(false);
-  const [nuevoTenantNombre, setNuevoTenantNombre] = useState('');
-  const [nuevoTenantNit, setNuevoTenantNit] = useState('');
-  const [nuevoTenantPlan, setNuevoTenantPlan] = useState('Edición Profesional');
-  const [nuevoTenantIndustria, setNuevoTenantIndustria] = useState('ind-lacteos');
-
-  // Base de datos dinámica de Procedimientos (Control Documental ISO)
-  const [procedimientos, setProcedimientos] = useState([]);
-  const [registrosSaneamiento, setRegistrosSaneamiento] = useState([]);
-  const [medicionesVariables, setMedicionesVariables] = useState([]);
-  const [manipuladores, setManipuladores] = useState([]);
-  const [accionesCapa, setAccionesCapa] = useState([]);
-  const [registrosAlergenos, setRegistrosAlergenos] = useState([]);
-
-  // Carga inicial y cambio dinámico según la empresa activa
-  useEffect(() => {
-    async function syncFromSupabase() {
-      const dbInds = await fetchIndustriasFromDb();
-      if (dbInds) setIndustrias(dbInds);
-
-      const dbTenants = await fetchTenantsFromDb();
-      if (dbTenants && dbTenants.length > 0) setTenants(dbTenants);
-
-      const dbTiendas = await fetchTiendasFromDb(activeTenant.id);
-      if (dbTiendas && dbTiendas.length > 0) {
-        setTiendas(dbTiendas);
-        setActiveTienda(dbTiendas[0]);
-      } else {
-        setTiendas([{ id: 'store-default', nombre: 'Planta Principal', codigo_tienda: 'PLT-01' }]);
-        setActiveTienda({ id: 'store-default', nombre: 'Planta Principal', codigo_tienda: 'PLT-01' });
-      }
-
-      const dbDeps = await fetchDepartamentosFromDb(activeTenant.id);
-      if (dbDeps) setDepartamentos(dbDeps);
-
-      const dbProcs = await fetchProcedimientosFromDb(activeTenant.id);
-      if (dbProcs) setProcedimientos(dbProcs);
-
-      const dbSaneamiento = await fetchSaneamientoFromDb(activeTenant.id);
-      if (dbSaneamiento) setRegistrosSaneamiento(dbSaneamiento);
-
-      const dbCapa = await fetchCapaFromDb(activeTenant.id);
-      if (dbCapa) setAccionesCapa(dbCapa);
-
-      const dbAlergenos = await fetchAlergenosFromDb(activeTenant.id);
-      if (dbAlergenos) setRegistrosAlergenos(dbAlergenos);
-
-      const dbMan = await fetchManipuladoresFromDb(activeTenant.id);
-      if (dbMan) setManipuladores(dbMan);
-
-      const dbMed = await fetchMedicionesFromDb(activeTenant.id);
-      if (dbMed) setMedicionesVariables(dbMed);
-    }
-
-    syncFromSupabase();
-  }, [activeTenant.id]);
-
-  useEffect(() => {
-    localStorage.setItem('OCA-active-tenant-v1', JSON.stringify(activeTenant));
-  }, [activeTenant]);
-
-  useEffect(() => {
-    localStorage.setItem('OCA-procedimientos-v5', JSON.stringify(procedimientos));
-  }, [procedimientos]);
-
-  useEffect(() => {
-    localStorage.setItem('OCA-saneamiento-v4', JSON.stringify(registrosSaneamiento));
-  }, [registrosSaneamiento]);
-
-  useEffect(() => {
-    localStorage.setItem('OCA-variables-v4', JSON.stringify(medicionesVariables));
-  }, [medicionesVariables]);
-
-  useEffect(() => {
-    localStorage.setItem('OCA-manipuladores-v4', JSON.stringify(manipuladores));
-  }, [manipuladores]);
-
-  useEffect(() => {
-    localStorage.setItem('OCA-capa-v4', JSON.stringify(accionesCapa));
-  }, [accionesCapa]);
-
-  useEffect(() => {
-    localStorage.setItem('OCA-alergenos-v4', JSON.stringify(registrosAlergenos));
-  }, [registrosAlergenos]);
-
-  // Manejo del tema (Modo Claro / Modo Oscuro)
-  useEffect(() => {
-    document.body.setAttribute('data-theme', theme);
-    localStorage.setItem('OCA-theme-v4', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
-
-  const handleCrearTenant = async (e) => {
-    e.preventDefault();
-    if (!nuevoTenantNombre.trim()) return;
-
-    const nuevo = {
-      id: `tenant-${Date.now()}`,
-      nombre: nuevoTenantNombre.trim(),
-      nit: nuevoTenantNit.trim() || 'Sin NIT',
-      plan: nuevoTenantPlan,
-      activo: true
-    };
-
-    setTenants(prev => [...prev, nuevo]);
-    setActiveTenant(nuevo);
-    saveTenantToDb(nuevo);
-    setNuevoTenantNombre('');
-    setNuevoTenantNit('');
-    setMostrarCrearTenant(false);
-  };
-
-  // Agregar registros y autogenerar Tickets CAPA ante fallas o alertas
-  const handleAgregarSaneamiento = async (nuevoRegistro) => {
-    const id = Date.now();
-    setRegistrosSaneamiento(prev => [...prev, { id, ...nuevoRegistro }]);
-    saveSaneamientoToDb(nuevoRegistro, activeTenant.id);
-
-    if (!nuevoRegistro.conforme) {
-      const nuevaCapa = {
-        id: Date.now() + 10,
-        origen: 'Saneamiento',
-        fecha: nuevoRegistro.fecha,
-        hora: nuevoRegistro.hora,
-        hallazgo: `Saneamiento fallido en ${nuevoRegistro.area}: ${nuevoRegistro.observacion}`,
-        responsable: nuevoRegistro.supervisor,
-        estado: 'Abierto',
-        causaRaiz: '',
-        planAccion: '',
-        fechaCierre: '',
-        supervisorCierre: ''
-      };
-      setAccionesCapa(prev => [...prev, nuevaCapa]);
-    }
-  };
-
-  const handleAgregarVariable = async (nuevaMedicion) => {
-    const id = Date.now();
-    setMedicionesVariables(prev => [...prev, { id, ...nuevaMedicion }]);
-    saveMedicionToDb(nuevaMedicion, activeTenant.id);
-
-    if (nuevaMedicion.estado === 'Alerta') {
-      const nuevaCapa = {
-        id: Date.now() + 20,
-        origen: 'Variables Críticas',
-        fecha: nuevaMedicion.fecha,
-        hora: nuevaMedicion.hora,
-        hallazgo: `Desviación en ${nuevaMedicion.punto}: Valor registrado de ${nuevaMedicion.temperatura}°C. Comentario: ${nuevaMedicion.comentario}`,
-        responsable: nuevaMedicion.supervisor,
-        estado: 'Abierto',
-        causaRaiz: '',
-        planAccion: '',
-        fechaCierre: '',
-        supervisorCierre: ''
-      };
-      setAccionesCapa(prev => [...prev, nuevaCapa]);
-    }
-  };
-
-  const handleResolverCapa = async (id, resolucion) => {
-    setAccionesCapa(prev => prev.map(capa => {
-      if (capa.id === id) {
-        return {
-          ...capa,
-          estado: 'Cerrado',
-          causaRaiz: resolucion.causaRaiz,
-          planAccion: resolucion.planAccion,
-          fechaCierre: new Date().toISOString().split('T')[0],
-          supervisorCierre: resolucion.supervisorCierre
-        };
-      }
-      return capa;
-    }));
-
-    updateCapaInDb(id, {
-      causaRaiz: resolucion.causaRaiz,
-      planAccion: resolucion.planAccion,
-      responsable: resolucion.supervisorCierre,
-      estado: 'Cerrado',
-      fechaCierre: new Date().toISOString().split('T')[0]
-    });
-  };
-
-  const handleAgregarAlergeno = async (nuevoAlergeno) => {
-    setRegistrosAlergenos(prev => [
-      ...prev,
-      { id: Date.now(), ...nuevoAlergeno }
-    ]);
-    saveAlergenoToDb(nuevoAlergeno, activeTenant.id);
-  };
-
-  const handleAgregarManipulador = async (nuevoMan) => {
-    setManipuladores(prev => [...prev, { id: Date.now(), ...nuevoMan }]);
-    saveManipuladorToDb(nuevoMan, activeTenant.id);
-  };
-
-  const handleAgregarProcedimiento = async (nuevoProc) => {
-    const item = {
-      id: Date.now(),
-      fechaAprobacion: new Date().toISOString().split('T')[0],
-      ...nuevoProc
-    };
-    setProcedimientos(prev => [...prev, item]);
-    saveProcedimientoToDb(item, activeTenant.id);
-  };
-
-  // Calcular alertas activas para el centro de notificaciones
-  const alertasActivas = [];
-
-  // Agregar alertas si hay CAPA pendientes abiertos
-  accionesCapa.forEach(capa => {
-    if (capa.estado === 'Abierto') {
-      alertasActivas.push({
-        id: `capa-${capa.id}`,
-        tipo: 'danger',
-        mensaje: `CAPA Abierta: ${capa.hallazgo.substring(0, 60)}...`,
-        fecha: capa.fecha
-      });
-    }
-  });
-
-  // Agregar alertas de personal vencido
-  manipuladores.forEach(man => {
-    if (man.carnetBpm === 'Vencido') {
-      alertasActivas.push({
-        id: `man-${man.id}`,
-        tipo: 'warning',
-        mensaje: `Carnet BPM vencido para ${man.nombre}`,
-        fecha: 'Urgente'
-      });
-    }
-  });
+  const {
+    currentView,
+    setCurrentView,
+    theme,
+    toggleTheme,
+    userRole,
+    setUserRole,
+    roleDefinition,
+    isProcedimientosOpen,
+    setIsProcedimientosOpen,
+    activeCategory,
+    setActiveCategory,
+    expandedCategories,
+    setExpandedCategories,
+    tenants,
+    activeTenant,
+    setActiveTenant,
+    departamentos,
+    procedimientos,
+    registrosSaneamiento,
+    medicionesVariables,
+    manipuladores,
+    accionesCapa,
+    registrosAlergenos,
+    alertasActivas,
+    mostrarCrearTenant,
+    setMostrarCrearTenant,
+    nuevoTenantNombre,
+    setNuevoTenantNombre,
+    nuevoTenantNit,
+    setNuevoTenantNit,
+    nuevoTenantPlan,
+    setNuevoTenantPlan,
+    handleCrearTenant,
+    handleAgregarSaneamiento,
+    handleAgregarVariable,
+    handleResolverCapa,
+    handleAgregarAlergeno,
+    handleAgregarManipulador,
+    handleAgregarProcedimiento
+  } = useAppEngine();
 
   return (
-    <div className="container-fluid p-0 d-flex">
-      {/* Sidebar de Navegación */}
-      <aside className="gipa-sidebar d-flex flex-column flex-shrink-0 p-3 text-white" style={{ width: '280px' }}>
-        <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-          <div className="icon-badge icon-badge-emerald me-2" style={{ width: '36px', height: '36px' }}>
-            <i className="bi bi-shield-check fs-5"></i>
+    <div className="d-flex min-vh-100 bg-body font-sans">
+      {/* Sidebar Lateral */}
+      <aside className="d-flex flex-column flex-shrink-0 p-3 bg-dark text-white shadow-lg" style={{ width: '280px', minHeight: '100vh', zIndex: 1000 }}>
+        {/* Brand Header */}
+        <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none px-2 py-2">
+          <div className="icon-badge icon-badge-teal me-2" style={{ width: '36px', height: '36px', fontSize: '18px' }}>
+            <i className="bi bi-shield-check"></i>
           </div>
-          <span className="fs-4 fw-bold tracking-tight">OCA <span className="text-success fw-normal">ONE</span></span>
+          <div>
+            <span className="fs-4 font-heading fw-bold tracking-tight text-white d-block" style={{ lineHeight: '1.1' }}>OCA ONE</span>
+            <small className="text-secondary" style={{ fontSize: '10.5px' }}>Plataforma SaaS de Inocuidad</small>
+          </div>
         </div>
+
         <hr className="bg-secondary opacity-25" />
         
         <ul className="nav nav-pills flex-column mb-auto">
@@ -359,7 +121,7 @@ function App() {
                         <i className={`bi bi-chevron-down arrow-rotate ${isCatExpanded ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
                       </button>
                       
-                      {/* Nivel 3: Sub-submenú (Sólo la subcategoría Procedimiento) */}
+                      {/* Nivel 3: Sub-submenú */}
                       {isCatExpanded && (
                         <ul className="sidebar-sub-submenu">
                           <li>
@@ -534,15 +296,15 @@ function App() {
               {/* Selector de Rol del Usuario (RBAC) */}
               <div className="dropdown me-3">
                 <button 
-                  className={`btn btn-sm dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 fw-semibold text-white ${getRoleDefinition(userRole).badgeClass}`} 
+                  className={`btn btn-sm dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 fw-semibold text-white ${roleDefinition.badgeClass}`} 
                   type="button" 
                   data-bs-toggle="dropdown" 
                   aria-expanded="false"
                   style={{ borderRadius: '10px' }}
                   title="Cambiar rol para simular permisos"
                 >
-                  <i className={`bi ${getRoleDefinition(userRole).icon}`}></i>
-                  <span>{getRoleDefinition(userRole).nombre}</span>
+                  <i className={`bi ${roleDefinition.icon}`}></i>
+                  <span>{roleDefinition.nombre}</span>
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '310px', borderRadius: '12px' }}>
                   <li className="dropdown-header fw-bold text-dark border-bottom pb-2">Seleccionar Rol del Usuario (RBAC)</li>
@@ -592,12 +354,11 @@ function App() {
                   )}
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '320px', borderRadius: '12px' }}>
-                  <li className="dropdown-header border-bottom pb-2 fw-bold text-dark">Alertas de Planta</li>
+                  <li className="dropdown-header fw-bold text-dark border-bottom pb-2">
+                    Notificaciones de Calidad ({alertasActivas.length})
+                  </li>
                   {alertasActivas.length === 0 ? (
-                    <li className="text-center py-3 text-muted">
-                      <i className="bi bi-check2-circle text-success fs-3 d-block mb-1"></i>
-                      Sin alertas activas en planta.
-                    </li>
+                    <li className="p-3 text-center text-muted small">No hay alertas críticas en este momento.</li>
                   ) : (
                     alertasActivas.map(al => (
                       <li key={al.id} className="my-1">
@@ -615,7 +376,7 @@ function App() {
               <div className="d-flex align-items-center border-start ps-3">
                 <div className="text-end me-2 d-none d-md-block">
                   <div className="fw-bold" style={{ fontSize: '14px' }}>Ing. Carlos G.</div>
-                  <div className="text-muted" style={{ fontSize: '12px' }}>Director de Calidad</div>
+                  <div className="text-muted" style={{ fontSize: '12px' }}>{roleDefinition.nombre}</div>
                 </div>
                 <div className="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '40px', height: '40px' }}>
                   CG
@@ -754,7 +515,7 @@ function App() {
         {/* Footer */}
         <footer className="footer mt-auto py-3 border-top bg-body-tertiary">
           <div className="container-fluid px-4 d-flex justify-content-between align-items-center text-muted small">
-            <span>&copy; 2026 OCA ONE. Multi-Tenant SaaS Engine - {activeTenant.nombre}.</span>
+            <span>&copy; 2026 OCA ONE. Clean Architecture Engine - {activeTenant.nombre}.</span>
             <span>Seguridad Alimentaria: HACCP / ISO 22000 / BRCGS / IFS</span>
           </div>
         </footer>
