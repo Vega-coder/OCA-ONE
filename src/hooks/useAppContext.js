@@ -55,6 +55,14 @@ export function useAppEngine() {
   const [nuevoTenantNit, setNuevoTenantNit] = useState('');
   const [nuevoTenantPlan, setNuevoTenantPlan] = useState('Edición Profesional');
 
+  // Redirección de vista si la vista actual no está permitida para el rol seleccionado
+  useEffect(() => {
+    const roleDef = getRoleDefinition(userRole);
+    if (roleDef && roleDef.allowedViews && !roleDef.allowedViews.includes(currentView)) {
+      setCurrentView(roleDef.allowedViews[0] || 'procedimientos');
+    }
+  }, [userRole, currentView]);
+
   // Sincronización limpia desde el Caso de Uso de Aplicación
   const syncCompanyData = useCallback(async () => {
     const data = await loadInitialCompanyData(activeTenant.id);

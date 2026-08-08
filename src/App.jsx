@@ -8,7 +8,7 @@ import Capa from './components/Capa';
 import AllergenRecall from './components/AllergenRecall';
 import Procedimientos from './components/Procedimientos';
 import { useAppEngine } from './hooks/useAppContext';
-import { ROLES_DEFINITIONS } from './lib/permissions';
+import { ROLES_DEFINITIONS, isViewAllowedForRole } from './lib/permissions';
 
 function App() {
   const {
@@ -71,162 +71,192 @@ function App() {
         <hr className="bg-secondary opacity-25" />
         
         <ul className="nav nav-pills flex-column mb-auto">
-          {/* Módulo Control de Calidad (DE PRIMERO) */}
-          <li className="nav-item mb-1">
-            <button 
-              className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'procedimientos' ? 'active' : 'text-white'}`}
-              onClick={() => {
-                setCurrentView('procedimientos');
-                setIsProcedimientosOpen(!isProcedimientosOpen);
-              }}
-            >
-              <span className="d-flex align-items-center">
-                <div className="icon-badge icon-badge-cyan me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                  <i className="bi bi-patch-check-fill"></i>
-                </div>
-                Control de Calidad
-              </span>
-              <i className={`bi bi-chevron-down arrow-rotate ${isProcedimientosOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
-            </button>
-            
-            {/* Nivel 2: Categorías Desplegables */}
-            {isProcedimientosOpen && (
-              <ul className="sidebar-submenu">
-                {[
-                  { name: 'Limpieza y Desinfección', icon: 'bi-droplet-fill', badgeStyle: 'icon-badge-sky' },
-                  { name: 'Control de Plagas', icon: 'bi-bug-fill', badgeStyle: 'icon-badge-amber' },
-                  { name: 'Residuos Sólidos y Líquidos', icon: 'bi-trash-fill', badgeStyle: 'icon-badge-emerald' },
-                  { name: 'Agua Potable', icon: 'bi-water', badgeStyle: 'icon-badge-indigo' }
-                ].map(cat => {
-                  const isCatExpanded = expandedCategories[cat.name];
-                  return (
-                    <li key={cat.name} className="mb-1">
-                      <button 
-                        className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'procedimientos' && activeCategory === cat.name ? 'fw-bold' : ''}`}
-                        onClick={() => {
-                          setCurrentView('procedimientos');
-                          setActiveCategory(cat.name);
-                          setExpandedCategories(prev => ({
-                            ...prev,
-                            [cat.name]: !prev[cat.name]
-                          }));
-                        }}
-                      >
-                        <span className="d-flex align-items-center">
-                          <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
-                            <i className={`bi ${cat.icon}`}></i>
-                          </div>
-                          {cat.name}
-                        </span>
-                        <i className={`bi bi-chevron-down arrow-rotate ${isCatExpanded ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
-                      </button>
-                      
-                      {/* Nivel 3: Sub-submenú */}
-                      {isCatExpanded && (
-                        <ul className="sidebar-sub-submenu">
-                          <li>
-                            <button
-                              className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'procedimientos' && activeCategory === cat.name ? 'active-sub-sub' : 'text-white'}`}
-                              onClick={() => {
-                                setCurrentView('procedimientos');
-                                setActiveCategory(cat.name);
-                              }}
-                            >
-                              <i className="bi bi-file-earmark-pdf me-2 text-danger"></i> Procedimiento
-                            </button>
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </li>
-          <li className="mb-1">
-            <button 
-              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'dashboard' ? 'active' : 'text-white'}`}
-              onClick={() => setCurrentView('dashboard')}
-            >
-              <div className="icon-badge icon-badge-cyan me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                <i className="bi bi-grid-1x2-fill"></i>
-              </div>
-              Dashboard
-            </button>
-          </li>
-          <li className="mb-1">
-            <button 
-              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'saneamiento' ? 'active' : 'text-white'}`}
-              onClick={() => setCurrentView('saneamiento')}
-            >
-              <div className="icon-badge icon-badge-emerald me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                <i className="bi bi-droplet-half"></i>
-              </div>
-              Saneamiento e Higiene
-            </button>
-          </li>
-          <li className="mb-1">
-            <button 
-              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'variables' ? 'active' : 'text-white'}`}
-              onClick={() => setCurrentView('variables')}
-            >
-              <div className="icon-badge icon-badge-indigo me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                <i className="bi bi-sliders"></i>
-              </div>
-              Variables Críticas
-            </button>
-          </li>
-          <li className="mb-1">
-            <button 
-              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center justify-content-between ${currentView === 'capa' ? 'active' : 'text-white'}`}
-              onClick={() => setCurrentView('capa')}
-            >
-              <span className="d-flex align-items-center">
-                <div className="icon-badge icon-badge-rose me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                  <i className="bi bi-patch-exclamation-fill"></i>
-                </div>
-                Acciones CAPA
-              </span>
-              {accionesCapa.filter(c => c.estado === 'Abierto').length > 0 && (
-                <span className="badge bg-danger ms-2">
-                  {accionesCapa.filter(c => c.estado === 'Abierto').length}
+          {/* Módulo Control de Calidad */}
+          {isViewAllowedForRole('procedimientos', userRole) && (
+            <li className="nav-item mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'procedimientos' ? 'active' : 'text-white'}`}
+                onClick={() => {
+                  setCurrentView('procedimientos');
+                  setIsProcedimientosOpen(!isProcedimientosOpen);
+                }}
+              >
+                <span className="d-flex align-items-center">
+                  <div className="icon-badge icon-badge-cyan me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                    <i className="bi bi-patch-check-fill"></i>
+                  </div>
+                  Control de Calidad
                 </span>
+                <i className={`bi bi-chevron-down arrow-rotate ${isProcedimientosOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
+              </button>
+              
+              {/* Nivel 2: Categorías Desplegables */}
+              {isProcedimientosOpen && (
+                <ul className="sidebar-submenu">
+                  {[
+                    { name: 'Limpieza y Desinfección', icon: 'bi-droplet-fill', badgeStyle: 'icon-badge-sky' },
+                    { name: 'Control de Plagas', icon: 'bi-bug-fill', badgeStyle: 'icon-badge-amber' },
+                    { name: 'Residuos Sólidos y Líquidos', icon: 'bi-trash-fill', badgeStyle: 'icon-badge-emerald' },
+                    { name: 'Agua Potable', icon: 'bi-water', badgeStyle: 'icon-badge-indigo' }
+                  ].map(cat => {
+                    const isCatExpanded = expandedCategories[cat.name];
+                    return (
+                      <li key={cat.name} className="mb-1">
+                        <button 
+                          className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'procedimientos' && activeCategory === cat.name ? 'fw-bold' : ''}`}
+                          onClick={() => {
+                            setCurrentView('procedimientos');
+                            setActiveCategory(cat.name);
+                            setExpandedCategories(prev => ({
+                              ...prev,
+                              [cat.name]: !prev[cat.name]
+                            }));
+                          }}
+                        >
+                          <span className="d-flex align-items-center">
+                            <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                              <i className={`bi ${cat.icon}`}></i>
+                            </div>
+                            {cat.name}
+                          </span>
+                          <i className={`bi bi-chevron-down arrow-rotate ${isCatExpanded ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
+                        </button>
+                        
+                        {/* Nivel 3: Sub-submenú */}
+                        {isCatExpanded && (
+                          <ul className="sidebar-sub-submenu">
+                            <li>
+                              <button
+                                className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'procedimientos' && activeCategory === cat.name ? 'active-sub-sub' : 'text-white'}`}
+                                onClick={() => {
+                                  setCurrentView('procedimientos');
+                                  setActiveCategory(cat.name);
+                                }}
+                              >
+                                <i className="bi bi-file-earmark-pdf me-2 text-danger"></i> Procedimiento
+                              </button>
+                            </li>
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
               )}
-            </button>
-          </li>
-          <li className="mb-1">
-            <button 
-              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'trazabilidad' ? 'active' : 'text-white'}`}
-              onClick={() => setCurrentView('trazabilidad')}
-            >
-              <div className="icon-badge icon-badge-amber me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                <i className="bi bi-diagram-3-fill"></i>
-              </div>
-              Trazabilidad de Lotes
-            </button>
-          </li>
-          <li className="mb-1">
-            <button 
-              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'alergenos-recall' ? 'active' : 'text-white'}`}
-              onClick={() => setCurrentView('alergenos-recall')}
-            >
-              <div className="icon-badge icon-badge-rose me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                <i className="bi bi-shield-lock-fill"></i>
-              </div>
-              Alérgenos y Retiros
-            </button>
-          </li>
-          <li className="mb-1">
-            <button 
-              className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'capacitaciones' ? 'active' : 'text-white'}`}
-              onClick={() => setCurrentView('capacitaciones')}
-            >
-              <div className="icon-badge icon-badge-sky me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                <i className="bi bi-person-badge-fill"></i>
-              </div>
-              Manipuladores y BPM
-            </button>
-          </li>
+            </li>
+          )}
+
+          {/* Módulo Dashboard */}
+          {isViewAllowedForRole('dashboard', userRole) && (
+            <li className="mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'dashboard' ? 'active' : 'text-white'}`}
+                onClick={() => setCurrentView('dashboard')}
+              >
+                <div className="icon-badge icon-badge-cyan me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                  <i className="bi bi-grid-1x2-fill"></i>
+                </div>
+                Dashboard
+              </button>
+            </li>
+          )}
+
+          {/* Módulo Saneamiento e Higiene */}
+          {isViewAllowedForRole('saneamiento', userRole) && (
+            <li className="mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'saneamiento' ? 'active' : 'text-white'}`}
+                onClick={() => setCurrentView('saneamiento')}
+              >
+                <div className="icon-badge icon-badge-emerald me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                  <i className="bi bi-droplet-half"></i>
+                </div>
+                Saneamiento e Higiene
+              </button>
+            </li>
+          )}
+
+          {/* Módulo Variables Críticas */}
+          {isViewAllowedForRole('variables', userRole) && (
+            <li className="mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'variables' ? 'active' : 'text-white'}`}
+                onClick={() => setCurrentView('variables')}
+              >
+                <div className="icon-badge icon-badge-indigo me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                  <i className="bi bi-sliders"></i>
+                </div>
+                Variables Críticas (PCC)
+              </button>
+            </li>
+          )}
+
+          {/* Módulo Acciones CAPA */}
+          {isViewAllowedForRole('capa', userRole) && (
+            <li className="mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex align-items-center justify-content-between ${currentView === 'capa' ? 'active' : 'text-white'}`}
+                onClick={() => setCurrentView('capa')}
+              >
+                <span className="d-flex align-items-center">
+                  <div className="icon-badge icon-badge-rose me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                    <i className="bi bi-patch-exclamation-fill"></i>
+                  </div>
+                  Acciones CAPA
+                </span>
+                {accionesCapa.filter(c => c.estado === 'Abierto').length > 0 && (
+                  <span className="badge bg-danger ms-2">
+                    {accionesCapa.filter(c => c.estado === 'Abierto').length}
+                  </span>
+                )}
+              </button>
+            </li>
+          )}
+
+          {/* Módulo Trazabilidad */}
+          {isViewAllowedForRole('trazabilidad', userRole) && (
+            <li className="mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'trazabilidad' ? 'active' : 'text-white'}`}
+                onClick={() => setCurrentView('trazabilidad')}
+              >
+                <div className="icon-badge icon-badge-amber me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                  <i className="bi bi-diagram-3-fill"></i>
+                </div>
+                Trazabilidad de Lotes
+              </button>
+            </li>
+          )}
+
+          {/* Módulo Alérgenos y Retiros */}
+          {isViewAllowedForRole('alergenos-recall', userRole) && (
+            <li className="mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'alergenos-recall' ? 'active' : 'text-white'}`}
+                onClick={() => setCurrentView('alergenos-recall')}
+              >
+                <div className="icon-badge icon-badge-rose me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                  <i className="bi bi-shield-lock-fill"></i>
+                </div>
+                Alérgenos y Retiros
+              </button>
+            </li>
+          )}
+
+          {/* Módulo Manipuladores y BPM */}
+          {isViewAllowedForRole('capacitaciones', userRole) && (
+            <li className="mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'capacitaciones' ? 'active' : 'text-white'}`}
+                onClick={() => setCurrentView('capacitaciones')}
+              >
+                <div className="icon-badge icon-badge-sky me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                  <i className="bi bi-person-badge-fill"></i>
+                </div>
+                Manipuladores y BPM
+              </button>
+            </li>
+          )}
         </ul>
         <hr className="bg-secondary opacity-25" />
         <div className="text-secondary small">

@@ -198,7 +198,98 @@ export async function fetchProcedimientosFromDb(tenantId = 'tenant-opt-01') {
         controlCambios: item.control_cambios || []
       }));
     }
-    return null;
+    
+    // Retornar base oficial POES por defecto para que cualquier inquilino tenga sus manuales
+    return [
+      {
+        id: 1,
+        tenantId,
+        codigo: 'POES-PLG-001',
+        titulo: 'Procedimiento Operativo de Control de Plagas',
+        categoria: 'Control de Plagas',
+        version: '2.0.0',
+        fechaAprobacion: '2026-01-10',
+        responsable: 'Carlos Gómez',
+        aprobado: 'Carlos Gómez',
+        objetivo: 'Establecer las medidas preventivas y correctivas necesarias para evitar la proliferación de insectos, roedores y otras plagas en la planta de proceso.',
+        alcance: 'Aplica a todas las áreas internas, externas, almacenes de materia prima y producto terminado.',
+        responsablesDoc: 'Empresa subcontratista de control de vectores y el supervisor de calidad.',
+        definiciones: 'Vector: Animal que puede transmitir enfermedades o contaminar alimentos.',
+        desarrollo: '1. INSPECCIÓN:\n- El supervisor revisará semanalmente los 15 cebaderos numerados.',
+        registrosControl: [
+          { nombre: 'Planilla de Monitoreo de Estaciones de Cebado', codigo: 'F-PLG-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+        ],
+        controlCambios: [
+          { fecha: 'Enero 2026 Version 2.0.0', descripcion: 'Actualización general de cebaderos externos', responsable: 'Carlos Gómez' }
+        ]
+      },
+      {
+        id: 2,
+        tenantId,
+        codigo: 'POES-RES-002',
+        titulo: 'Manual de Gestión de Residuos Sólidos y Líquidos',
+        categoria: 'Residuos Sólidos y Líquidos',
+        version: '1.2.0',
+        fechaAprobacion: '2026-03-15',
+        responsable: 'Carlos Gómez',
+        aprobado: 'Carlos Gómez',
+        objetivo: 'Normar el correcto manejo, separación en la fuente y disposición final de los residuos generados.',
+        alcance: 'Aplica a todas las áreas operativas, bodegas y zona de efluentes.',
+        responsablesDoc: 'Auxiliares de almacén, personal de limpieza y dirección ambiental.',
+        definiciones: 'Residuo Orgánico: Resto biodegradable de origen vegetal o animal.',
+        desarrollo: '1. CLASIFICACIÓN:\n- Orgánicos: Canecas Verdes.\n- Plásticos: Canecas Grises.',
+        registrosControl: [
+          { nombre: 'Bitácora Diaria de Retiro de Residuos', codigo: 'F-RES-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+        ],
+        controlCambios: [
+          { fecha: 'Marzo 2026 Version 1.2.0', descripcion: 'Inclusión de entrega de aceites quemados', responsable: 'Carlos Gómez' }
+        ]
+      },
+      {
+        id: 3,
+        tenantId,
+        codigo: 'POES-LIM-003',
+        titulo: 'Plan Maestro de Limpieza y Desinfección',
+        categoria: 'Limpieza y Desinfección',
+        version: '3.1.0',
+        fechaAprobacion: '2026-05-20',
+        responsable: 'Carlos Gómez',
+        aprobado: 'Carlos Gómez',
+        objetivo: 'Garantizar que todos los equipos, utensilios e infraestructura estén limpios y desinfectados.',
+        alcance: 'Aplica a todas las salas de proceso, envasado A y B.',
+        responsablesDoc: 'Operarios de limpieza y supervisores.',
+        definiciones: 'Sanitización: Reducción del número de microorganismos a un nivel seguro.',
+        desarrollo: '1. DOSIFICACIONES PERMITIDAS:\n- Cloro: 200 ppm para superficies de contacto directo.',
+        registrosControl: [
+          { nombre: 'Registro de Inspección Diaria de L&D', codigo: 'Q-FR-18', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+        ],
+        controlCambios: [
+          { fecha: 'Mayo 2026 Version 3.1.0', descripcion: 'Actualización de dosificación de cloro a 200ppm', responsable: 'Carlos Gómez' }
+        ]
+      },
+      {
+        id: 4,
+        tenantId,
+        codigo: 'POES-AGU-004',
+        titulo: 'Procedimiento de Control y Potabilidad de Agua',
+        categoria: 'Agua Potable',
+        version: '1.0.0',
+        fechaAprobacion: '2026-02-05',
+        responsable: 'Carlos Gómez',
+        aprobado: 'Carlos Gómez',
+        objetivo: 'Asegurar que el agua utilizada sea apta para consumo humano.',
+        alcance: 'Aplica a toda la red interna de agua potable.',
+        responsablesDoc: 'Supervisor de laboratorio y mantenimiento.',
+        definiciones: 'Cloro Libre Residual: Cantidad de cloro activo en agua.',
+        desarrollo: '1. MONITOREO DIARIO: Medir cloro libre (0.3 a 2.0 ppm) y pH (6.5 a 8.5).',
+        registrosControl: [
+          { nombre: 'Planilla Diaria de Cloro y pH', codigo: 'F-AGU-01', responsable: 'Aseguramiento de Calidad', retencion: '1 año', destino: 'Destrucción' }
+        ],
+        controlCambios: [
+          { fecha: 'Febrero 2026 Version 1.0.0', descripcion: 'Creación del documento', responsable: 'Carlos Gómez' }
+        ]
+      }
+    ];
   } catch (err) {
     console.error('Error fetching procedimientos:', err);
     return null;

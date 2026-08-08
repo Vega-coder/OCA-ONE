@@ -15,7 +15,8 @@ export const ROLES_DEFINITIONS = [
     canEditFormats: true,
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
-    canViewMSDS: true
+    canViewMSDS: true,
+    allowedViews: ['procedimientos', 'dashboard', 'saneamiento', 'variables', 'capa', 'trazabilidad', 'alergenos-recall', 'capacitaciones']
   },
   {
     id: 'control-calidad',
@@ -29,7 +30,8 @@ export const ROLES_DEFINITIONS = [
     canEditFormats: false,
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
-    canViewMSDS: true
+    canViewMSDS: true,
+    allowedViews: ['procedimientos', 'dashboard', 'saneamiento', 'capa', 'alergenos-recall']
   },
   {
     id: 'produccion',
@@ -43,7 +45,8 @@ export const ROLES_DEFINITIONS = [
     canEditFormats: false,
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
-    canViewMSDS: false
+    canViewMSDS: false,
+    allowedViews: ['variables', 'trazabilidad', 'dashboard']
   },
   {
     id: 'operativo',
@@ -57,7 +60,8 @@ export const ROLES_DEFINITIONS = [
     canEditFormats: false,
     canDownloadFormats: true,
     canViewFichasTecnicas: false,
-    canViewMSDS: false
+    canViewMSDS: false,
+    allowedViews: ['variables', 'saneamiento', 'trazabilidad']
   },
   {
     id: 'mantenimiento',
@@ -71,7 +75,8 @@ export const ROLES_DEFINITIONS = [
     canEditFormats: false,
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
-    canViewMSDS: true
+    canViewMSDS: true,
+    allowedViews: ['variables', 'capa', 'dashboard']
   },
   {
     id: 'logistica',
@@ -85,7 +90,8 @@ export const ROLES_DEFINITIONS = [
     canEditFormats: false,
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
-    canViewMSDS: false
+    canViewMSDS: false,
+    allowedViews: ['trazabilidad', 'alergenos-recall', 'dashboard']
   },
   {
     id: 'sg-sst',
@@ -99,7 +105,8 @@ export const ROLES_DEFINITIONS = [
     canEditFormats: false,
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
-    canViewMSDS: true
+    canViewMSDS: true,
+    allowedViews: ['capacitaciones', 'dashboard']
   }
 ];
 
@@ -115,4 +122,9 @@ export function canUserDownloadProcedure(roleId) {
 export function canUserEditDocument(roleId) {
   const role = getRoleDefinition(roleId);
   return role.canEditDocuments;
+}
+
+export function isViewAllowedForRole(viewId, roleId) {
+  const role = getRoleDefinition(roleId);
+  return role.allowedViews ? role.allowedViews.includes(viewId) : true;
 }
