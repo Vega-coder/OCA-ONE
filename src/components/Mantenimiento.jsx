@@ -756,32 +756,178 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                     <div className="badge bg-primary px-3 py-2 fs-6">CÓDIGO: MAN-PME-001 | VERSIÓN: 3.0.0</div>
                   </div>
 
-                  {/* Renderizado Completo Párrafo por Párrafo de los 514 Párrafos del Word */}
-                  {MAN_PME_FULL_PARAGRAPHS.map((pText, idx) => {
-                    const cleanText = pText.trim();
-                    const isMainHeader = [
-                      'INTRODUCCIÓN', 'OBJETIVO', 'ALCANCE', 'DEFINICIONES', 'RESPONSABILIDADES',
-                      'MANTENIMIENTO PREVENTIVO', 'MANTENIMIENTO CORRECTIVO', 'ÁREA', 'EQUIPOS',
-                      'FRECUENCIA', 'MANTENIMIENTO DE EQUIPOS', 'MOTOBOMBA', 'ELECTROBOMBA',
-                      'HILADORAS', 'MOLDEADORA', 'VENTILADORES', 'EXTRACTORES', 'PLANCHA SELLADORA',
-                      'CUARTOS FRIOS', 'CALDERA', 'PLANTA ELÉCTRICA', 'COMPRESOR 2HP', 'REGISTROS',
-                      'ANEXOS', 'ESPECIFICACIONES', 'ACCIONAMIENTO', 'MANTENIMIENTO', 'RECOMENDACIONES'
-                    ].includes(cleanText.toUpperCase());
+                  {/* 1. TABLA DE CONTROL DE CAMBIOS */}
+                  <div className="mb-4">
+                    <h6 className="fw-bold text-dark font-heading mb-2">
+                      <i className="bi bi-clock-history me-2 text-primary"></i>CONTROL DE CAMBIOS DEL DOCUMENTO
+                    </h6>
+                    <div className="table-responsive">
+                      <table className="table table-sm table-bordered align-middle mb-0" style={{ fontSize: '12px' }}>
+                        <thead className="table-light">
+                          <tr>
+                            <th width="10%">Versión</th>
+                            <th width="45%">Descripción del Cambio</th>
+                            <th width="25%">Solicitante (Cargo)</th>
+                            <th width="20%">Fecha</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><span className="badge bg-secondary">01</span></td>
+                            <td>Creación del documento</td>
+                            <td>Jefe de calidad</td>
+                            <td>12/01/2016</td>
+                          </tr>
+                          <tr>
+                            <td><span className="badge bg-secondary">02</span></td>
+                            <td>Actualización de procedimientos de mantenimiento equipos</td>
+                            <td>Jefe de calidad</td>
+                            <td>25/08/2019</td>
+                          </tr>
+                          <tr>
+                            <td><span className="badge bg-primary">03</span></td>
+                            <td>Actualización General</td>
+                            <td>Jefe de calidad</td>
+                            <td>06/07/2022</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
 
-                    if (isMainHeader) {
-                      return (
-                        <h5 key={idx} className="fw-bold text-primary border-bottom pb-1 mt-4 font-heading">
-                          <i className="bi bi-bookmark-fill me-2 text-primary"></i>{cleanText}
-                        </h5>
-                      );
-                    }
+                  {/* 2. SECCIONES DEL TEXTO MAESTRO */}
+                  <div className="mb-4">
+                    <h5 className="fw-bold text-primary font-heading border-bottom pb-1 mb-2">1. INTRODUCCIÓN</h5>
+                    <p className="text-dark" style={{ textAlign: 'justify' }}>
+                      El mantenimiento industrial (preventivo y correctivo) es un conjunto de acciones encaminadas a la funcionalidad y durabilidad de la maquinaria, equipos e instalaciones, de tal manera que permanezcan sirviendo en óptimas condiciones y se detecten fallas a tiempo.
+                    </p>
+                    <p className="text-dark" style={{ textAlign: 'justify' }}>
+                      En la actualidad, gracias al desarrollo de nuevas tecnologías, el uso de diferentes técnicas de inspección para el mantenimiento industrial de equipos es algo común. Dichas técnicas permiten un estudio estadístico de los parámetros más importantes para conocer la condición operacional de cada equipo. Al realizar el monitoreo continuo, recolectando datos sobre el estado de los equipos, es posible predecir el momento para realizar paradas programadas y así reducir el número de intervenciones necesarias para cada equipo, garantizando una mayor continuidad del proceso productivo.
+                    </p>
+                  </div>
 
+                  <div className="mb-4">
+                    <h5 className="fw-bold text-primary font-heading border-bottom pb-1 mb-2">2. OBJETIVO Y ALCANCE</h5>
+                    <p className="mb-1 text-dark"><strong>OBJETIVO:</strong> Establecer el procedimiento para llevar a cabo el mantenimiento de los equipos para lograr confiabilidad, funcionalidad y durabilidad de los equipos y evitar retrasos en la producción.</p>
+                    <p className="mb-0 text-dark"><strong>ALCANCE:</strong> Este programa aplica para todos los equipos e instrumentos de medición que son necesarios para llevar a cabo el cumplimiento de los procesos en la planta.</p>
+                  </div>
+
+                  <div className="mb-4">
+                    <h5 className="fw-bold text-primary font-heading border-bottom pb-1 mb-2">3. DEFINICIONES</h5>
+                    <ul className="text-dark">
+                      <li><strong>Disponibilidad:</strong> Probabilidad de que el equipo esté en servicio o presto para operar cuando sea requerido.</li>
+                      <li><strong>Fiabilidad:</strong> Probabilidad de que el equipo o la máquina opere correctamente durante un período determinado de tiempo.</li>
+                      <li><strong>Mantenibilidad:</strong> Capacidad de un equipo de ser llevado a su funcionamiento regular mediante tareas de mantenimiento necesarias.</li>
+                      <li><strong>Mantenimiento Correctivo:</strong> Corregir los defectos observados en los equipos o instalaciones, es la forma más básica de mantenimiento y consiste en localizar fallos y corregirlos o repararlos.</li>
+                      <li><strong>Mantenimiento Preventivo:</strong> Inspección periódica de los equipos de la planta, para descubrir las condiciones que conducen a paros imprevistos de producción o desgaste perjudicial. Corregir dichas condiciones aun cuando se encuentre en una fase inicial.</li>
+                      <li><strong>Reparaciones de Emergencia:</strong> Son aquellas que deben ejecutarse inmediatamente para prevenir pérdidas de producción, averías serias en los equipos o para corregir peligros.</li>
+                      <li><strong>Reparaciones Normales:</strong> Son la mayoría de los trabajos de mantenimiento. Se programan tomando en cuenta los requerimientos de producción y la disponibilidad de la fuerza de trabajo y mantenimiento.</li>
+                      <li><strong>Reparaciones de Urgencia:</strong> Aquellas que durante la programación normal deben terminarse lo antes posible.</li>
+                      <li><strong>Verificación o Inspección:</strong> Consiste en hacer un examen minucioso en forma visual y mediante elementos de medición de cada una de las partes y componentes del equipo con el fin de comprobar que el estado de funcionamiento es el óptimo.</li>
+                    </ul>
+                  </div>
+
+                  <div className="mb-4">
+                    <h5 className="fw-bold text-primary font-heading border-bottom pb-1 mb-2">4. RESPONSABILIDADES Y PROCEDIMIENTOS</h5>
+                    <p className="text-dark">Los procesos de mantenimiento de equipos están a cargo de los operarios delegados por el jefe de producción o responsable del funcionamiento de toda la empresa; si la situación no tiene solución se contrata una persona externa.</p>
+                    
+                    <h6 className="fw-bold text-dark font-heading mt-3">MANTENIMIENTO PREVENTIVO:</h6>
+                    <ul className="text-dark">
+                      <li>Limpieza de equipos de acuerdo a lo previsto en el manual de limpieza y desinfección de forma periódica (diario), brindando una alerta temprana en caso de observar alguna anomalía.</li>
+                      <li>Revisión Periódica (Inspección Semanal) de todos los equipos existentes, diligenciando las fichas de datos básicos.</li>
+                      <li>Desmontaje periódico (mensual) en la mayor cantidad de partes posibles para extractores y ventiladores. Para bombas, hiladoras, caldera y cuartos fríos no se deben desmontar por el grado de dificultad de su estructura y deben ser revisados por un profesional calificado.</li>
+                    </ul>
+
+                    <h6 className="fw-bold text-dark font-heading mt-3">MANTENIMIENTO CORRECTIVO:</h6>
+                    <ol className="text-dark">
+                      <li>Evaluar el daño causado por la falla.</li>
+                      <li>Analizar la o las causas de la falla.</li>
+                      <li>Corregir las causas.</li>
+                      <li>Reparar, ajustar o cambiar las piezas defectuosas.</li>
+                      <li>Hacer pruebas y ajustes finales necesarios.</li>
+                    </ol>
+                  </div>
+
+                  {/* 3. TABLA 2. FRECUENCIA DE MANTENIMIENTO DE EQUIPOS */}
+                  <div className="mb-5">
+                    <h5 className="fw-bold text-primary font-heading border-bottom pb-1 mb-2">5. TABLA 2. FRECUENCIA DE MANTENIMIENTO DE EQUIPOS</h5>
+                    <div className="table-responsive">
+                      <table className="table table-sm table-striped table-bordered align-middle mb-0" style={{ fontSize: '12.5px' }}>
+                        <thead className="table-dark">
+                          <tr>
+                            <th width="25%">ÁREA OPERATIVA</th>
+                            <th width="40%">EQUIPOS E INSTALACIONES</th>
+                            <th width="35%">FRECUENCIA DE MANTENIMIENTO</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr><td>RECEPCIÓN DE LECHE</td><td className="fw-bold">Motobomba</td><td>Diaria, Semanal y Semestral</td></tr>
+                          <tr><td>CUAJADO</td><td className="fw-bold">Electrobomba</td><td>Diaria, Semanal y Semestral</td></tr>
+                          <tr><td>HILADO</td><td className="fw-bold">Hiladoras</td><td>Diaria, Semanal y Mensual</td></tr>
+                          <tr><td>MOLDEO</td><td className="fw-bold">Moldeadora</td><td>Diaria, Semanal y Mensual</td></tr>
+                          <tr><td>MOLDEO</td><td className="fw-bold">Ventiladores</td><td>Semanal</td></tr>
+                          <tr><td>MOLDEO</td><td className="fw-bold">Extractores</td><td>Semanal</td></tr>
+                          <tr><td>EMPAQUE</td><td className="fw-bold">Plancha Selladora</td><td>Diaria y Mensual</td></tr>
+                          <tr><td>CUARTOS FRÍOS</td><td className="fw-bold">Cuarto de choque</td><td>Diaria, Semanal, Mensual y Trimestral</td></tr>
+                          <tr><td>CUARTOS FRÍOS</td><td className="fw-bold">Cuarto almacenamiento producto terminado</td><td>Diaria, Semanal, Mensual y Trimestral</td></tr>
+                          <tr><td>OTRAS ÁREAS</td><td className="fw-bold">Caldera Pirotubular</td><td>Diaria, Semanal y Semestral</td></tr>
+                          <tr><td>OTRAS ÁREAS</td><td className="fw-bold">Planta eléctrica Cummins</td><td>Diaria, Semanal y Mensual</td></tr>
+                          <tr><td>OTRAS ÁREAS</td><td className="fw-bold">Compresor de Aire 2HP</td><td>Diaria, Semanal y Quincenal</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* 4. PROGRAMA DETALLADO POR EQUIPO */}
+                  <h5 className="fw-bold text-primary font-heading border-bottom pb-2 mb-4">6. FICHAS TÉCNICAS Y PROGRAMAS OPERATIVOS POR EQUIPO</h5>
+                  
+                  {Object.keys(equiposDetalle).map((key, index) => {
+                    const eq = equiposDetalle[key];
                     return (
-                      <p key={idx} className="mb-2 text-dark" style={{ textAlign: 'justify' }}>
-                        {cleanText}
-                      </p>
+                      <div key={key} className="card p-3 mb-4 border rounded-3 bg-light bg-opacity-25 shadow-sm">
+                        <h5 className="fw-bold font-heading text-dark border-bottom pb-2 mb-3">
+                          <span className="badge bg-primary me-2">{index + 1}</span>{eq.nombre}
+                        </h5>
+                        <div className="row g-3">
+                          <div className="col-12 col-md-6 border-end">
+                            <h6 className="fw-bold text-dark small"><i className="bi bi-gear-wide me-1 text-primary"></i> ESPECIFICACIONES:</h6>
+                            <ul className="small text-muted mb-3 ps-3">
+                              {eq.especificaciones.map((e, idx) => <li key={idx}>{e}</li>)}
+                            </ul>
+                            <h6 className="fw-bold text-dark small"><i className="bi bi-play-circle me-1 text-success"></i> ACCIONAMIENTO:</h6>
+                            <div className="bg-white p-2 rounded border small text-dark mb-2">
+                              {eq.accionamiento.map((a, idx) => <div key={idx}>{a}</div>)}
+                            </div>
+                          </div>
+                          <div className="col-12 col-md-6">
+                            <h6 className="fw-bold text-dark small"><i className="bi bi-wrench me-1 text-warning"></i> PROGRAMA DE MANTENIMIENTO:</h6>
+                            <table className="table table-sm table-bordered bg-white small mb-3">
+                              <thead>
+                                <tr><th>FRECUENCIA</th><th>ACTIVIDAD</th></tr>
+                              </thead>
+                              <tbody>
+                                {eq.mantenimiento.map((m, idx) => (
+                                  <tr key={idx}>
+                                    <td><span className="badge bg-primary-subtle text-primary">{m.frec}</span></td>
+                                    <td className="text-muted">{m.act}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            <div className="alert alert-warning p-2 small mb-0 rounded-2">
+                              <strong><i className="bi bi-shield-exclamation me-1"></i>RECOMENDACIONES:</strong> {eq.recomendaciones}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     );
                   })}
+
+                  <div className="border-top pt-4 mt-4 text-dark">
+                    <h5 className="fw-bold text-primary font-heading mb-2">7. REGISTROS Y ANEXOS</h5>
+                    <p className="mb-1"><strong>REGISTROS:</strong> Las actividades de mantenimiento realizadas a los equipos de la planta quedan registradas en <strong>FOPME-002: FORMATO DE MANTENIMIENTO REALIZADO A EQUIPOS Y MAQUINARIA</strong>.</p>
+                    <p className="mb-0"><strong>ANEXOS:</strong> Anexo 1 (Manual de instrucciones para el uso y mantenimiento de motores eléctricos) y Anexo 2 (Manual de soluciones a fallos y posibles causas de caja de control de máquinas hiladoras).</p>
+                  </div>
                 </div>
               </div>
               <div className="modal-footer border-top-0 p-3 bg-light" style={{ borderBottomLeftRadius: '18px', borderBottomRightRadius: '18px' }}>
