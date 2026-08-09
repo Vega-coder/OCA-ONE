@@ -16,7 +16,7 @@ export const ROLES_DEFINITIONS = [
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
     canViewMSDS: true,
-    allowedViews: ['procedimientos', 'dashboard', 'saneamiento', 'variables', 'capa', 'trazabilidad', 'alergenos-recall', 'capacitaciones']
+    allowedViews: ['procedimientos', 'mantenimiento', 'dashboard', 'saneamiento', 'variables', 'capa', 'trazabilidad', 'alergenos-recall', 'capacitaciones']
   },
   {
     id: 'control-calidad',
@@ -31,7 +31,7 @@ export const ROLES_DEFINITIONS = [
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
     canViewMSDS: true,
-    allowedViews: ['procedimientos', 'dashboard', 'saneamiento', 'capa', 'alergenos-recall']
+    allowedViews: ['procedimientos', 'mantenimiento', 'dashboard', 'saneamiento', 'capa', 'alergenos-recall']
   },
   {
     id: 'produccion',
@@ -46,7 +46,7 @@ export const ROLES_DEFINITIONS = [
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
     canViewMSDS: false,
-    allowedViews: ['variables', 'trazabilidad', 'dashboard']
+    allowedViews: ['mantenimiento', 'variables', 'trazabilidad', 'dashboard']
   },
   {
     id: 'operativo',
@@ -76,7 +76,7 @@ export const ROLES_DEFINITIONS = [
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
     canViewMSDS: true,
-    allowedViews: ['variables', 'capa', 'dashboard']
+    allowedViews: ['mantenimiento', 'variables', 'capa', 'dashboard']
   },
   {
     id: 'logistica',

@@ -7,6 +7,7 @@ import Capacitaciones from './components/Capacitaciones';
 import Capa from './components/Capa';
 import AllergenRecall from './components/AllergenRecall';
 import Procedimientos from './components/Procedimientos';
+import Mantenimiento from './components/Mantenimiento';
 import Login from './components/Login';
 import { useAppEngine } from './hooks/useAppContext';
 import { ROLES_DEFINITIONS, isViewAllowedForRole } from './lib/permissions';
@@ -157,6 +158,21 @@ function App() {
             </li>
           )}
 
+          {/* Módulo Mantenimiento de Equipos */}
+          {isViewAllowedForRole('mantenimiento', userRole, rolesList) && (
+            <li className="mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'mantenimiento' ? 'active' : 'text-white'}`}
+                onClick={() => setCurrentView('mantenimiento')}
+              >
+                <div className="icon-badge icon-badge-indigo me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                  <i className="bi bi-tools"></i>
+                </div>
+                Mantenimiento de Equipos
+              </button>
+            </li>
+          )}
+
           {/* Módulo Dashboard */}
           {isViewAllowedForRole('dashboard', userRole, rolesList) && (
             <li className="mb-1">
@@ -283,6 +299,7 @@ function App() {
           <div className="container-fluid p-0">
             <h1 className="h3 mb-0 text-capitalize font-heading">
               {currentView === 'procedimientos' && 'Módulo de Control de Calidad - Procedimientos, POES y Archivos'}
+              {currentView === 'mantenimiento' && 'Módulo de Mantenimiento Preventivo y Correctivo de Equipos'}
               {currentView === 'dashboard' && 'Dashboard de Calidad e Inocuidad'}
               {currentView === 'saneamiento' && 'Plan de Saneamiento e Higiene'}
               {currentView === 'variables' && 'Monitoreo de Variables Críticas (PCC)'}
@@ -466,6 +483,12 @@ function App() {
               setCarpetaActiva={setActiveCategory}
               tenantId={activeTenant.id}
               userRole={userRole}
+            />
+          )}
+          {currentView === 'mantenimiento' && (
+            <Mantenimiento 
+              tenantId={activeTenant.id} 
+              userRole={userRole} 
             />
           )}
           {currentView === 'dashboard' && (

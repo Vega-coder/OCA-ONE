@@ -1,0 +1,515 @@
+VERSION
+DESCRIPCION DEL CAMBIO
+SOLICITANTE  (CARGO)
+FECHA
+01
+Creación del documento
+Jefe de calidad
+12/01/2016
+02
+Actualización de procedimientos de mantenimiento equipos
+Jefe de calidad
+25/08/2019
+03
+Actualización General
+Jefe de calidad
+06/07/2022
+                                     
+INTRODUCCIÓN
+El mantenimiento industrial (preventivo y correctivo) es un conjunto de acciones encaminadas a la funcionalidad y durabilidad de la maquinaria, equipos e instalaciones, de tal manera que permanezcan sirviendo en óptimas condiciones y se detecten fallas a tiempo. 
+En la actualidad, gracias al desarrollo de nuevas tecnologías, el uso de diferentes técnicas de inspección para el mantenimiento industrial de equipos es algo común. Dichas técnicas permiten un estudio estadístico de los parámetros más importantes para conocer la condición operacional de cada equipo. Al realizar el monitoreo continuo, recolectando datos sobre el estado de los equipos, es posible predecir el momento para realizar paradas programadas y así reducir el número de intervenciones necesarias para cada equipo, garantizando una mayor continuidad del proceso productivo.
+OBJETIVO
+Establecer el procedimiento para llevar a cabo el mantenimiento de los equipos para lograr confiabilidad, funcionalidad y durabilidad de los equipos y retrasos en la producción 
+ALCANCE
+Este programa aplica para todos los equipos e instrumentos de medición que son necesarios para llevar a cabo el cumplimiento de los procesos en la planta QUESOS NATA DEL CHAIRA.
+DEFINICIONES
+Disponibilidad: probabilidad de que el equipo estén en servicio o presto para operar cuando sea requerido.
+Fiabilidad: Probabilidad de que el equipo o la maquina opere correctamente durante un periodo determinado de tiempo.
+Mantenibilidad: Capacidad de un equipo de ser llevado a su funcionamiento regular mediante tareas de mantenimiento necesarias.
+Mantenimiento correctivo: Corregir los defectos observados en los equipos o instalaciones, es la forma más básica de mantenimiento y consiste en localizar fallos y corregirlos o repararlos.
+Mantenimiento preventivo: Inspección periódica de los equipos de la planta, para descubrir las condiciones que conducen a paros imprevistos de producción o desgaste perjudicial. Corregir dichas condiciones aun cuando se encuentre en una fase inicial.
+Reparaciones de emergencia: Son aquellas que deben ejecutarse inmediatamente para prevenir pérdidas de producción, averías serias en los equipos o para corregir peligros.
+Reparaciones normales: Son la mayoría de los trabajos de mantenimiento. Se programan tomando en cuenta los requerimientos de producción y la disponibilidad de la fuerza de trabajo y mantenimiento.
+Reparaciones de urgencia: Aquellas que durante la programación normal deben terminarse lo antes posible.
+Verificación o inspección: Consiste en hacer un examen minucioso en forma visual y mediante elementos de medición de cada una de las partes y componentes del equipo con el fin de comprobar que el estado de funcionamiento es el óptimo y que está de acuerdo con las características y condiciones técnicas de construcción y operación dadas por los fabricantes.
+RESPONSABILIDADES
+Los procesos de mantenimiento de equipos están a cargo de los operarios delegados por el jefe de producción o responsable del funcionamiento de toda la empresa, si la situación no tiene solución se contrata una persona externa.
+MANTENIMIENTO PREVENTIVO
+Procedimientos de mantenimiento preventivo
+Limpieza de equipos de acuerdo a lo previsto en el manual de limpieza y desinfección de forma periódica (diario), brindando una alerta temprana en caso de observar alguna anomalía existente en algún equipo.
+Revisión Periódica (Inspección Semanal) de todos los equipos existentes, diligenciando las fichas de datos básicos establecidas en la tabla 1.
+Desmontaje periódico (mensual) en la mayor cantidad de parte posibles para los siguientes equipos: extractores, ventiladores. Para los equipos como bomba de succión, hiladoras, caldera y cuartos fríos, entre otros, no se deben desmontar por el grado de dificultad de su estructura y la sensibilidad de cada una de sus partes, por lo que se debe realizar esta operación por un profesional calificado para este proceso.
+MANTENIMIENTO CORRECTIVO
+En estos casos se debe seguir los siguientes pasos:
+Evaluar el daño causado por la falla.
+Analizar la o las causas de la falla.
+Corregir las causas.
+Reparar, ajustar o cambiar las piezas defectuosas.
+Hacer pruebas y ajustes finales necesarios.
+El orden lógico de los pasos anteriores lleva a evitar enfocarse a solamente los efectos del problema con los consiguientes efectos de estar haciendo reparaciones frecuentes, con posibles daños permanentes y algunas veces irreparables de los equipos.
+Para el mantenimiento correctivo, en sus diferentes grados de urgencia, se necesita:
+Personal de mantenimiento capacitado: aquí influye la selección y la capacitación que se haya realizado. Aunado a la experiencia requerida en la empresa. 
+Repuestos y materiales: la existencia en la empresa de los repuestos de uso más frecuente es de suma importancia para una reparación rápida y efectiva. Caso contrario, es necesario iniciar la búsqueda con los diferentes proveedores, lo que alarga el tiempo de reparación. 
+Herramienta: la adquisición, uso y control de las herramientas se vuelve un aspecto clave para obtener buenos resultados.
+ÁREA
+EQUIPOS
+FRECUENCIA
+RECEPCIÓN DE LECHE
+Motobomba
+Diaria, Semanal y Semestral
+CUAJADO
+Electrobomba
+Diaria, Semanal y Semestral
+HILADO
+Hiladoras
+Diaria, Semanal y Mensual
+MOLDEO
+Moldeadora 
+Diaria, Semanal y Mensual
+Ventiladores
+Semanal 
+Extractores 
+Semanal
+EMPAQUE
+Plancha Selladora
+Diaria y Mensual
+CUARTOS FRIOS
+Cuarto de choque
+Diaria, Semanal, Mensual y Trimestral
+Cuarto almacenamiento producto terminado
+Diaria, Semanal, Mensual y Trimestral
+OTRAS
+Caldera
+Diaria, Semanal y Semestral
+Planta eléctrica
+Diaria, Semanal y Mensual
+Compresor
+Diaria, Semanal y Quincenal
+Tabla 2. Frecuencia de mantenimiento de equipos.
+MANTENIMIENTO DE EQUIPOS
+MOTOBOMBA
+ESPECIFICACIONES
+GX 120 (eje de la toma de fuerza tipo S)
+Longitud x Anchura x Altura: 297x341x318mm
+Peso en seco: 13Kg
+Tipo de motor: 4 tiempos, válvulas en cabeza, monocilindrico.
+Cilindrada: 119cm3
+Potencia max.: 2,9kW a 3600min-1 (rpm)
+Torsión max.: 7,4N.m a 2.500min-1 (rpm)
+Capacidad de aceite de motor: 0, 60Q.
+Capacidad del depósito de combustible: 2,5Q.
+Consumo de combustible: 313g/kWh (230g/PSh).
+Sistema de enfriamiento: aire forzado.
+Sistema de encendido: magneto transistorizado.
+Rotación del eje de la toma de fuerza: hacia la izquierda
+ACCIONAMIENTO
+Girar la válvula del combustible a la posición “ON”.
+Mover la palanca del acelerador un poco hacia la izquierda.
+Girar la palanca del estrangulador a la posición cerrada.
+Girar el interruptor del motor a la posición “ON”.
+Tirar un poco de la empuñadura del arrancador hasta notar resistencia, y luego tire con fuerza.
+Girar la palanca del estrangulador a la posición abierta.
+Ajustar la palanca del acelerador a la posición deseada.
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Comprobación del estado del estado general del motor
+Mirar en torno al motor y debajo del mismo para ver si hay indicios de fugas de aceite o de gasolina.
+Buscar si hay indicios de daños.
+Comprobar que todos los protectores y cubiertas estén en su lugar y que todas las tuercas, pernos y tornillos estén apretados.
+Comprobación del motor
+Comprobar el nivel de combustible. Mantener el depósito lleno, evita interrupciones de la operación. 
+Comprobar el elemento del filtro de aire.
+SEMANAL
+Extraer el polvo o la suciedad excesiva, especialmente en torno al silenciador y al arrancador de retroceso.
+Comprobar el nivel de aceite. Mantener alto el nivel de aceite para asegurar larga vida de servicio.
+SEMESTRAL
+Cambio de sello para evitar derrames de leche.
+RECOMENDACIONES
+Mantener apartado de materiales inflamables.
+No fumar cerca de la máquina.
+Evitar derrames de combustible.
+Suministrar combustible y hacer mantenimiento, siempre en modo apagado.
+ELECTROBOMBA
+ESPECIFICACIONES
+Potencia de 1500W
+2HP
+Eficiencia energética: 71.9%
+Revoluciones 3450RPM
+Voltaje: 110/220
+Frecuencia 60HZ
+ACCIONAMIENTO
+Conectar a una corriente eléctrica.
+Presionar el botón de color verde que se encuentra en la caja de control.
+Nota: Presionar el botón de color rojo para apagar o parar el equipo.
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Comprobar que la velocidad de la bomba de agua se corresponde con la salida.
+Examinar las bridas para detectar fugas, fisuras, desgastes o partes oxidadas que puedan hacer peligrar el funcionamiento.
+SEMANAL
+Comprobar que los puntos de montaje son seguros.
+Inspeccionar el sello mecánico y el embalaje.
+Inspeccionar los acoplamientos
+Inspeccionar y limpiar los filtros.
+Es importante comprobar que todas las terminaciones están bien apretadas, e inspeccionar las ventilaciones del motor y los devanados para detectar la acumulación de polvo y suciedad. 
+SEMESTRAL
+Lubricación de cojinetes.
+Comprobar la elevación de la bomba respecto a su base.
+Cambiar los acoplamientos del motor para lograr una salida adecuada.
+RECOMENDACIONES
+Realizar un mantenimiento frecuente es una manera de garantizar que la bomba no pase por grandes problemas, lo que reduce bastante el costo con posibles reparaciones y pérdida de eficiencia. 
+Hacer mantenimiento siempre con el equipo apagado.
+HILADORAS
+ESPECIFICACIONES
+Elaborado en acero inoxidable tipo 304 en las partes que hacen contacto con los alimentos y partes exteriores, tipo 430 en las cámaras de aire caliente y cámara de vapor. Adicionalmente barras redondas de acero inoxidable tipo 304 calibre 5/6”.
+Acople de cadena y piñones paso 50 para conectar eje reductor con eje principal de la máquina.
+Capacidad de 1600L de leche cuajada.
+Sistema de agitación con paletas y cuchillas.
+Motor reductor marca SITI de 3 HP con 3 newton/metro de torque.
+Caja de controles eléctricos comandada por un variador marca LS de LG.
+ACCIONAMIENTO
+Colocar el aspa dentro de la máquina.
+Asegurar el aspa con los tornillos.
+Cerrar el orificio por donde sale el queso caliente con la tapa y asegurarla con la abrazadera.
+Abrir las válvulas de vapor.
+Verificar que el equipo esté conectado a una corriente eléctrica.
+Encender la maquina desde el interruptor que se encuentra en el tablero de control.
+Variar la velocidad de las aspas girando el potenciómetro de acuerdo a su necesidad.
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Realizar procedimiento de limpieza y desinfección. Ver A-Z Programa de limpieza y desinfección.
+Observar con detenimiento las aspas para verificar si hay fisuras o si están partidas.  De ser así, se debe solicitar personal experto en soldadura o trasladarlas a un taller (torno).
+SEMANAL
+Revisar las conexiones eléctricas.
+Limpiar el tablero de control.
+Inspeccionar los conductos de vapor, verificar que no haya fugas.
+Revisar las válvulas de salida de vapor.
+Examinar las partes interna y externa de la máquina para descartar la presencia de fisuras y/o hendiduras. Si es el caso, se solicita personal experto en soldadura.
+MENSUAL
+MOTOR: 
+Eliminar los depósitos de grasa y suciedad en la tapa del ventilador para mantener una buena ventilación y permitir un correcto enfriamiento del motor.
+Controlar las condiciones de los retenes y de los V-ring. 
+Controlar las condiciones de las conexiones eléctricas y mecánicas y de los pernos de fijación.
+Controlar las condiciones de los rodamientos prestando atención a ruidos anómalos o vibraciones. 
+Lubricar las chumaceras.
+Examinar los variadores.
+RECOMENDACIONES
+Si es necesario desmontar el motor y acceder a sus partes internas, se requiere la intervención de personal calificado utilizando herramientas y métodos de trabajo adecuados. También, se puede usar el Manual de instrucciones para el uso y mantenimiento de motores eléctricos (Anexo 1).
+Cuando el tablero de control presente algún fallo, se debe utilizar el manual de soluciones a fallos y posibles causas (Anexo 2).
+Si la velocidad del aspa se ve interrumpida, es decir que no se puede graduar, es probable que el potenciómetro este presentando fallas, de ser así, se debe reparar o cambiar.  En caso de que no haya un potenciómetro disponible, se puede usar un graduador de volumen mientras se consigue uno original. 
+MOLDEADORA
+ESPECIFICACIONES
+Material de fabricación: Acero inoxidable tipo 304 y plástico industrial sanitario
+Dimensiones: Largo 170cm x ancho 90cm x 165cm
+Capacidad de la tolva: 250kg
+Capacidad dosificadora: 400g a 2500g
+Voltaje: 220V trifásico
+Potencia: 3HP
+Tracción: Motorreductor sifín corona y piñones externos.
+Sistema de inyección y agitación: Tornillos paralelos tipo sinfín.
+Capacidad de producción: 8 a 20 unidades por minuto dependiendo la cantidad a dosificar.
+ACCIONAMIENTO
+Colocar los tornillos dentro de la tolva y se conectan con los ejes de tracción. (hay que colocarlos en su posición adecuada, están marcados). 
+Colocar las piezas que hacen centro en salida de la máquina, después se pone el empaque, se cierra la tapa se coloca los dos tornillos tipo brida y luego se ajusta de forma simultánea las dos mariposas con loa mano hasta que queden bien apretadas.
+Energizar con el switch de muletilla indicado.
+Prender la marcha del variador, y se gradúa la velocidad deseada, se puede girar el switch para colocarla en reversa, se controla el doble giro.
+Girar el potenciómetro para lograr la velocidad deseada.
+Con el temporizador graduar el tiempo del dosificador.
+Llenar la tolva 
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Realizar el procedimiento de limpieza y desinfección. Ver A-Z Programa de limpieza y desinfección.
+SEMANAL
+Limpiar el tablero de control y verificar que no queden materiales extraños en su interior.
+Revisar las mangueras de aire, en caso de ruptura, se sella el orificio o en su defecto se cambia por otra.
+Inspeccionar que los cables de la corriente eléctrica no tengan perforaciones. 
+Lavar el equipo completamente con desincrustante para remover las incrustaciones.
+MENSUAL
+MOTOR: 
+Eliminar los depósitos de grasa y suciedad en la tapa del ventilador para mantener una buena ventilación y permitir un correcto enfriamiento del motor.
+Inspeccionar las condiciones de los retenes y de los V-ring. 
+Controlar las condiciones de las conexiones eléctricas y mecánicas y de los pernos de fijación.
+Controlar las condiciones de los rodamientos prestando atención a ruidos anómalos o vibraciones. 
+Lubricar las chumaceras.
+RECOMENDACIONES
+Si es necesario desmontar el motor y acceder a sus partes internas, se requiere la intervención de personal calificado utilizando herramientas y métodos de trabajo adecuados. También, se puede usar el Manual de instrucciones para el uso y mantenimiento de motores eléctricos (Anexo 1).
+Cuando los cilindros dosificadores presenten dificultad para moverse, se debe revisar el compresor y las mangueras, ya que puede ser pérdida de aire. 
+VENTILADORES
+ESPECIFICACIONES
+Metálico
+Diámetro: 26 pulgadas
+Potencia: 230W
+Motor: durable y alta potencia
+Velocidades: 3
+Oscilación: 90°
+Trabajo pesado: operación continua
+Caudal: 7800CFM
+Numero de aspas:3
+ACCIONAMIENTO
+Enchufar a una corriente eléctrica.
+Mover la el control de velocidad de acuerdo a su necesidad: los números 0, 1, 2, 3 corresponden a apagado, bajo, medio y alto respectivamente.
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+SEMANAL
+Realizar procedimiento de limpieza.
+Revisar conexión eléctrica.
+Inspeccionar que no presente daños.
+RECOMENDACIONES
+Encender únicamente cuando se vaya a usar.
+Desconectar al terminar la jornada laboral.
+EXTRACTORES
+ESPECIFICACIONES
+Metálico
+Medida: 14 pulgadas, 35 cm
+Caudal: 580cm3/h 
+Potencia: 1/8HP
+RPM: 1700
+ACCIONAMIENTO
+Mover el suiche del taco hacia arriba (ON)
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Realizar procedimiento de limpieza y desinfección. Ver A-Z Programa de limpieza y desinfección.
+Inspeccionar conexión eléctrica.
+RECOMENDACIONES
+Apagar al terminar la jornada laboral.
+Realizar el procedimiento de limpieza con el equipo apagado.
+Esperar hasta que se seque para encenderlo.
+PLANCHA SELLADORA
+ESPECIFICACIONES
+Potencia: 1200 Watts,120 Vac 60 Hz.
+Su cuerpo está fabricado en baquelita, el cual permite que el usuario lo pueda manipular con tranquilidad, ya que no alcanza altas temperaturas. 
+Cuenta con una suela de planchado en aluminio.
+Completamente pulida.
+Tiene un cable de alimentación con una longitud de 1.8 metros.
+Cuenta con un dispositivo de seguridad interior que evita incendio y el daño del producto cuando el controlador de temperatura se dañe.
+Materiales del producto 
+Material primario: Cuerpo en bakelita 50%.
+Material Secundario: Base aluminio 30%.
+Otros: Sistema eléctrico 20%.
+ACCIONAMIENTO
+Conectar a una corriente eléctrica.
+Mover la palanquita hasta el número 4.
+Colocar la plancha de manera vertical sobre una superficie plana.
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Realizar procedimiento de limpieza y desinfección. Ver A-Z Programa de limpieza y desinfección.
+MENSUAL
+Cambiar el teflón.
+RECOMENDACIONES
+No sumergir en agua el cuerpo principal.
+Conectar solo a tomacorriente de 120 Vac.
+CUARTOS FRIOS
+ESPECIFICACIONES
+Cuarto de choque
+Está fabricado en modulación inyectada en poliuretano al 35%, revestimiento en lámina interior y exterior. Tiene dos puertas combatientes con sus respectivas cortinas para el ingreso del producto y la otra para la salida después del choque térmico.
+Medidas:
+Fondo: 212cm
+Ancho: 356cm
+Alto: 200cm
+Evaporador de 14500 BTU con una válvula de expansión de 5 toneladas.
+Unidad condensadora de 5 HP: consta de un condensador de 5 HP, con un motor de 1/3 HP, una botella acumuladora, un separador de aceite, un control de alta y baja temperatura, una válvula celenoide, un filtro secador 163, una mirilla de líquido, un compresor sellado de 5HP.
+Tablero eléctrico: 
+cofre metálico
+2 muletillas
+2 pilotos
+Controlador fullgau MT 512
+Baquet  de 50 Amperios
+Protector de voltaje
+2 contactores, uno de 32ª y otro de 18ª
+Relec de 18 a 25 Amperios
+Cuarto almacenamiento de producto terminado
+Está fabricado en modulación inyectada en poliuretano al 35%, revestimiento en lámina interior y exterior.  Tiene dos puertas combatientes con sus respectivas cortinas para el ingreso del producto terminado y la otra para la salida al cargue. 
+Medidas:
+Fondo: 530cm
+Ancho: 250cm
+Alto: 240cm
+Evaporador de 24000 BTU con válvula de expansión de expansión de 7 toneladas.
+Unidad condensadora de 7,5 HP: consta de un condensador de 7,5 HP, con dos motores axiales de ½ HP, una botella acumuladora, un separador de aceite, un control de alta y baja temperatura, una válvula celenoide, un filtro 430, una mirilla de líquido, un compresor sellado de 7,5 HP. 
+ACCIONAMIENTO
+Verificar las conexiones eléctricas.
+Cuarto de almacenamiento:
+Unidad: Girar hacia la derecha la perilla del lado izquierdo del tablero de control. Inmediatamente se enciende un led de color rojo.
+Evaporadores: Girar hacia la derecha la perilla de lado derecho del tablero de control. Inmediatamente se enciende un led de color verde.
+Cuarto de choque:
+Unidad: Girar hacia la derecha la perilla de la superior del tablero de control. Inmediatamente se enciende un led de color rojo.
+Evaporadores: Girar hacia la derecha la segunda perilla del tablero de control. Inmediatamente se enciende un led de color verde.
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Realizar el procedimiento de limpieza y desinfección a toda el área. Ver A-Z Programa de limpieza y desinfección.
+Llevar registro y control de temperatura. Ver A-Z Control de temperatura.
+SEMANAL
+Limpiar los evaporadores con la hidrolavadora, hasta retirar toda la suciedad.
+Mantener continuamente ajustada la temperatura del sistema.
+MENSUAL
+Limpiar el tablero de control.
+Limpiar e inspeccionar los serpentines
+Inspeccionar las conexiones eléctricas.
+Verificar fugas en el sistema (tubería).
+Inspeccionar los sensores.
+Inspeccionar y mantener limpios todos los contactos electrónicos de potencia y de controles.
+TRIMESTRAL
+Verificar todas las tarjetas electrónicas incluyendo los variadores de frecuencia. Limpiar, reparar o cambiar si es necesario.
+Limpieza interior y exterior de la unidad.
+Lubricación de chumaceras
+Inspeccionar la bandeja de condensados y verificar que no tenga materiales extraños.
+Limpiar todas las aberturas del drenado y línea del drenado para asegurar su flujo adecuado.
+Suministrar gas.
+RECOMENDACIONES
+Revisiones de aceite mediante mirilla: Confirmar que los niveles estén óptimos, un nivel muy bajo puede resultar en un daño mecánico por lubricación. Se recomienda estar al tanto de cualquier tipo de fuga de aceite mirando alrededor de la máquina y controlando niveles, si se encuentra alguna se debe apagar el sistema y dar aviso para realizar la reparación.
+Hacer reconocimientos de tableros para evitar encontrar cables sulfatados, son potenciales para evitar paso de corriente dañando los Cuartos fríos, debe darse aviso inmediato al encontrar un polvillo acumulado, cable pelado de recubrimiento o similares.
+Puertas y cortinas deben estar cerradas, en caso de rotura de alguna lámina de las cortinas debe informarse y repararse o hacer el cambio de la misma para evitar pérdidas de frío innecesarias.
+Las zonas eléctricas deben estar en óptimo estado, cajas y tomas deben estar alejadas de acumulación de agua y en caso de emergencia utilizar protección aislante y desconectar cualquier fuente de energía antes de remover el agua, ejemplo bajar tacos y usar botas de caucho antes de acercarse a la zona de Cuartos fríos.
+Si no baja la temperatura en el cuarto: En caso de evaporador congelado, se debe apagar la unidad condensadora para dejarlo en deshielo. Si los evaporadores no prenden se debe revisar el tablero eléctrico que tenga suministro de energía, igual que si la unidad condensadora no enciende, verificar térmicos, controladores, protecciones del sistema y demás medidas de mantenimiento.
+En caso de chispa o corto, las protecciones y seguridades se deben saltar automáticamente cerrando cualquier circuito, sin embargo, es recomendable bajar tacos y llamar al encargado lo antes posible para evitar daños y pérdidas de tiempo, operaciones de este caso debe ser atendidas por personal capacitado únicamente.
+CALDERA
+ESPECIFICACIONES
+Caldera
+Pirotubular: agua dentro de la caldera y llama dentro de los tubos.
+De tres pasos
+Automática 
+Capacidad: 60 BHP
+Eficiencia térmica: 97%
+Combustible: gas licuado de petróleo.
+Un manómetro
+Un presurector: control de presión.
+Un L91: controla el sistema de modificación de la máquina.
+Quemador de 1.200.000BTU
+Tanque de agua con capacidad de 1200 litros.
+Bomba de agua
+Capacidad: 3HP
+220V
+Eficiencia: 82,5%
+rpm: 3450
+ACCIONAMIENTO
+Abrir válvula de gas
+Verificar que el tanque del agua este lleno
+Abrir válvulas de paso del agua
+Encender la bomba de agua: mover hacia la derecha la perilla que se encuentra en la parte superior izquierda del tablero.
+Encender el quemador: mover hacia la derecha la perilla que se encuentra en la parte superior derecha del tablero.
+Nota: las dos perillas se mueven hacia el lado derecho para que la maquina trabaje de manera automática
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Realizar procedimiento de limpieza a su alrededor.
+Purgar antes de encender:
+Abrir la válvula de color rojo que se encuentra en la columna de agua, dejar abierta hasta que salga agua clara, hacer el mismo proceso con la válvula, también de color rojo, que se encuentra en la parte trasera de la caldera.
+SEMANAL
+Realizar procedimiento de limpieza en la parte externa.
+SEMESTRAL
+Limpiar tubería 
+Verificar si hay fugas
+Revisar sistema de control
+Realizar limpieza del quemador
+RECOMENDACIONES
+El mantenimiento semestral lo debe realizar un experto en manejo de calderas.
+PLANTA ELÉCTRICA
+ESPECIFICACIONES
+Características motor
+Marca: Cummins
+Motor: 4BTA3.9-G2
+Numero de cilindros: 4
+Configuración de cilindros: En línea 
+Tiempos: 4
+Desplazamiento: 3,9
+Velocidad de giro: 1800
+Potencia Standby (Kw): 73,9
+Potencia Standby (bhp): 99,0
+Tipo de gobernador: electrónico 
+Aspiración: Turbocargado/Post Enfriado
+Diámetro: 102mm
+Carrera: 120mm
+Capacidad lubricante: 2,9gal
+Capacidad refrigerante del radiador: 5gal
+Tipo de aire: seco
+Características generador (alternador)
+Marca: Marathon
+Tipo: sincrónico
+Potencia Standby: 80 Kva
+Fases: 3
+Conexión: 12 hilos
+Factor potencia: 0,8
+Frecuencia: 60
+Numero de polos: 4
+Tipo de breaker: Termomagnético
+Sistema de excitación: Autoexitado
+Eficiencia: 92%
+ACCIONAMIENTO
+MODO MANUAL
+Oprimir el botón “MANUAL”  
+Mantener oprimido el botón verde hasta que encienda el equipo.
+MODO AUTOMATICO
+Presionar el botón “AUTO”, inmediatamente se enciende un led de color rojo.
+Es recomendable mantener la planta en modo automático, de esta manera los demás equipos seguirán trabajando de forma normal en caso de que no haya energía eléctrica. 
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Realizar procedimiento de limpieza en la parte externa de la planta y a su alrededor.
+SEMANAL
+Agregar combustible (ACPM)
+Prender en caso de que no haya sido utilizada para descartar fallas.
+MENSUAL
+Cambio de aceite lubricante
+Cambio de filtros de combustible y de aire.
+Revisión de radiador
+RECOMENDACIONES
+Instalar en un lugar de fácil acceso y buenas condiciones de iluminación para facilitar las operaciones de mantenimiento.
+Es importante asegurarse de que la planta eléctrica disponga de suficiente ventilación para mantenerlo refrigerado y eliminar el exceso de emanaciones gaseosas y de calor producidas por la combustión del motor.
+Sobrecarga de la planta eléctrica:
+NO se debe sobrecargar la planta eléctrica una vez que esté funcionando, aunque están diseñados para soportar condiciones de sobrecarga por un tiempo breve durante el arranque. Si una planta eléctrica funciona durante mucho tiempo en condiciones de sobrecarga (Es decir, a un régimen por encima del régimen máximo de su capacidad) podrán ocurrir varias cosas, como: 
+Recalentamiento del sistema de refrigeración.
+Recalentamiento de las bobinas del alternador.
+Disminución de la viscosidad del aceite (Espesor) con la resultante pérdida de presión del aceite.
+Reducción de la vida útil de la planta eléctrica.
+COMPRESOR 2HP
+ESPECIFICACIONES
+Compresor de 80-120psi de presión con tanque de 170 litros de capacidad. Cuenta con un motor de trabajo directo lubricado con aceite para aumentar la vida útil y un par de manómetros junto a un regulador de presión que permite conocer y cambiar sus respectivos niveles.
+Potencia de 750W
+2HP
+Válvula de emergencia.
+Eficiencia energética: 75.2%
+Revoluciones 3440 rpm
+Voltaje: 220/440
+Frecuencia 60HZ
+ACCIONAMIENTO
+Enchufar a una corriente eléctrica.
+Conectar la manguera de aire 
+Halar hacia arriba el botón de arranque (perilla de color rojo que se encuentra en la parte superior del presostato). 
+NOTA: El funcionamiento del compresor es completamente automático y es controlado por el interruptor de presión que hace que pare cuando la presión en el receptor de aire alcanza el nivel máximo y vuelve a arrancar cuando baja a un nivel menor.
+MANTENIMIENTO
+FRECUENCIA
+ACTIVIDAD
+DIARIA
+Revisar el nivel de aceite del elemento de bombeo antes de cada uso.
+Verificar si la polea está en buenas condiciones, de lo contrario, debe ser cambiada por otra.
+Inspeccionar la válvula de anti retorno, si hay fugas se debe reparar o cambiar.
+SEMANAL
+Abrir el recipiente del filtro, extraerlo y sacudirlo para remover la suciedad acumulada en éste.
+Extraer el aire comprimido remanente en el depósito o calderín. Este proceso se realiza desenroscando la válvula de purga que se encuentra en la parte inferior del calderín.
+QUINCENAL
+Cambiar el aceite, para que éste preserve sus características lubricantes que le permitan al motor funcionar con adecuada potencia.
+Realizar procedimiento de limpieza en la parte externa, como tanque, motor y algunos accesorios, teniendo la máxima precaución y evitar que se filtre algún líquido en su parte interna.
+RECOMENDACIONES
+No realizar las labores de mantenimiento del compresor de aire sin antes desconectarlo de la corriente eléctrica.
+Evitar que el agua o líquidos inflamables entren en contacto con el motor del compresor de aire.
+No ubicar objetos inflamables cerca del compresor.
+No operar en espacios cerrados ni cercanos a llamas y bien ventilados.
+REGISTROS
+Las actividades de mantenimiento realizadas a los equipos de la planta quedan registradas en “FOPME -002, FORMATO DE MANTENIMIENTO REALIZADO A EQUIPOS Y MAQUINARIA
+ANEXOS
+Manual de soluciones a fallos posibles causas de caja de control de máquinas hiladoras 
