@@ -8,14 +8,14 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
   const [equipoSeleccionadoTab, setEquipoSeleccionadoTab] = useState('motobomba');
   const [alertaExito, setAlertaExito] = useState(false);
 
-  // Lista de registros de mantenimiento realizados
+  // Registros de mantenimiento realizados (FOPME-002)
   const [registrosMantenimiento, setRegistrosMantenimiento] = useState([
     {
       id: 1,
       fecha: '2026-08-01',
       equipo: 'Motobomba Recepción GX 120',
       tipo: 'Preventivo',
-      actividad: 'Comprobación de fugas de aceite/gasolina, ajuste de pernos y revisión de elemento de filtro de aire.',
+      actividad: 'Comprobación del estado general del motor en busca de signos de fugas de aceite o gasolina. Ajuste de pernos y revisión de filtro de aire.',
       tecnico: 'Téc. Mateo Morales',
       repuestos: 'Aceite 10W-30 (0.6Q), Sello mecánico',
       estado: 'Operativo'
@@ -25,7 +25,7 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
       fecha: '2026-08-05',
       equipo: 'Cuarto Frío de Choque 5HP',
       tipo: 'Preventivo',
-      actividad: 'Limpieza de serpentines evaporadores con hidrolavadora, inspección de presostatos y controlador MT 512.',
+      actividad: 'Limpieza de serpentines evaporadores con hidrolavadora hasta retirar exceso de hielo. Inspección de presostato y relés térmicos.',
       tecnico: 'Ing. Mateo Morales / FrigoServicios',
       repuestos: 'Ninguno',
       estado: 'Operativo'
@@ -33,9 +33,9 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
     {
       id: 3,
       fecha: '2026-08-07',
-      equipo: 'Hiladora de Queso 3HP',
+      equipo: 'Hiladoras de Queso 3HP',
       tipo: 'Correctivo',
-      actividad: 'Reemplazo de potenciómetro de velocidad de aspas en tablero comandado por variador LG.',
+      actividad: 'Reemplazo de potenciómetro en tablero comandado por variador LS. Inspección de retenes, V-rings y chumaceras.',
       tecnico: 'Téc. Mateo Morales',
       repuestos: 'Potenciómetro graduador 10k Ohm',
       estado: 'Operativo'
@@ -75,39 +75,40 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
     setTimeout(() => setAlertaExito(false), 4000);
   };
 
-  // Fichas técnicas completas extraídas del documento Word con imágenes y notas exactas
+  // Base de datos de equipos con texto 100% literal extraído de las 13 tablas del documento Word original
   const equiposDetalle = {
     motobomba: {
       nombre: 'Motobomba Honda GX 120 (Recepción de Leche)',
       imagen: '/images/mantenimiento/image2.png',
       descripcionWord: 'Motobomba Honda GX 120 de alta confiabilidad con eje de toma de fuerza tipo S, diseñada para trasvase pre-operacional en la recepción de leche cruda.',
       especificaciones: [
-        'Modelo: GX 120 (Eje de la toma de fuerza tipo S)',
+        'Modelo: GX 120 (eje de la toma de fuerza tipo S)',
         'Dimensiones (Longitud x Anchura x Altura): 297 x 341 x 318 mm',
         'Peso en seco: 13 Kg',
         'Tipo de motor: 4 tiempos, válvulas en cabeza, monocilíndrico',
         'Cilindrada: 119 cm³',
-        'Potencia máxima: 2,9 kW a 3.600 min⁻¹ (RPM)',
-        'Torsión máxima: 7,4 N.m a 2.500 min⁻¹ (RPM)',
-        'Capacidad de aceite de motor: 0,60 Q (Quarts)',
+        'Potencia máx.: 2,9 kW a 3600 min⁻¹ (rpm)',
+        'Torsión máx.: 7,4 N.m a 2500 min⁻¹ (rpm)',
+        'Capacidad de aceite de motor: 0,60 Q',
         'Capacidad del depósito de combustible: 2,5 Q',
         'Consumo de combustible: 313 g/kWh (230 g/PSh)',
-        'Sistema de enfriamiento: Aire forzado | Enfriamiento magneto transistorizado'
+        'Sistema de enfriamiento: aire forzado',
+        'Sistema de encendido: magneto transistorizado'
       ],
       accionamiento: [
-        '1. Girar la válvula del combustible a la posición "ON".',
-        '2. Mover la palanca del acelerador un poco hacia la izquierda.',
-        '3. Girar la palanca del estrangulador a la posición cerrada.',
-        '4. Girar el interruptor del motor a la posición "ON".',
-        '5. Tirar un poco de la empuñadura del arrancador hasta notar resistencia, y luego tirar con fuerza.',
-        '6. Girar la palanca del estrangulador a la posición abierta a medida que el motor se caliente.',
-        '7. Ajustar la palanca del acelerador a la velocidad deseada.'
+        '1. Girar la válvula del combustible a la posición ON.',
+        '2. Mover la palanca del estrangulador a la posición CERRADO para arrancar en frío.',
+        '3. Mover la palanca del acelerador un poco hacia la izquierda.',
+        '4. Girar el interruptor del motor a la posición ON.',
+        '5. Tirar ligeramente de la empuñadura del arrancador hasta notar resistencia, y luego tirar con fuerza.',
+        '6. A medida que el motor se caliente, girar gradualmente la palanca del estrangulador hacia la posición ABIERTO.',
+        '7. Ajustar la palanca del acelerador para obtener la velocidad del motor deseada.'
       ],
       notaAccionamiento: 'NOTA: No tire de la empuñadura del arrancador de golpe mientras el motor esté en marcha para evitar daños en el mecanismo de arranque.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Comprobación visual de fugas de aceite o gasolina. Verificar protectores, cubiertas, tuercas y pernos. Comprobar nivel de combustible y elemento del filtro de aire.' },
-        { frec: 'SEMANAL', act: 'Extraer el polvo o la suciedad excesiva en torno al silenciador y arrancador. Comprobar nivel de aceite del motor.' },
-        { frec: 'SEMESTRAL', act: 'Cambio del sello mecánico de la bomba para evitar derrames y contaminación del producto.' }
+        { frec: 'DIARIA', act: 'Comprobación del estado general del motor. Mirar en busca de signos de fugas de aceite o gasolina. Comprobar que no hay protectores, cubiertas, tuercas y pernos sueltos o apretados de forma inadecuada. Mirar el nivel del combustible. Mirar el elemento del filtro de aire.' },
+        { frec: 'SEMANAL', act: 'Extraer el polvo o la suciedad acumulada alrededor del silenciador y arrancador. Comprobar nivel de aceite del motor.' },
+        { frec: 'SEMESTRAL', act: 'Cambio de sello para evitar derrames de leche.' }
       ],
       recomendaciones: 'Mantener apartado de materiales inflamables. No fumar cerca del equipo. Suministrar combustible y ejecutar mantenimiento siempre con el motor apagado y en frío.'
     },
@@ -116,211 +117,224 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
       imagen: '/images/mantenimiento/image3.png',
       descripcionWord: 'Electrobomba centrífuga de alta eficiencia para impulsión de agua tratada y suero lácteo en los tanques de cuajado.',
       especificaciones: [
-        'Potencia de 1500W (2 HP)',
+        'Potencia de 1500W',
+        '2 HP',
         'Eficiencia energética: 71.9%',
-        'Revoluciones: 3.450 RPM',
-        'Voltaje de operación: 110 / 220 V',
-        'Frecuencia: 60 Hz'
+        'Revoluciones: 3450 RPM',
+        'Voltaje: 110/220 V',
+        'Frecuencia: 60 HZ'
       ],
       accionamiento: [
-        '1. Conectar a una corriente eléctrica segura.',
+        '1. Conectar a una corriente eléctrica.',
         '2. Presionar el botón de color verde que se encuentra en la caja de control.'
       ],
-      notaAccionamiento: 'NOTA: Presionar el botón de color rojo para apagar o detener el equipo inmediatamente.',
+      notaAccionamiento: 'Nota: Presionar el botón de color rojo para apagar o parar el equipo.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Comprobar que la velocidad y caudal correspondan a la salida. Examinar bridas para detectar fugas, fisuras u oxidación.' },
-        { frec: 'SEMANAL', act: 'Comprobar puntos de montaje. Inspeccionar sello mecánico, acoplamientos y filtros. Limpiar ventilaciones del motor.' },
-        { frec: 'SEMESTRAL', act: 'Lubricación de cojinetes. Comprobar elevación respecto a la base. Cambiar acoplamientos del motor.' }
+        { frec: 'DIARIA', act: 'Comprobar que la velocidad de la bomba de agua se corresponde con la salida. Examinar las bridas para detectar fugas, fisuras, oxidación.' },
+        { frec: 'SEMANAL', act: 'Comprobar que los puntos de montaje son seguros. Inspeccionar el sello mecánico. Inspeccionar los acoplamientos y filtros de la bomba. Inspeccionar y limpiar las ventilaciones del motor.' },
+        { frec: 'SEMESTRAL', act: 'Lubricación de cojinetes. Comprobar si hay signos de que la elevación de la bomba respecto a la base haya cambiado. Cambiar acoplamientos del motor.' }
       ],
-      recomendaciones: 'Realizar mantenimiento frecuente para evitar pérdidas de eficiencia. Operar y realizar mantenimiento siempre con el equipo apagado y desenergizado.'
+      recomendaciones: 'Realizar un mantenimiento frecuente es una manera de garantizar la eficiencia y prevenir pérdidas imprevistas. Operar y realizar mantenimiento siempre con el equipo apagado.'
     },
     hiladoras: {
       nombre: 'Hiladoras de Queso (Área de Hilado)',
       imagen: '/images/mantenimiento/image4.png',
       descripcionWord: 'Equipo industrial elaborado en acero inoxidable tipo 304 en partes de contacto con alimentos y tipo 430 en cámaras de vapor y aire caliente.',
       especificaciones: [
-        'Construcción: Acero inoxidable tipo 304 en contacto con alimentos; tipo 430 en cámaras de aire caliente y vapor.',
+        'Elaborado en acero inoxidable tipo 304 en las partes que hacen contacto con los alimentos y partes exteriores, tipo 430 en las cámaras de aire caliente y cámara de vapor.',
         'Barras redondas de acero inoxidable tipo 304 calibre 5/16".',
-        'Acople de transmisión: Cadena y piñones paso 50 entre eje reductor y eje principal.',
-        'Capacidad: 1.600 Litros de leche cuajada.',
-        'Sistema de agitación: Paletas y cuchillas de corte.',
-        'Motor reductor: Marca SITI de 3 HP con 3 N.m de torque.',
-        'Control eléctrico: Caja de controles comandada por variador de frecuencia marca LS (LG).'
+        'Acople de cadena y piñones paso 50 para conectar eje reductor con eje principal de la máquina.',
+        'Capacidad de 1600L de leche cuajada.',
+        'Sistema de agitación con paletas y cuchillas.',
+        'Motor reductor marca SITI de 3 HP con 3 newton/metro de torque.',
+        'Caja de controles comandada por variador de frecuencia marca LS.'
       ],
       accionamiento: [
         '1. Colocar el aspa dentro de la máquina y asegurarla adecuadamente con los tornillos.',
         '2. Cerrar el orificio de salida del queso caliente colocándole la tapa y ajustando la abrazadera.',
-        '3. Abrir las válvulas de paso de vapor.',
-        '4. Encender desde el interruptor del tablero de control.',
-        '5. Variar la velocidad de rotación del aspa girando la perilla del potenciómetro.'
+        '3. Abrir las válvulas de vapor.',
+        '4. Encender desde el suiche que se encuentra en el tablero de control.',
+        '5. Se le da la velocidad requerida al aspa girando la perilla del potenciómetro.'
       ],
-      notaAccionamiento: 'NOTA: En caso de avería del potenciómetro principal, utilizar el potenciómetro de regulado de volumen auxiliar en la tarjeta interna mientras se instala el repuesto original.',
+      notaAccionamiento: 'NOTA: Si falla el potenciómetro, utilizar el potenciómetro de regulado de volumen de la tarjeta electrónica mientras se instala el repuesto original.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Ejecutar procedimiento de limpieza y desinfección según POES. Inspeccionar aspas por fisuras.' },
-        { frec: 'SEMANAL', act: 'Revisar conexiones eléctricas, limpiar tablero, inspeccionar conductos y válvulas de vapor.' },
-        { frec: 'MENSUAL', act: 'Limpiar depósitos de grasa en la tapa del ventilador del motor. Controlar retenes, V-rings, chumaceras y variador de frecuencia.' }
+        { frec: 'DIARIA', act: 'Realizar procedimiento de limpieza y desinfección de acuerdo con el programa POES. Inspeccionar el estado de las aspas.' },
+        { frec: 'SEMANAL', act: 'Revisar las conexiones eléctricas. Limpiar el tablero de control. Inspeccionar conductos y válvulas por donde transita el vapor.' },
+        { frec: 'MENSUAL', act: 'MOTOR: Eliminar los depósitos de grasa y suciedad en la tapa del ventilador para garantizar el flujo de aire fresco y evitar el sobrecalentamiento. Controlar retenes y V-rings, chumaceras y tarjetas de variador.' }
       ],
-      recomendaciones: 'Para desmontaje interno del motor usar personal técnico calificado. Realizar el procedimiento de limpieza con el equipo completamente apagado y desconectado.'
+      recomendaciones: 'Si es necesario desmontar el motor y acceder a sus partes internas, esta tarea debe llevarse a cabo por personal altamente cualificado.'
     },
     moldeadora: {
       nombre: 'Moldeadora Industrial 250kg (Área de Moldeo)',
       imagen: '/images/mantenimiento/image5.jpeg',
-      descripcionWord: 'Moldeadora automática con dosificación regulable de 400g a 2500g por unidad y sistema neumático de moldeo en bloque.',
+      descripcionWord: 'Moldeadora automática fabricada en acero inoxidable 304 con dosificación de 400g a 2500g y sistema de inyección mediante tornillos paralelos sinfín.',
       especificaciones: [
-        'Material de fabricación: Acero inoxidable tipo 304 y plástico industrial sanitario.',
-        'Dimensiones: Largo 170 cm x Ancho 90 cm x Alto 165 cm.',
-        'Capacidad de tolva: 250 kg | Capacidad dosificadora: 400 g a 2.500 g.',
-        'Alimentación: 220V trifásico | Potencia: 3 HP.',
-        'Tracción: Motorreductor sinfín-corona y piñones externos.',
+        'Material de fabricación: Acero inoxidable tipo 304 y plástico industrial sanitario',
+        'Dimensiones: Largo 170cm x ancho 90cm x 165cm',
+        'Capacidad de la tolva: 250kg',
+        'Capacidad dosificadora: 400g a 2500g',
+        'Voltaje: 220V trifásico',
+        'Potencia: 3HP',
+        'Tracción: Motorreductor sinfín corona y piñones externos.',
         'Sistema de inyección y agitación: Tornillos paralelos tipo sinfín.',
-        'Capacidad de producción: 8 a 20 unidades por minuto.'
+        'Capacidad de producción: 8 a 20 unidades por minuto dependiendo la cantidad a dosificar.'
       ],
       accionamiento: [
-        '1. Colocar los dos tornillos sinfín en la tolva asegurándose de que coincidan en sus respectivos ejes marcados.',
-        '2. Colocar las piezas de centro, empaque, tapa brida y apretar simultáneamente las mariposas de ajuste.',
+        '1. Colocar los tornillos dentro de la tolva y se conectan con los respectivos ejes, teniendo en cuenta la marcación que tiene cada eje y cada tornillo.',
+        '2. Colocar las piezas de centro, empaque, tapa brida y se aprietan las mariposas al mismo tiempo para que entre pareja la pieza.',
         '3. Energizar el switch de muletilla y encender el variador.',
-        '4. Graduar la velocidad en el potenciómetro y ajustar el temporizador para la dosificación requerida.'
+        '4. Con el potenciómetro se le da la velocidad requerida y con el temporizador la dosificación.'
       ],
       notaAccionamiento: 'NOTA: Si los cilindros dosificadores presentan resistencia o trabamiento, verificar la presión del compresor neumático de aire.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Ejecutar procedimiento POES de limpieza y desinfección.' },
-        { frec: 'SEMANAL', act: 'Limpiar tablero de control, revisar mangueras de aire neumático y cables de alimentación. Lavado con desincrustante.' },
-        { frec: 'MENSUAL', act: 'Eliminar depósitos de grasa del ventilador del motor, verificar rodamientos, retenes y lubricar chumaceras.' }
+        { frec: 'DIARIA', act: 'Realizar procedimiento de limpieza y desinfección de acuerdo al programa POES.' },
+        { frec: 'SEMANAL', act: 'Limpiar el tablero de control y verificar que no queden materiales o sustancias extrañas que puedan interferir en su buen funcionamiento. Mangueras de aire neumático y cables de alimentación. Lavado con desincrustante.' },
+        { frec: 'MENSUAL', act: 'MOTOR: Eliminar los depósitos de grasa y suciedad en la tapa del ventilador. Inspeccionar rodamientos, retenes y lubricar chumaceras.' }
       ],
-      recomendaciones: 'Evitar manipular los tornillos sinfín con la máquina encendida. Desconectar la fuente eléctrica antes de lavar o dar mantenimiento.'
+      recomendaciones: 'Si es necesario desmontar el motor y acceder a sus partes internas, esta tarea debe llevarse a cabo por personal altamente cualificado.'
     },
     ventiladores: {
       nombre: 'Ventiladores Industriales 26" (Área de Moldeo)',
       imagen: '/images/mantenimiento/image6.jpeg',
       descripcionWord: 'Ventilador metálico oscilante de 26 pulgadas y 7800 CFM de caudal para circulación continua de aire en salas de proceso.',
       especificaciones: [
-        'Construcción: Metálico reforzado.',
-        'Diámetro: 26 pulgadas | Potencia: 230 W.',
-        'Motor: Durable y de alta potencia.',
-        'Velocidades: 3 posiciones | Oscilación: 90°.',
-        'Trabajo pesado: Operación continua | Caudal: 7.800 CFM.',
-        'Número de aspas: 3 aspas de aluminio.'
+        'Metálico',
+        'Diámetro: 26 pulgadas',
+        'Potencia: 230W',
+        'Motor: durable y alta potencia',
+        'Velocidades: 3',
+        'Oscilación: 90°',
+        'Trabajo pesado: operación continua',
+        'Caudal: 7800CFM',
+        'Número de aspas: 3'
       ],
       accionamiento: [
         '1. Enchufar a una corriente eléctrica.',
-        '2. Mover la perilla de control de velocidad de acuerdo a la necesidad (los números 0, 1, 2, 3 corresponden a apagado, bajo, medio y alto).'
+        '2. Mover el control de velocidad de acuerdo a su necesidad: los números 0, 1, 2, 3 corresponden a apagado, bajo, medio y alto respectivamente.'
       ],
-      notaAccionamiento: 'NOTA: Mantener el rejillado de protección limpio para asegurar el caudal nominal de 7.800 CFM.',
+      notaAccionamiento: 'NOTA: Mantener el rejillado de protección limpio para asegurar el caudal nominal de 7800 CFM.',
       mantenimiento: [
-        { frec: 'SEMANAL', act: 'Realizar procedimiento de limpieza en rejas y aspas. Revisar conexiones eléctricas y cableado.' }
+        { frec: 'SEMANAL', act: 'Realizar procedimiento de limpieza. Revisar conexión eléctrica.' }
       ],
-      recomendaciones: 'Apagar y desconectar al terminar la jornada laboral. No introducir objetos entre las aspas en movimiento.'
+      recomendaciones: 'Encender únicamente cuando se vaya a usar. Desconectar al terminar la jornada laboral. Realizar el procedimiento de limpieza con el equipo apagado.'
     },
     extractores: {
       nombre: 'Extractores de Aire 14" (Área de Moldeo)',
       imagen: '/images/mantenimiento/image6.jpeg',
       descripcionWord: 'Extractor de aire metálico de 14 pulgadas para evacuación de vapor y humedad ambiental.',
       especificaciones: [
-        'Construcción: Metálico industrial.',
-        'Medida: 14 pulgadas (35 cm).',
-        'Caudal: 580 cm³/h.',
-        'Potencia: 1/8 HP | RPM: 1.700 RPM.'
+        'Metálico',
+        'Medida: 14 pulgadas, 35 cm',
+        'Caudal: 580 cm³/h',
+        'Potencia: 1/8HP',
+        'RPM: 1700'
       ],
       accionamiento: [
-        '1. Mover el suiche del taco hacia arriba (posición ON).'
+        '1. Mover el suiche del taco hacia arriba (ON).'
       ],
-      notaAccionamiento: 'NOTA: Esperar a que el extractor se seque totalmente tras el lavado antes de reanudar la marcha.',
+      notaAccionamiento: 'NOTA: Esperar hasta que se seque completamente antes de encenderlo tras labores de aseo.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Ejecutar procedimiento de limpieza y desinfección POES. Inspeccionar conexiones eléctricas.' }
+        { frec: 'DIARIA', act: 'Realizar procedimiento de limpieza y desinfección. Ver A-Z Programa de limpieza y desinfección. Inspeccionar conexión eléctrica.' }
       ],
-      recomendaciones: 'Apagar al terminar la jornada laboral. Ejecutar la limpieza siempre con el equipo apagado y desenergizado.'
+      recomendaciones: 'Apagar al terminar la jornada laboral. Realizar el procedimiento de limpieza con el equipo apagado. Esperar hasta que se seque para encenderlo.'
     },
     plancha_selladora: {
       nombre: 'Plancha Selladora en Baquelita (Empaque)',
       imagen: '/images/mantenimiento/image7.png',
       descripcionWord: 'Plancha termose selladora fabricada en baquelita con suela de aluminio térmico y protector anti-incendio.',
       especificaciones: [
-        'Potencia: 1200 Watts, 120 Vac, 60 Hz.',
-        'Cuerpo en baquelita de alta resistencia térmica para manipular sin riesgo de quemaduras.',
-        'Suela de planchado en aluminio purificado y completamente pulida.',
-        'Cable de alimentación de 1.8 metros con aislamiento reforzado.',
-        'Dispositivo de seguridad interno contra sobrecalentamiento e incendios.'
+        'Potencia: 1200 Watts, 120 Vac 60 Hz.',
+        'Su cuerpo está fabricado en baquelita, el cual permite que el usuario lo pueda manipular con tranquilidad, ya que no alcanza altas temperaturas.',
+        'Cuenta con una suela de planchado en aluminio completamente pulida.',
+        'Tiene un cable de alimentación con una longitud de 1.8 metros.',
+        'Cuenta con un dispositivo de seguridad interior que evita incendio y el daño del producto cuando el controlador de temperatura se dañe.'
       ],
       accionamiento: [
-        '1. Conectar el cable a la red eléctrica de 120V.',
-        '2. Graduar la temperatura en el termostato giratorio según el calibre de la bolsa de empaque.'
+        '1. Conectar a tomas en buenas condiciones.',
+        '2. Graduar la temperatura en el termostato según el calibre del empaque.'
       ],
       notaAccionamiento: 'NOTA: No dejar la suela de aluminio sobre superficies combustibles mientras se encuentre energizada.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Limpiar la suela de aluminio con paño seco para eliminar residuos plásticos.' },
-        { frec: 'MENSUAL', act: 'Revisión del cableado y verificación del dispositivo de protección térmica.' }
+        { frec: 'DIARIA', act: 'Realizar procedimiento de limpieza y desinfección.' },
+        { frec: 'MENSUAL', act: 'Cambiar el teflón. Inspeccionar cableado eléctrico.' }
       ],
-      recomendaciones: 'Desconectar inmediatamente al finalizar el turno de empaque. No lavar con chorros de agua directo.'
+      recomendaciones: 'No sumergir en agua el cuerpo principal. Conectar solo a tomas en buenas condiciones. Desconectar al terminar.'
     },
     cuartos_frios: {
       nombre: 'Cuartos Fríos (Choque 5HP y Almacenamiento 7.5HP)',
       imagen: '/images/mantenimiento/image8.jpeg',
       descripcionWord: 'Sistemas de refrigeración industrial con aislamiento en poliuretano e inyección de frío para maduración y conservación de queso.',
       especificaciones: [
-        'Cuarto de Choque: 212 x 356 x 200 cm, Poliuretano 35%, Evaporador 14.500 BTU, Condensador 5 HP.',
-        'Cuarto Almacenamiento: 530 x 250 x 240 cm, Evaporador 24.000 BTU, Condensador 7.5 HP con 2 motores axiales.',
-        'Controladores: Cuadros metálicos con termostatos digitales Fullgauge MT 512 y relés térmicos.'
+        'Cuarto de choque: Está fabricado en modulación inyectada en poliuretano al 35% de aislamiento térmico de densidad de alto rendimiento con unas medidas de 212 x 356 x 200cm. Cuenta con un evaporador de 14.500 BTU y una unidad condensadora de 5 HP con motor del ventilador de 1/3 HP.',
+        'Cuarto de almacenamiento producto terminado: Fabricado en poliuretano con medidas de 530 x 250 x 240cm. Cuenta con un evaporador de 24.000 BTU y una unidad condensadora de 7.5 HP con dos motores de ventilador axiales de 1/2 HP.',
+        'Cuadros metálicos con termostatos digitales Fullgauge MT 512 y relés térmicos.'
       ],
       accionamiento: [
-        '1. Verificar conexiones eléctricas en el cuadro general.',
-        '2. Encender la unidad condensadora girando la perilla izquierda (luz piloto roja).',
-        '3. Encender los evaporadores girando la perilla derecha (luz piloto verde).'
+        '1. Verificar las conexiones eléctricas.',
+        '2. Cuarto de almacenamiento: Encender la unidad condensadora girando la perilla que se encuentra al lado izquierdo (al encenderlo se ilumina un bombillo de color rojo).',
+        '3. Encender los evaporadores girando la perilla del lado derecho (se ilumina un bombillo verde).'
       ],
       notaAccionamiento: 'NOTA: En caso de congelamiento en el serpentín evaporador, apagar la condensadora y mantener el evaporador encendido para deshielo forzado.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Limpieza y desinfección del área. Registro diario de temperatura en planilla.' },
-        { frec: 'SEMANAL', act: 'Lavado de serpentines evaporadores con hidrolavadora. Inspección de cortinas plásticas.' },
-        { frec: 'MENSUAL', act: 'Limpieza de cuadro eléctrico, presostatos, sensores y ajuste de contactos.' },
-        { frec: 'TRIMESTRAL', act: 'Verificación de tarjetas electrónicas, lubricación de chumaceras y recarga de gas refrigerante.' }
+        { frec: 'DIARIA', act: 'Realizar procedimiento de limpieza y desinfección. Tomar registro de temperatura.' },
+        { frec: 'SEMANAL', act: 'Limpiar los evaporadores con la hidrolavadora, hasta retirar el exceso de hielo producido.' },
+        { frec: 'MENSUAL', act: 'Limpiar el tablero de control. Limpiar e inspeccionar los serpentines. Inspeccionar presostato, sensores de temperatura y lubricar los motores si es necesario. Ajustar los contactos del solenoide. Inspeccionar la tubería por si hay fugas.' },
+        { frec: 'TRIMESTRAL', act: 'Verificar todas las tarjetas electrónicas incluyendo los variadores. Lubricación de chumaceras. Limpieza de tubería de drenaje. Revisiones de aceite mediante mirilla: Confirmar que los niveles de aceite estén a la mitad de la mirilla.' }
       ],
       recomendaciones: 'Mantener las puertas herméticamente cerradas. Evitar obstruir la circulación de aire de las colmenas evaporadoras.'
     },
     caldera: {
       nombre: 'Caldera Pirotubular 60 BHP (Servicios Térmicos)',
       imagen: '/images/mantenimiento/image9.png',
-      descripcionWord: 'Caldera automática pirotubular de 3 pasos para generación continua de vapor de proceso alimentario alimentada por gas GLP.',
+      descripcionWord: 'Caldera Pirotubular: agua dentro de la caldera y llama dentro de los tubos. De tres pasos. Automática.',
       especificaciones: [
-        'Tipo: Pirotubular de 3 pasos automática.',
-        'Capacidad: 60 BHP | Eficiencia térmica: 97%.',
-        'Combustible: Gas Licuado de Petróleo (GLP).',
-        'Accesorios: Quemador de 1.200.000 BTU, manómetro, presostato de control y modulador L91.',
-        'Tanque de suministro de agua: 1.200 Litros | Bomba de agua: 3 HP, 3.450 RPM, 220V.'
+        'Caldera Pirotubular: agua dentro de la caldera y llama dentro de los tubos.',
+        'De tres pasos | Automática',
+        'Capacidad: 60 BHP',
+        'Eficiencia térmica: 97%',
+        'Combustible: gas licuado de petróleo (GLP).',
+        'Un manómetro',
+        'Un presurector: control de presión.',
+        'Un L91: controla el sistema de modificación de la máquina.',
+        'Quemador de 1.200.000 BTU',
+        'Tanque de agua con capacidad de 1200 litros.',
+        'Bomba de agua: Capacidad 3HP, 220V, Eficiencia 82,5%, RPM 3450'
       ],
       accionamiento: [
-        '1. Abrir la válvula de paso de gas GLP.',
-        '2. Verificar que el tanque de agua de 1.200L contenga nivel adecuado y abrir válvulas.',
-        '3. Encender la bomba de agua impulsando la perilla superior izquierda a la derecha.',
-        '4. Encender el quemador moviendo la perilla superior derecha en modo automático.'
+        '1. Abrir válvula de gas.',
+        '2. Verificar que el tanque del agua esté lleno.',
+        '3. Abrir válvulas de paso del agua.',
+        '4. Encender la bomba de agua: mover hacia la derecha la perilla que se encuentra en la parte superior izquierda del tablero.',
+        '5. Encender el quemador: mover hacia la derecha la perilla que se encuentra en la parte superior derecha del tablero.'
       ],
-      notaAccionamiento: 'NOTA: Realizar purga diaria abriendo la válvula de la columna de agua y la válvula posterior hasta eliminar lodos y sedimentos.',
+      notaAccionamiento: 'Nota: Las dos perillas se mueven hacia el lado derecho para que la máquina trabaje de manera automática.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Limpieza del área. Purgar la columna de agua y el fondo del cuerpo de la caldera.' },
-        { frec: 'SEMANAL', act: 'Limpieza externa del cuerpo y verificación de niveladores de presión.' },
-        { frec: 'SEMESTRAL', act: 'Mantenimiento preventivo especializado en pirotubos, desincrustación química e inspección por técnico acreditado.' }
+        { frec: 'DIARIA', act: 'Realizar procedimiento de limpieza a su alrededor. Purgar antes de encender: Abrir la válvula de color rojo que se encuentra en la columna de agua, dejar abierta hasta que salga agua clara, hacer el mismo proceso con la válvula, también de color rojo, que se encuentra en la parte trasera de la caldera.' },
+        { frec: 'SEMANAL', act: 'Realizar procedimiento de limpieza en la parte externa.' },
+        { frec: 'SEMESTRAL', act: 'Limpiar tubería. Verificar si hay fugas. Revisar sistema de control. Realizar limpieza del quemador.' }
       ],
-      recomendaciones: 'El mantenimiento semestral interno debe ser efectuado exclusivamente por un técnico calificado de calderas de vapor.'
+      recomendaciones: 'El mantenimiento semestral lo debe realizar un experto en manejo de calderas.'
     },
     planta_electrica: {
       nombre: 'Planta Eléctrica Cummins 80 KVA (Respaldo de Energía)',
       imagen: '/images/mantenimiento/image10.jpeg',
       descripcionWord: 'Grupo electrógeno con motor diésel Cummins 4BTA3.9-G2 y alternador Marathon de 80 KVA para respaldo automático de la planta.',
       especificaciones: [
-        'Motor: Cummins 4BTA3.9-G2, 4 cilindros en línea, 4 tiempos, turbocargado.',
-        'Potencia Standby: 99 BHP (73,9 kW) a 1.800 RPM | Gobernador electrónico.',
-        'Capacidad lubricante: 2,9 galones | Capacidad refrigerante radiador: 5 galones.',
-        'Generador: Marathon sincrónico, 80 KVA, 3 fases, 12 hilos, factor 0.8, 60 Hz, eficiencia 92%.'
+        'Características motor: Marca Cummins, Motor 4BTA3.9-G2, Cilindros: 4 en línea, Tiempos: 4, Desplazamiento: 3,9, Velocidad de giro: 1800 RPM, Potencia Standby: 73,9 Kw (99,0 bhp), Tipo de gobernador: electrónico, Aspiración: Turbocargado/Post Enfriado, Diámetro: 102mm, Carrera: 120mm, Capacidad lubricante: 2,9 gal, Capacidad refrigerante del radiador: 5 gal, Tipo de aire: seco.',
+        'Características generador (alternador): Marca Marathon, Tipo: sincrónico, Potencia Standby: 80 Kva, Fases: 3, Conexión: 12 hilos, Factor potencia: 0,8, Frecuencia: 60, Número de polos: 4, Tipo de breaker: Termomagnético, Sistema de excitación: Autoexcitado, Eficiencia: 92%.'
       ],
       accionamiento: [
-        '1. MODO MANUAL: Presionar el botón "MANUAL" y mantener oprimido el botón verde de arranque.',
-        '2. MODO AUTOMÁTICO: Presionar el botón "AUTO" (luz piloto roja encendida) para conmutación ante fallos de red.'
+        'MODO MANUAL: Oprimir el botón MANUAL. Mantener oprimido el botón verde hasta que encienda el equipo.',
+        'MODO AUTOMÁTICO: Presionar el botón AUTO, inmediatamente se enciende un led de color rojo.',
+        'Es recomendable mantener la planta en modo automático, de esta manera los demás equipos seguirán trabajando de forma normal en caso de que no haya energía eléctrica.'
       ],
       notaAccionamiento: 'NOTA: Mantener el selector en modo AUTO para garantizar la transferencia automática de energía durante cortes del servicio público.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Limpieza externa y del área perimetral de la planta.' },
-        { frec: 'SEMANAL', act: 'Suministrar combustible ACPM. Encender 10 minutos para descarte de fallos si no ha habido cortes.' },
-        { frec: 'MENSUAL', act: 'Cambio de aceite lubricante, sustitución de filtros de combustible y aire, y revisión del radiador.' }
+        { frec: 'DIARIA', act: 'Realizar procedimiento de limpieza en la parte externa de la planta y a su alrededor.' },
+        { frec: 'SEMANAL', act: 'Agregar combustible (ACPM). Prender en caso de que no haya sido utilizada para descartar fallas.' },
+        { frec: 'MENSUAL', act: 'Cambio de aceite lubricante. Cambio de filtros de combustible y de aire. Revisión de radiador.' }
       ],
-      recomendaciones: 'Asegurar ventilación suficiente para evacuar calor y gases de escape. Evitar sobrecargar la planta por encima del régimen máximo nominal.'
+      recomendaciones: 'Instalar en un lugar de fácil acceso y buenas condiciones de iluminación para facilitar las operaciones de mantenimiento. Es importante asegurarse de que la planta eléctrica disponga de suficiente ventilación para mantenerlo refrigerado y eliminar el exceso de emanaciones gaseosas y de calor producidas por la combustión del motor. Sobrecarga de la planta eléctrica: NO se debe sobrecargar la planta eléctrica una vez que esté funcionando, aunque están diseñados para soportar condiciones de sobrecarga por un tiempo breve durante el arranque. Si una planta eléctrica funciona durante mucho tiempo en condiciones de sobrecarga (Es decir, a un régimen por encima del régimen máximo de su capacidad) podrán ocurrir varias cosas, como: Recalentamiento del sistema de refrigeración, Recalentamiento de las bobinas del alternador, Disminución de la viscosidad del aceite (Espesor) con la resultante pérdida de presión del aceite, Reducción de la vida útil de la planta eléctrica.'
     },
     compresor: {
       nombre: 'Compresor 2HP (Área Neumática)',
@@ -328,12 +342,12 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
       descripcionWord: 'Compresor de 80-120psi de presión con tanque de 170 litros de capacidad. Cuenta con un motor de trabajo directo lubricado con aceite para aumentar la vida útil y un par de manómetros junto a un regulador de presión que permite conocer y cambiar sus respectivos niveles.',
       especificaciones: [
         'Potencia de 750W',
-        '2 HP',
-        'Válvula de emergencia',
+        '2HP',
+        'Válvula de emergencia.',
         'Eficiencia energética: 75.2%',
-        'Revoluciones: 3.440 RPM',
-        'Voltaje: 220 / 440 V',
-        'Frecuencia: 60 Hz'
+        'Revoluciones 3440 rpm',
+        'Voltaje: 220/440',
+        'Frecuencia 60HZ'
       ],
       accionamiento: [
         '1. Enchufar a una corriente eléctrica.',
@@ -342,11 +356,11 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
       ],
       notaAccionamiento: 'NOTA: El funcionamiento del compresor es completamente automático y es controlado por el interruptor de presión que hace que pare cuando la presión en el receptor de aire alcanza el nivel máximo y vuelve a arrancar cuando baja a un nivel menor.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Revisar el nivel de aceite del elemento de bombeo antes de cada uso. Verificar si la polea está en buenas condiciones, de lo contrario, debe ser cambiada. Inspeccionar la válvula de anti retorno, si hay fugas se debe reparar o cambiar.' },
-        { frec: 'SEMANAL', act: 'Abrir el recipiente del filtro, extraerlo y sacudirlo para remover la suciedad acumulada. Extraer el aire comprimido remanente en el depósito o calderín desenroscando la válvula de purga inferior.' },
-        { frec: 'QUINCENAL', act: 'Cambiar el aceite para que este preserve sus características lubricantes. Realizar limpieza externa en tanque, motor y accesorios.' }
+        { frec: 'DIARIA', act: 'Revisar el nivel de aceite del elemento de bombeo antes de cada uso. Verificar si la polea está en buenas condiciones, de lo contrario, debe ser cambiada por otra. Inspeccionar la válvula de anti retorno, si hay fugas se debe reparar o cambiar.' },
+        { frec: 'SEMANAL', act: 'Abrir el recipiente del filtro, extraerlo y sacudirlo para remover la suciedad acumulada en éste. Extraer el aire comprimido remanente en el depósito o calderín. Este proceso se realiza desenroscando la válvula de purga que se encuentra en la parte inferior del calderín.' },
+        { frec: 'QUINCENAL', act: 'Cambiar el aceite, para que éste preserve sus características lubricantes que le permitan al motor funcionar con adecuada potencia. Realizar procedimiento de limpieza en la parte externa, como tanque, motor y algunos accesorios, teniendo la máxima precaución y evitar que se filtre algún líquido en su parte interna.' }
       ],
-      recomendaciones: 'No realizar las labores de mantenimiento del compresor de aire sin antes desconectarlo de la corriente eléctrica. Evitar que el agua o líquidos inflamables entren en contacto con el motor. No ubicar objetos inflamables cerca. No operar en espacios cerrados ni cercanos a llamas y mantener bien ventilado.'
+      recomendaciones: 'No realizar las labores de mantenimiento del compresor de aire sin antes desconectarlo de la corriente eléctrica. Evitar que el agua o líquidos inflamables entren en contacto con el motor del compresor de aire. No ubicar objetos inflamables cerca del compresor. No operar en espacios cerrados ni cercanos a llamas y bien ventilados.'
     }
   };
 
@@ -390,7 +404,7 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
 
         <div class="section-title">CONTROL DE CAMBIOS</div>
         <table class="data-table">
-          <thead><tr><th>Versión</th><th>Descripción del Cambio</th><th>Solicitante</th><th>Fecha</th></tr></thead>
+          <thead><tr><th>Versión</th><th>Descripción del Cambio</th><th>Solicitante (Cargo)</th><th>Fecha</th></tr></thead>
           <tbody>
             <tr><td>01</td><td>Creación del documento</td><td>Jefe de calidad</td><td>12/01/2016</td></tr>
             <tr><td>02</td><td>Actualización de procedimientos de mantenimiento equipos</td><td>Jefe de calidad</td><td>25/08/2019</td></tr>
@@ -1135,7 +1149,7 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                   </table>
                 </div>
               </div>
-              <div className="modal-footer border-top-0 p-3 bg-light" style={{ borderBottomLeftRadius: '18px', borderBottomRightRadius: '18px' }}>
+              <div className="modal-footer border-top-0 p-3 bg-light" style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}>
                 <button type="button" className="btn btn-secondary btn-sm" onClick={() => setMostrarHistorial(false)}>
                   Cerrar
                 </button>
