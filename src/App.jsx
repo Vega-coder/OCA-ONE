@@ -28,6 +28,8 @@ function App() {
     roleDefinition,
     isProcedimientosOpen,
     setIsProcedimientosOpen,
+    isMantenimientoOpen,
+    setIsMantenimientoOpen,
     activeCategory,
     setActiveCategory,
     expandedCategories,
@@ -158,18 +160,124 @@ function App() {
             </li>
           )}
 
-          {/* Módulo Mantenimiento de Equipos */}
+          {/* Módulo Mantenimiento de Equipos - Desplegable Multinivel */}
           {isViewAllowedForRole('mantenimiento', userRole, rolesList) && (
-            <li className="mb-1">
+            <li className="nav-item mb-1">
               <button 
-                className={`nav-link text-start w-100 btn border-0 d-flex align-items-center ${currentView === 'mantenimiento' ? 'active' : 'text-white'}`}
-                onClick={() => setCurrentView('mantenimiento')}
+                className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'mantenimiento' ? 'active' : 'text-white'}`}
+                onClick={() => {
+                  setCurrentView('mantenimiento');
+                  setIsMantenimientoOpen(!isMantenimientoOpen);
+                }}
               >
-                <div className="icon-badge icon-badge-indigo me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                  <i className="bi bi-tools"></i>
-                </div>
-                Mantenimiento de Equipos
+                <span className="d-flex align-items-center">
+                  <div className="icon-badge icon-badge-indigo me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                    <i className="bi bi-tools"></i>
+                  </div>
+                  Mantenimiento de Equipos
+                </span>
+                <i className={`bi bi-chevron-down arrow-rotate ${isMantenimientoOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
               </button>
+              
+              {/* Nivel 2: Categorías Desplegables de Mantenimiento */}
+              {isMantenimientoOpen && (
+                <ul className="sidebar-submenu">
+                  {[
+                    { 
+                      name: 'Equipos de Producción', 
+                      icon: 'bi-gear-wide-connected', 
+                      badgeStyle: 'icon-badge-sky',
+                      subItems: [
+                        { label: 'Motobomba Recepción GX 120', tabId: 'motobomba' },
+                        { label: 'Electrobomba Cuajado 2HP', tabId: 'electrobomba' },
+                        { label: 'Hiladoras de Queso 3HP', tabId: 'hiladoras' },
+                        { label: 'Moldeadora Industrial 250kg', tabId: 'moldeadora' }
+                      ]
+                    },
+                    { 
+                      name: 'Servicios Auxiliares', 
+                      icon: 'bi-lightning-charge-fill', 
+                      badgeStyle: 'icon-badge-amber',
+                      subItems: [
+                        { label: 'Caldera Pirotubular 60 BHP', tabId: 'caldera' },
+                        { label: 'Planta Eléctrica Cummins 80 KVA', tabId: 'planta_electrica' },
+                        { label: 'Compresor 2HP (Área Neumática)', tabId: 'compresor' }
+                      ]
+                    },
+                    { 
+                      name: 'Frío y Ventilación', 
+                      icon: 'bi-snow', 
+                      badgeStyle: 'icon-badge-cyan',
+                      subItems: [
+                        { label: 'Cuartos Fríos (5HP y 7.5HP)', tabId: 'cuartos_frios' },
+                        { label: 'Ventiladores Industriales 26"', tabId: 'ventiladores' },
+                        { label: 'Extractores de Aire 14"', tabId: 'extractores' },
+                        { label: 'Plancha Selladora Baquelita', tabId: 'plancha_selladora' }
+                      ]
+                    }
+                  ].map(cat => {
+                    const isCatExpanded = expandedCategories[cat.name];
+                    return (
+                      <li key={cat.name} className="mb-1">
+                        <button 
+                          className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'mantenimiento' && activeCategory === cat.name ? 'fw-bold' : ''}`}
+                          onClick={() => {
+                            setCurrentView('mantenimiento');
+                            setActiveCategory(cat.name);
+                            setExpandedCategories(prev => ({
+                              ...prev,
+                              [cat.name]: !prev[cat.name]
+                            }));
+                          }}
+                        >
+                          <span className="d-flex align-items-center">
+                            <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                              <i className={`bi ${cat.icon}`}></i>
+                            </div>
+                            {cat.name}
+                          </span>
+                          <i className={`bi bi-chevron-down arrow-rotate ${isCatExpanded ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
+                        </button>
+                        
+                        {/* Nivel 3: Sub-submenú de Equipos */}
+                        {isCatExpanded && (
+                          <ul className="sidebar-sub-submenu">
+                            {cat.subItems.map(item => (
+                              <li key={item.tabId}>
+                                <button
+                                  className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'mantenimiento' && activeCategory === item.label ? 'active-sub-sub' : 'text-white'}`}
+                                  onClick={() => {
+                                    setCurrentView('mantenimiento');
+                                    setActiveCategory(item.label);
+                                  }}
+                                >
+                                  <i className="bi bi-wrench-adjustable me-2 text-warning"></i> {item.label}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  })}
+
+                  {/* FOPME-002 Bitácora Formato */}
+                  <li className="mb-1">
+                    <button 
+                      className={`nav-link-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'mantenimiento' && activeCategory === 'FOPME-002' ? 'fw-bold' : ''}`}
+                      onClick={() => {
+                        setCurrentView('mantenimiento');
+                        setActiveCategory('FOPME-002');
+                      }}
+                    >
+                      <div className="icon-badge icon-badge-emerald me-2" style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                        <i className="bi bi-file-earmark-check-fill"></i>
+                      </div>
+                      Formato Registro (FOPME-002)
+                    </button>
+                  </li>
+                </ul>
+              )}
             </li>
           )}
 
@@ -489,6 +597,8 @@ function App() {
             <Mantenimiento 
               tenantId={activeTenant.id} 
               userRole={userRole} 
+              carpetaActiva={activeCategory}
+              setCarpetaActiva={setActiveCategory}
             />
           )}
           {currentView === 'dashboard' && (

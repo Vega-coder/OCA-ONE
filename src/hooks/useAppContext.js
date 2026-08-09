@@ -36,12 +36,16 @@ export function useAppEngine() {
   const [rolesList, setRolesList] = useState(ROLES_DEFINITIONS);
   const [usuariosDb, setUsuariosDb] = useState([]);
   const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
+  const [isMantenimientoOpen, setIsMantenimientoOpen] = useState(true);
   const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
   const [expandedCategories, setExpandedCategories] = useState({
     'Limpieza y Desinfección': true,
     'Control de Plagas': false,
     'Residuos Sólidos y Líquidos': false,
-    'Agua Potable': false
+    'Agua Potable': false,
+    'Equipos de Producción': true,
+    'Servicios Auxiliares': false,
+    'Frío y Ventilación': false
   });
 
   // Cargar Roles y Usuarios dinámicos desde Supabase DB
@@ -258,6 +262,8 @@ export function useAppEngine() {
     roleDefinition: getRoleDefinition(userRole, rolesList),
     isProcedimientosOpen,
     setIsProcedimientosOpen,
+    isMantenimientoOpen,
+    setIsMantenimientoOpen,
     activeCategory,
     setActiveCategory,
     expandedCategories,

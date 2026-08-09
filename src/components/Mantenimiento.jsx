@@ -1,12 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { canUserDownloadProcedure, canUserEditDocument } from '../lib/permissions';
 
-export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = 'super-admin' }) {
+export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = 'super-admin', carpetaActiva, setCarpetaActiva }) {
   const [mostrarHistorial, setMostrarHistorial] = useState(false);
   const [mostrarTextoCompleto, setMostrarTextoCompleto] = useState(false);
   const [mostrarRegistroForm, setMostrarRegistroForm] = useState(false);
   const [equipoSeleccionadoTab, setEquipoSeleccionadoTab] = useState('motobomba');
   const [alertaExito, setAlertaExito] = useState(false);
+
+  // Sincronizar selección desde el Sidebar
+  useEffect(() => {
+    if (!carpetaActiva) return;
+    const mapaTabs = {
+      'Motobomba Recepción GX 120': 'motobomba',
+      'Electrobomba Cuajado 2HP': 'electrobomba',
+      'Hiladoras de Queso 3HP': 'hiladoras',
+      'Moldeadora Industrial 250kg': 'moldeadora',
+      'Caldera Pirotubular 60 BHP': 'caldera',
+      'Planta Eléctrica Cummins 80 KVA': 'planta_electrica',
+      'Compresor 2HP (Área Neumática)': 'compresor',
+      'Cuartos Fríos (5HP y 7.5HP)': 'cuartos_frios',
+      'Ventiladores Industriales 26"': 'ventiladores',
+      'Extractores de Aire 14"': 'extractores',
+      'Plancha Selladora Baquelita': 'plancha_selladora'
+    };
+
+    if (mapaTabs[carpetaActiva]) {
+      setEquipoSeleccionadoTab(mapaTabs[carpetaActiva]);
+    } else if (carpetaActiva === 'FOPME-002') {
+      setMostrarRegistroForm(true);
+    }
+  }, [carpetaActiva]);
 
   // Registros de mantenimiento realizados (FOPME-002)
   const [registrosMantenimiento, setRegistrosMantenimiento] = useState([
