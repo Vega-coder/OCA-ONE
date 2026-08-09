@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { canUserDownloadProcedure, canUserEditDocument } from '../lib/permissions';
-import { MAN_PME_FULL_PARAGRAPHS } from '../domain/manPmeFullText';
 
 export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = 'super-admin' }) {
   const [mostrarHistorial, setMostrarHistorial] = useState(false);
@@ -76,22 +75,24 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
     setTimeout(() => setAlertaExito(false), 4000);
   };
 
-  // Fichas técnicas completas extraídas palabra por palabra del documento Word
+  // Fichas técnicas completas extraídas del documento Word con imágenes y notas exactas
   const equiposDetalle = {
     motobomba: {
       nombre: 'Motobomba Honda GX 120 (Recepción de Leche)',
+      imagen: '/images/mantenimiento/image2.png',
+      descripcionWord: 'Motobomba Honda GX 120 de alta confiabilidad con eje de toma de fuerza tipo S, diseñada para trasvase pre-operacional en la recepción de leche cruda.',
       especificaciones: [
-        'Modelo: GX 120 (Eje de toma de fuerza tipo S)',
+        'Modelo: GX 120 (Eje de la toma de fuerza tipo S)',
         'Dimensiones (Longitud x Anchura x Altura): 297 x 341 x 318 mm',
         'Peso en seco: 13 Kg',
         'Tipo de motor: 4 tiempos, válvulas en cabeza, monocilíndrico',
         'Cilindrada: 119 cm³',
-        'Potencia máxima: 2,9 kW a 3.600 RPM',
-        'Torsión máxima: 7,4 N.m a 2.500 RPM',
-        'Capacidad de aceite de motor: 0,60 Quarts',
-        'Capacidad del depósito de combustible: 2,5 Quarts',
+        'Potencia máxima: 2,9 kW a 3.600 min⁻¹ (RPM)',
+        'Torsión máxima: 7,4 N.m a 2.500 min⁻¹ (RPM)',
+        'Capacidad de aceite de motor: 0,60 Q (Quarts)',
+        'Capacidad del depósito de combustible: 2,5 Q',
         'Consumo de combustible: 313 g/kWh (230 g/PSh)',
-        'Sistema de enfriamiento: Aire forzado | Sistema encendido: Magneto transistorizado'
+        'Sistema de enfriamiento: Aire forzado | Enfriamiento magneto transistorizado'
       ],
       accionamiento: [
         '1. Girar la válvula del combustible a la posición "ON".',
@@ -99,138 +100,221 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
         '3. Girar la palanca del estrangulador a la posición cerrada.',
         '4. Girar el interruptor del motor a la posición "ON".',
         '5. Tirar un poco de la empuñadura del arrancador hasta notar resistencia, y luego tirar con fuerza.',
-        '6. Girar la palanca del estrangulador a la posición abierta.',
+        '6. Girar la palanca del estrangulador a la posición abierta a medida que el motor se caliente.',
         '7. Ajustar la palanca del acelerador a la velocidad deseada.'
       ],
+      notaAccionamiento: 'NOTA: No tire de la empuñadura del arrancador de golpe mientras el motor esté en marcha para evitar daños en el mecanismo de arranque.',
       mantenimiento: [
         { frec: 'DIARIA', act: 'Comprobación visual de fugas de aceite o gasolina. Verificar protectores, cubiertas, tuercas y pernos. Comprobar nivel de combustible y elemento del filtro de aire.' },
         { frec: 'SEMANAL', act: 'Extraer el polvo o la suciedad excesiva en torno al silenciador y arrancador. Comprobar nivel de aceite del motor.' },
-        { frec: 'SEMESTRAL', act: 'Cambio de sello mecánico para evitar derrames de leche.' }
+        { frec: 'SEMESTRAL', act: 'Cambio del sello mecánico de la bomba para evitar derrames y contaminación del producto.' }
       ],
-      recomendaciones: 'Mantener apartado de materiales inflamables. No fumar cerca. Suministrar combustible y mantenimiento siempre con el equipo apagado.'
+      recomendaciones: 'Mantener apartado de materiales inflamables. No fumar cerca del equipo. Suministrar combustible y ejecutar mantenimiento siempre con el motor apagado y en frío.'
     },
     electrobomba: {
-      nombre: 'Electrobomba de Agua / Suero (Cuajado)',
+      nombre: 'Electrobomba 2HP (Área de Cuajado)',
+      imagen: '/images/mantenimiento/image3.png',
+      descripcionWord: 'Electrobomba centrífuga de alta eficiencia para impulsión de agua tratada y suero lácteo en los tanques de cuajado.',
       especificaciones: [
-        'Potencia: 1500W (2 HP)',
+        'Potencia de 1500W (2 HP)',
         'Eficiencia energética: 71.9%',
-        'Velocidad de giro: 3.450 RPM',
+        'Revoluciones: 3.450 RPM',
         'Voltaje de operación: 110 / 220 V',
         'Frecuencia: 60 Hz'
       ],
       accionamiento: [
-        '1. Conectar a la red eléctrica.',
-        '2. Presionar el botón verde de encendido en la caja de control.',
-        '3. Nota: Presionar el botón rojo para detener el equipo inmediatamente.'
+        '1. Conectar a una corriente eléctrica segura.',
+        '2. Presionar el botón de color verde que se encuentra en la caja de control.'
       ],
+      notaAccionamiento: 'NOTA: Presionar el botón de color rojo para apagar o detener el equipo inmediatamente.',
       mantenimiento: [
         { frec: 'DIARIA', act: 'Comprobar que la velocidad y caudal correspondan a la salida. Examinar bridas para detectar fugas, fisuras u oxidación.' },
         { frec: 'SEMANAL', act: 'Comprobar puntos de montaje. Inspeccionar sello mecánico, acoplamientos y filtros. Limpiar ventilaciones del motor.' },
         { frec: 'SEMESTRAL', act: 'Lubricación de cojinetes. Comprobar elevación respecto a la base. Cambiar acoplamientos del motor.' }
       ],
-      recomendaciones: 'Realizar mantenimiento frecuente para evitar pérdidas de eficiencia. Operar y realizar mantenimiento siempre con el equipo apagado.'
+      recomendaciones: 'Realizar mantenimiento frecuente para evitar pérdidas de eficiencia. Operar y realizar mantenimiento siempre con el equipo apagado y desenergizado.'
     },
     hiladoras: {
-      nombre: 'Hiladora de Queso (Sección Hilado)',
+      nombre: 'Hiladoras de Queso (Área de Hilado)',
+      imagen: '/images/mantenimiento/image4.png',
+      descripcionWord: 'Equipo industrial elaborado en acero inoxidable tipo 304 en partes de contacto con alimentos y tipo 430 en cámaras de vapor y aire caliente.',
       especificaciones: [
-        'Construcción: Acero inoxidable 304 en contacto con alimentos; acero 430 en cámaras de vapor y aire caliente.',
-        'Acople de transmisión: Cadena y piñones paso 50.',
+        'Construcción: Acero inoxidable tipo 304 en contacto con alimentos; tipo 430 en cámaras de aire caliente y vapor.',
+        'Barras redondas de acero inoxidable tipo 304 calibre 5/16".',
+        'Acople de transmisión: Cadena y piñones paso 50 entre eje reductor y eje principal.',
         'Capacidad: 1.600 Litros de leche cuajada.',
         'Sistema de agitación: Paletas y cuchillas de corte.',
         'Motor reductor: Marca SITI de 3 HP con 3 N.m de torque.',
         'Control eléctrico: Caja de controles comandada por variador de frecuencia marca LS (LG).'
       ],
       accionamiento: [
-        '1. Colocar el aspa dentro de la máquina y asegurarla con los tornillos.',
-        '2. Cerrar el orificio de salida de queso caliente con la tapa y abrazadera.',
-        '3. Abrir las válvulas de vapor.',
+        '1. Colocar el aspa dentro de la máquina y asegurarla adecuadamente con los tornillos.',
+        '2. Cerrar el orificio de salida del queso caliente colocándole la tapa y ajustando la abrazadera.',
+        '3. Abrir las válvulas de paso de vapor.',
         '4. Encender desde el interruptor del tablero de control.',
-        '5. Variar la velocidad del aspa girando el potenciómetro.'
+        '5. Variar la velocidad de rotación del aspa girando la perilla del potenciómetro.'
       ],
+      notaAccionamiento: 'NOTA: En caso de avería del potenciómetro principal, utilizar el potenciómetro de regulado de volumen auxiliar en la tarjeta interna mientras se instala el repuesto original.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Ejecutar POES de limpieza y desinfección. Inspeccionar aspas por fisuras o roturas.' },
+        { frec: 'DIARIA', act: 'Ejecutar procedimiento de limpieza y desinfección según POES. Inspeccionar aspas por fisuras.' },
         { frec: 'SEMANAL', act: 'Revisar conexiones eléctricas, limpiar tablero, inspeccionar conductos y válvulas de vapor.' },
-        { frec: 'MENSUAL', act: 'Limpiar depósitos de grasa en la tapa del ventilador del motor. Controlar retenes, V-rings, chumaceras y variadores de frecuencia.' }
+        { frec: 'MENSUAL', act: 'Limpiar depósitos de grasa en la tapa del ventilador del motor. Controlar retenes, V-rings, chumaceras y variador de frecuencia.' }
       ],
-      recomendaciones: 'Para desmontaje interno del motor usar personal calificado. En caso de fallo del potenciómetro, usar regulador auxiliar de volumen mientras se repone el original.'
+      recomendaciones: 'Para desmontaje interno del motor usar personal técnico calificado. Realizar el procedimiento de limpieza con el equipo completamente apagado y desconectado.'
     },
     moldeadora: {
-      nombre: 'Moldeadora Industrial de Queso',
+      nombre: 'Moldeadora Industrial 250kg (Área de Moldeo)',
+      imagen: '/images/mantenimiento/image5.jpeg',
+      descripcionWord: 'Moldeadora automática con dosificación regulable de 400g a 2500g por unidad y sistema neumático de moldeo en bloque.',
       especificaciones: [
-        'Material: Acero inoxidable 304 y plástico industrial sanitario.',
-        'Dimensiones: 170 cm largo x 90 cm ancho x 165 cm alto.',
-        'Capacidad de tolva: 250 kg | Dosificación: 400g a 2.500g.',
+        'Material de fabricación: Acero inoxidable tipo 304 y plástico industrial sanitario.',
+        'Dimensiones: Largo 170 cm x Ancho 90 cm x Alto 165 cm.',
+        'Capacidad de tolva: 250 kg | Capacidad dosificadora: 400 g a 2.500 g.',
         'Alimentación: 220V trifásico | Potencia: 3 HP.',
         'Tracción: Motorreductor sinfín-corona y piñones externos.',
-        'Inyección: Tornillos paralelos tipo sinfín | Producción: 8 a 20 unidades/minuto.'
+        'Sistema de inyección y agitación: Tornillos paralelos tipo sinfín.',
+        'Capacidad de producción: 8 a 20 unidades por minuto.'
       ],
       accionamiento: [
-        '1. Instalar los tornillos sinfín en la tolva en sus ejes marcados.',
-        '2. Colocar piezas de centro, empaque, tapa brida y apretar mariposas simultáneamente.',
-        '3. Energizar switch de muletilla y encender variador.',
-        '4. Ajustar potenciómetro de velocidad y temporizador de dosificado.'
+        '1. Colocar los dos tornillos sinfín en la tolva asegurándose de que coincidan en sus respectivos ejes marcados.',
+        '2. Colocar las piezas de centro, empaque, tapa brida y apretar simultáneamente las mariposas de ajuste.',
+        '3. Energizar el switch de muletilla y encender el variador.',
+        '4. Graduar la velocidad en el potenciómetro y ajustar el temporizador para la dosificación requerida.'
       ],
+      notaAccionamiento: 'NOTA: Si los cilindros dosificadores presentan resistencia o trabamiento, verificar la presión del compresor neumático de aire.',
       mantenimiento: [
         { frec: 'DIARIA', act: 'Ejecutar procedimiento POES de limpieza y desinfección.' },
         { frec: 'SEMANAL', act: 'Limpiar tablero de control, revisar mangueras de aire neumático y cables de alimentación. Lavado con desincrustante.' },
         { frec: 'MENSUAL', act: 'Eliminar depósitos de grasa del ventilador del motor, verificar rodamientos, retenes y lubricar chumaceras.' }
       ],
-      recomendaciones: 'Si los cilindros dosificadores presentan dificultad de movimiento, revisar el compresor de aire y mangueras por pérdidas de presión.'
+      recomendaciones: 'Evitar manipular los tornillos sinfín con la máquina encendida. Desconectar la fuente eléctrica antes de lavar o dar mantenimiento.'
+    },
+    ventiladores: {
+      nombre: 'Ventiladores Industriales 26" (Área de Moldeo)',
+      imagen: '/images/mantenimiento/image6.jpeg',
+      descripcionWord: 'Ventilador metálico oscilante de 26 pulgadas y 7800 CFM de caudal para circulación continua de aire en salas de proceso.',
+      especificaciones: [
+        'Construcción: Metálico reforzado.',
+        'Diámetro: 26 pulgadas | Potencia: 230 W.',
+        'Motor: Durable y de alta potencia.',
+        'Velocidades: 3 posiciones | Oscilación: 90°.',
+        'Trabajo pesado: Operación continua | Caudal: 7.800 CFM.',
+        'Número de aspas: 3 aspas de aluminio.'
+      ],
+      accionamiento: [
+        '1. Enchufar a una corriente eléctrica.',
+        '2. Mover la perilla de control de velocidad de acuerdo a la necesidad (los números 0, 1, 2, 3 corresponden a apagado, bajo, medio y alto).'
+      ],
+      notaAccionamiento: 'NOTA: Mantener el rejillado de protección limpio para asegurar el caudal nominal de 7.800 CFM.',
+      mantenimiento: [
+        { frec: 'SEMANAL', act: 'Realizar procedimiento de limpieza en rejas y aspas. Revisar conexiones eléctricas y cableado.' }
+      ],
+      recomendaciones: 'Apagar y desconectar al terminar la jornada laboral. No introducir objetos entre las aspas en movimiento.'
+    },
+    extractores: {
+      nombre: 'Extractores de Aire 14" (Área de Moldeo)',
+      imagen: '/images/mantenimiento/image6.jpeg',
+      descripcionWord: 'Extractor de aire metálico de 14 pulgadas para evacuación de vapor y humedad ambiental.',
+      especificaciones: [
+        'Construcción: Metálico industrial.',
+        'Medida: 14 pulgadas (35 cm).',
+        'Caudal: 580 cm³/h.',
+        'Potencia: 1/8 HP | RPM: 1.700 RPM.'
+      ],
+      accionamiento: [
+        '1. Mover el suiche del taco hacia arriba (posición ON).'
+      ],
+      notaAccionamiento: 'NOTA: Esperar a que el extractor se seque totalmente tras el lavado antes de reanudar la marcha.',
+      mantenimiento: [
+        { frec: 'DIARIA', act: 'Ejecutar procedimiento de limpieza y desinfección POES. Inspeccionar conexiones eléctricas.' }
+      ],
+      recomendaciones: 'Apagar al terminar la jornada laboral. Ejecutar la limpieza siempre con el equipo apagado y desenergizado.'
+    },
+    plancha_selladora: {
+      nombre: 'Plancha Selladora en Baquelita (Empaque)',
+      imagen: '/images/mantenimiento/image7.png',
+      descripcionWord: 'Plancha termose selladora fabricada en baquelita con suela de aluminio térmico y protector anti-incendio.',
+      especificaciones: [
+        'Potencia: 1200 Watts, 120 Vac, 60 Hz.',
+        'Cuerpo en baquelita de alta resistencia térmica para manipular sin riesgo de quemaduras.',
+        'Suela de planchado en aluminio purificado y completamente pulida.',
+        'Cable de alimentación de 1.8 metros con aislamiento reforzado.',
+        'Dispositivo de seguridad interno contra sobrecalentamiento e incendios.'
+      ],
+      accionamiento: [
+        '1. Conectar el cable a la red eléctrica de 120V.',
+        '2. Graduar la temperatura en el termostato giratorio según el calibre de la bolsa de empaque.'
+      ],
+      notaAccionamiento: 'NOTA: No dejar la suela de aluminio sobre superficies combustibles mientras se encuentre energizada.',
+      mantenimiento: [
+        { frec: 'DIARIA', act: 'Limpiar la suela de aluminio con paño seco para eliminar residuos plásticos.' },
+        { frec: 'MENSUAL', act: 'Revisión del cableado y verificación del dispositivo de protección térmica.' }
+      ],
+      recomendaciones: 'Desconectar inmediatamente al finalizar el turno de empaque. No lavar con chorros de agua directo.'
     },
     cuartos_frios: {
       nombre: 'Cuartos Fríos (Choque 5HP y Almacenamiento 7.5HP)',
+      imagen: '/images/mantenimiento/image8.jpeg',
+      descripcionWord: 'Sistemas de refrigeración industrial con aislamiento en poliuretano e inyección de frío para maduración y conservación de queso.',
       especificaciones: [
-        'Cuarto de Choque: 212 x 356 x 200 cm, Poliuretano 35%, Evaporador 14.500 BTU, Condensador 5 HP con motor 1/3 HP.',
-        'Cuarto Almacenamiento: 530 x 250 x 240 cm, Evaporador 24.000 BTU, Condensador 7.5 HP con 2 motores axiales de 1/2 HP.',
-        'Controles: Tablero metálico con controladores digitales Fullgauge MT 512, relés térmicos y protectores de voltaje.'
+        'Cuarto de Choque: 212 x 356 x 200 cm, Poliuretano 35%, Evaporador 14.500 BTU, Condensador 5 HP.',
+        'Cuarto Almacenamiento: 530 x 250 x 240 cm, Evaporador 24.000 BTU, Condensador 7.5 HP con 2 motores axiales.',
+        'Controladores: Cuadros metálicos con termostatos digitales Fullgauge MT 512 y relés térmicos.'
       ],
       accionamiento: [
-        '1. Verificar conexiones eléctricas.',
-        '2. Encender unidad condensadora girando la perilla izquierda (luz piloto roja).',
-        '3. Encender evaporadores girando la perilla derecha (luz piloto verde).'
+        '1. Verificar conexiones eléctricas en el cuadro general.',
+        '2. Encender la unidad condensadora girando la perilla izquierda (luz piloto roja).',
+        '3. Encender los evaporadores girando la perilla derecha (luz piloto verde).'
       ],
+      notaAccionamiento: 'NOTA: En caso de congelamiento en el serpentín evaporador, apagar la condensadora y mantener el evaporador encendido para deshielo forzado.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Limpieza y desinfección del área. Registro continuo de temperatura en bitácora.' },
-        { frec: 'SEMANAL', act: 'Lavado de serpentines evaporadores con hidrolavadora. Ajustar setpoint de temperatura.' },
-        { frec: 'MENSUAL', act: 'Limpieza de tablero eléctrico, serpentines, sensores, tuberías y contactos electrónicos.' },
-        { frec: 'TRIMESTRAL', act: 'Verificación de tarjetas electrónicas, lubricación de chumaceras, limpieza de drenajes y recarga de gas refrigerante.' }
+        { frec: 'DIARIA', act: 'Limpieza y desinfección del área. Registro diario de temperatura en planilla.' },
+        { frec: 'SEMANAL', act: 'Lavado de serpentines evaporadores con hidrolavadora. Inspección de cortinas plásticas.' },
+        { frec: 'MENSUAL', act: 'Limpieza de cuadro eléctrico, presostatos, sensores y ajuste de contactos.' },
+        { frec: 'TRIMESTRAL', act: 'Verificación de tarjetas electrónicas, lubricación de chumaceras y recarga de gas refrigerante.' }
       ],
-      recomendaciones: 'Mantener puertas y cortinas plásticas cerradas. En caso de congelamiento del evaporador, apagar la condensadora para efectuar deshielo manual.'
+      recomendaciones: 'Mantener las puertas herméticamente cerradas. Evitar obstruir la circulación de aire de las colmenas evaporadoras.'
     },
     caldera: {
-      nombre: 'Caldera Pirotubular 60 BHP (Generación de Vapor)',
+      nombre: 'Caldera Pirotubular 60 BHP (Servicios Térmicos)',
+      imagen: '/images/mantenimiento/image9.png',
+      descripcionWord: 'Caldera automática pirotubular de 3 pasos para generación continua de vapor de proceso alimentario alimentada por gas GLP.',
       especificaciones: [
         'Tipo: Pirotubular de 3 pasos automática.',
         'Capacidad: 60 BHP | Eficiencia térmica: 97%.',
         'Combustible: Gas Licuado de Petróleo (GLP).',
-        'Accesorios: Quemador de 1.200.000 BTU, presostato de control, manómetro, controlador L91.',
-        'Tanque de agua: 1.200 Litros | Bomba de agua: 3 HP, 3.450 RPM, 220V.'
+        'Accesorios: Quemador de 1.200.000 BTU, manómetro, presostato de control y modulador L91.',
+        'Tanque de suministro de agua: 1.200 Litros | Bomba de agua: 3 HP, 3.450 RPM, 220V.'
       ],
       accionamiento: [
-        '1. Abrir válvula de suministro de gas GLP.',
-        '2. Verificar que el tanque de agua de 1.200L esté lleno y abrir válvulas de paso.',
-        '3. Encender bomba de agua (perilla superior izquierda del tablero a la derecha).',
-        '4. Encender quemador (perilla superior derecha a la derecha para modo automático).'
+        '1. Abrir la válvula de paso de gas GLP.',
+        '2. Verificar que el tanque de agua de 1.200L contenga nivel adecuado y abrir válvulas.',
+        '3. Encender la bomba de agua impulsando la perilla superior izquierda a la derecha.',
+        '4. Encender el quemador moviendo la perilla superior derecha en modo automático.'
       ],
+      notaAccionamiento: 'NOTA: Realizar purga diaria abriendo la válvula de la columna de agua y la válvula posterior hasta eliminar lodos y sedimentos.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Limpieza del área. Purgar la caldera abriendo la válvula roja de la columna de agua y la válvula trasera hasta que el agua salga clara.' },
-        { frec: 'SEMANAL', act: 'Limpieza externa del cuerpo de la caldera.' },
-        { frec: 'SEMESTRAL', act: 'Limpieza interna de tuberías pirotubulares, revisión de fugas, mantenimiento de quemador y calibración de controles por técnico experto.' }
+        { frec: 'DIARIA', act: 'Limpieza del área. Purgar la columna de agua y el fondo del cuerpo de la caldera.' },
+        { frec: 'SEMANAL', act: 'Limpieza externa del cuerpo y verificación de niveladores de presión.' },
+        { frec: 'SEMESTRAL', act: 'Mantenimiento preventivo especializado en pirotubos, desincrustación química e inspección por técnico acreditado.' }
       ],
-      recomendaciones: 'El mantenimiento semestral debe ser ejecutado exclusivamente por un técnico especialista en calderas de vapor.'
+      recomendaciones: 'El mantenimiento semestral interno debe ser efectuado exclusivamente por un técnico calificado de calderas de vapor.'
     },
     planta_electrica: {
       nombre: 'Planta Eléctrica Cummins 80 KVA (Respaldo de Energía)',
+      imagen: '/images/mantenimiento/image10.jpeg',
+      descripcionWord: 'Grupo electrógeno con motor diésel Cummins 4BTA3.9-G2 y alternador Marathon de 80 KVA para respaldo automático de la planta.',
       especificaciones: [
         'Motor: Cummins 4BTA3.9-G2, 4 cilindros en línea, 4 tiempos, turbocargado.',
         'Potencia Standby: 99 BHP (73,9 kW) a 1.800 RPM | Gobernador electrónico.',
-        'Capacidad lubricante: 2.9 galones | Capacidad refrigerante radiador: 5 galones.',
-        'Generador: Marca Marathon sincrónico, 80 KVA, 3 fases, 12 hilos, factor de potencia 0.8, 60 Hz, eficiencia 92%.'
+        'Capacidad lubricante: 2,9 galones | Capacidad refrigerante radiador: 5 galones.',
+        'Generador: Marathon sincrónico, 80 KVA, 3 fases, 12 hilos, factor 0.8, 60 Hz, eficiencia 92%.'
       ],
       accionamiento: [
-        '1. MODO MANUAL: Presionar el botón "MANUAL" y mantener oprimido el botón verde hasta encender.',
-        '2. MODO AUTOMÁTICO: Presionar el botón "AUTO" (luz piloto roja encendida). Recomendado para conmutación automática ante cortes de red.'
+        '1. MODO MANUAL: Presionar el botón "MANUAL" y mantener oprimido el botón verde de arranque.',
+        '2. MODO AUTOMÁTICO: Presionar el botón "AUTO" (luz piloto roja encendida) para conmutación ante fallos de red.'
       ],
+      notaAccionamiento: 'NOTA: Mantener el selector en modo AUTO para garantizar la transferencia automática de energía durante cortes del servicio público.',
       mantenimiento: [
         { frec: 'DIARIA', act: 'Limpieza externa y del área perimetral de la planta.' },
         { frec: 'SEMANAL', act: 'Suministrar combustible ACPM. Encender 10 minutos para descarte de fallos si no ha habido cortes.' },
@@ -239,23 +323,30 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
       recomendaciones: 'Asegurar ventilación suficiente para evacuar calor y gases de escape. Evitar sobrecargar la planta por encima del régimen máximo nominal.'
     },
     compresor: {
-      nombre: 'Compresor de Aire Neumático 2HP',
+      nombre: 'Compresor 2HP (Área Neumática)',
+      imagen: '/images/mantenimiento/image11.jpeg',
+      descripcionWord: 'Compresor de 80-120psi de presión con tanque de 170 litros de capacidad. Cuenta con un motor de trabajo directo lubricado con aceite para aumentar la vida útil y un par de manómetros junto a un regulador de presión que permite conocer y cambiar sus respectivos niveles.',
       especificaciones: [
-        'Presión de trabajo: 80 - 120 PSI | Tanque calderín: 170 Litros.',
-        'Potencia: 750W (2 HP) | Velocidad: 3.440 RPM | Voltaje: 220/440V 60Hz.',
-        'Equipamiento: Válvula de emergencia, manómetros dobles y regulador de presión.'
+        'Potencia de 750W',
+        '2 HP',
+        'Válvula de emergencia',
+        'Eficiencia energética: 75.2%',
+        'Revoluciones: 3.440 RPM',
+        'Voltaje: 220 / 440 V',
+        'Frecuencia: 60 Hz'
       ],
       accionamiento: [
-        '1. Enchufar a red eléctrica y conectar manguera neumática.',
-        '2. Halar hacia arriba la perilla roja de arranque en el presostato.',
-        '3. El funcionamiento es automático comandado por el presostato.'
+        '1. Enchufar a una corriente eléctrica.',
+        '2. Conectar la manguera de aire.',
+        '3. Halar hacia arriba el botón de arranque (perilla de color rojo que se encuentra en la parte superior del presostato).'
       ],
+      notaAccionamiento: 'NOTA: El funcionamiento del compresor es completamente automático y es controlado por el interruptor de presión que hace que pare cuando la presión en el receptor de aire alcanza el nivel máximo y vuelve a arrancar cuando baja a un nivel menor.',
       mantenimiento: [
-        { frec: 'DIARIA', act: 'Revisar nivel de aceite del elemento de bombeo. Verificar estado de polea y válvula antirretorno.' },
-        { frec: 'SEMANAL', act: 'Sacudir elemento del filtro de aire. Purgar la humedad acumulada abriendo la válvula inferior del calderín.' },
-        { frec: 'QUINCENAL', act: 'Cambio de aceite lubricante del motor y limpieza exterior.' }
+        { frec: 'DIARIA', act: 'Revisar el nivel de aceite del elemento de bombeo antes de cada uso. Verificar si la polea está en buenas condiciones, de lo contrario, debe ser cambiada. Inspeccionar la válvula de anti retorno, si hay fugas se debe reparar o cambiar.' },
+        { frec: 'SEMANAL', act: 'Abrir el recipiente del filtro, extraerlo y sacudirlo para remover la suciedad acumulada. Extraer el aire comprimido remanente en el depósito o calderín desenroscando la válvula de purga inferior.' },
+        { frec: 'QUINCENAL', act: 'Cambiar el aceite para que este preserve sus características lubricantes. Realizar limpieza externa en tanque, motor y accesorios.' }
       ],
-      recomendaciones: 'Desconectar siempre de la corriente antes de realizar mantenimientos. No operar cerca de líquidos inflamables.'
+      recomendaciones: 'No realizar las labores de mantenimiento del compresor de aire sin antes desconectarlo de la corriente eléctrica. Evitar que el agua o líquidos inflamables entren en contacto con el motor. No ubicar objetos inflamables cerca. No operar en espacios cerrados ni cercanos a llamas y mantener bien ventilado.'
     }
   };
 
@@ -273,7 +364,6 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
           .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
           .header-table td { border: 1px solid #334155; padding: 8px; text-align: center; font-size: 11px; }
           .header-title { font-size: 13px; font-weight: bold; text-transform: uppercase; }
-          h2 { color: #0f172a; border-bottom: 2px solid #0284c7; padding-bottom: 4px; margin-top: 20px; font-size: 14px; }
           .section-title { font-weight: bold; background: #f1f5f9; padding: 6px; margin-top: 15px; border-left: 4px solid #0284c7; }
           table.data-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
           table.data-table th, table.data-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; font-size: 11px; }
@@ -298,22 +388,38 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
           </tr>
         </table>
 
-        ${MAN_PME_FULL_PARAGRAPHS.map((pText) => {
-          const cleanText = pText.trim();
-          const isMainHeader = [
-            'INTRODUCCIÓN', 'OBJETIVO', 'ALCANCE', 'DEFINICIONES', 'RESPONSABILIDADES',
-            'MANTENIMIENTO PREVENTIVO', 'MANTENIMIENTO CORRECTIVO', 'ÁREA', 'EQUIPOS',
-            'FRECUENCIA', 'MANTENIMIENTO DE EQUIPOS', 'MOTOBOMBA', 'ELECTROBOMBA',
-            'HILADORAS', 'MOLDEADORA', 'VENTILADORES', 'EXTRACTORES', 'PLANCHA SELLADORA',
-            'CUARTOS FRIOS', 'CALDERA', 'PLANTA ELÉCTRICA', 'COMPRESOR 2HP', 'REGISTROS',
-            'ANEXOS', 'ESPECIFICACIONES', 'ACCIONAMIENTO', 'MANTENIMIENTO', 'RECOMENDACIONES'
-          ].includes(cleanText.toUpperCase());
+        <div class="section-title">CONTROL DE CAMBIOS</div>
+        <table class="data-table">
+          <thead><tr><th>Versión</th><th>Descripción del Cambio</th><th>Solicitante</th><th>Fecha</th></tr></thead>
+          <tbody>
+            <tr><td>01</td><td>Creación del documento</td><td>Jefe de calidad</td><td>12/01/2016</td></tr>
+            <tr><td>02</td><td>Actualización de procedimientos de mantenimiento equipos</td><td>Jefe de calidad</td><td>25/08/2019</td></tr>
+            <tr><td>03</td><td>Actualización General</td><td>Jefe de calidad</td><td>06/07/2022</td></tr>
+          </tbody>
+        </table>
 
-          if (isMainHeader) {
-            return `<div class="section-title">${cleanText}</div>`;
-          }
-          return `<p>${cleanText}</p>`;
-        }).join('')}
+        <div class="section-title">1. INTRODUCCIÓN, OBJETIVO Y ALCANCE</div>
+        <p>El mantenimiento industrial (preventivo y correctivo) es un conjunto de acciones encaminadas a la funcionalidad y durabilidad de la maquinaria, equipos e instalaciones. <strong>Objetivo:</strong> Establecer el procedimiento para lograr confiabilidad y durabilidad de los equipos. <strong>Alcance:</strong> Aplica a todos los equipos e instrumentos de medición de la planta.</p>
+
+        <div class="section-title">2. TABLA DE FRECUENCIA DE MANTENIMIENTO DE EQUIPOS</div>
+        <table class="data-table">
+          <thead><tr><th>Área Operativa</th><th>Equipo / Instalación</th><th>Frecuencia Mantenimiento</th></tr></thead>
+          <tbody>
+            <tr><td>RECEPCIÓN DE LECHE</td><td>Motobomba Honda GX 120</td><td>Diaria, Semanal y Semestral</td></tr>
+            <tr><td>CUAJADO</td><td>Electrobomba 2HP</td><td>Diaria, Semanal y Semestral</td></tr>
+            <tr><td>HILADO</td><td>Hiladoras de Queso 3HP</td><td>Diaria, Semanal y Mensual</td></tr>
+            <tr><td>MOLDEO</td><td>Moldeadora Industrial 250kg</td><td>Diaria, Semanal y Mensual</td></tr>
+            <tr><td>MOLDEO</td><td>Ventiladores 26" / Extractores 14"</td><td>Semanal / Diaria</td></tr>
+            <tr><td>EMPAQUE</td><td>Plancha Selladora Baquelita</td><td>Diaria y Mensual</td></tr>
+            <tr><td>CUARTOS FRÍOS</td><td>Cuarto Choque 5HP / Almacenamiento 7.5HP</td><td>Diaria, Semanal, Mensual, Trimestral</td></tr>
+            <tr><td>OTRAS ÁREAS</td><td>Caldera Pirotubular 60 BHP</td><td>Diaria, Semanal y Semestral</td></tr>
+            <tr><td>OTRAS ÁREAS</td><td>Planta Eléctrica Cummins 80 KVA</td><td>Diaria, Semanal y Mensual</td></tr>
+            <tr><td>OTRAS ÁREAS</td><td>Compresor de Aire 2HP</td><td>Diaria, Semanal y Quincenal</td></tr>
+          </tbody>
+        </table>
+
+        <div class="section-title">3. REGISTROS ASOCIADOS</div>
+        <p>Las intervenciones técnicas quedan asentadas de forma obligatoria en la bitácora <strong>FOPME-002 (FORMATO DE MANTENIMIENTO REALIZADO A EQUIPOS Y MAQUINARIA)</strong>.</p>
 
         <table class="footer-signatures">
           <tr>
@@ -439,7 +545,7 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
           </div>
           <div>
             <div className="fw-bold font-heading text-dark" style={{ fontSize: '17px' }}>Módulo de Mantenimiento de Equipos e Maquinaria (MAN-PME)</div>
-            <div className="text-muted small">Gestión completa de procedimientos, especificaciones técnicas, accionamientos y registros FOPME-002.</div>
+            <div className="text-muted small">Gestión completa de procedimientos, imágenes oficiales, especificidades técnicas y registros FOPME-002.</div>
           </div>
         </div>
         <div className="d-flex gap-2">
@@ -485,7 +591,7 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
             Programa de Mantenimiento Preventivo y Correctivo de Equipos e Instrumentos
           </h4>
           <p className="text-muted small mb-3">
-            Manual maestro extraído directamente del documento Word oficial del establecimiento. Contiene los parámetros operativos, secuencia de encendido (accionamiento) y programas de inspección.
+            Manual maestro extraído directamente del documento Word oficial. Selecciona la pestaña de cada equipo para visualizar su fotografía oficial, descripción extensa, especificaciones y recomendaciones.
           </p>
 
           {/* Navegación por Pestañas de Equipos */}
@@ -497,6 +603,9 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                 { id: 'electrobomba', label: 'Electrobomba Cuajado' },
                 { id: 'hiladoras', label: 'Hiladoras' },
                 { id: 'moldeadora', label: 'Moldeadora' },
+                { id: 'ventiladores', label: 'Ventiladores 26"' },
+                { id: 'extractores', label: 'Extractores 14"' },
+                { id: 'plancha_selladora', label: 'Plancha Selladora' },
                 { id: 'cuartos_frios', label: 'Cuartos Fríos' },
                 { id: 'caldera', label: 'Caldera 60 BHP' },
                 { id: 'planta_electrica', label: 'Planta Eléctrica 80 KVA' },
@@ -520,11 +629,23 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
               <i className="bi bi-gear-fill me-2"></i>{eqActivo.nombre}
             </h5>
 
+            {eqActivo.imagen && (
+              <div className="text-center mb-3 p-3 bg-white rounded-3 border">
+                <img src={eqActivo.imagen} alt={eqActivo.nombre} style={{ maxHeight: '220px', objectFit: 'contain' }} className="img-fluid rounded" />
+              </div>
+            )}
+
+            {eqActivo.descripcionWord && (
+              <div className="p-3 mb-3 bg-white rounded border text-dark small" style={{ textAlign: 'justify', borderLeft: '4px solid #0284c7' }}>
+                {eqActivo.descripcionWord}
+              </div>
+            )}
+
             <div className="row g-4">
               {/* Columna 1: Especificaciones Técnicas */}
               <div className="col-12 col-md-6 border-end">
                 <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-card-list me-2 text-info"></i>Especificaciones Técnicas:</h6>
-                <ul className="list-unstyled text-muted small mb-3">
+                <ul className="list-unstyled text-muted small mb-3 ps-2">
                   {eqActivo.especificaciones.map((esp, i) => (
                     <li key={i} className="mb-1 d-flex align-items-start">
                       <i className="bi bi-check2-circle text-success me-2 mt-1"></i>
@@ -534,11 +655,16 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                 </ul>
 
                 <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-play-circle me-2 text-success"></i>Secuencia de Accionamiento (Encendido):</h6>
-                <div className="bg-light p-3 rounded-3 border mb-3 text-dark small">
+                <div className="bg-light p-3 rounded-3 border mb-2 text-dark small">
                   {eqActivo.accionamiento.map((acc, i) => (
                     <div key={i} className="mb-1">{acc}</div>
                   ))}
                 </div>
+                {eqActivo.notaAccionamiento && (
+                  <div className="alert alert-info p-2 small border-0 mb-3" style={{ fontSize: '11.5px', lineHeight: '1.4' }}>
+                    <i className="bi bi-info-circle-fill me-1"></i>{eqActivo.notaAccionamiento}
+                  </div>
+                )}
               </div>
 
               {/* Columna 2: Frecuencia de Mantenimiento y Recomendaciones */}
@@ -617,12 +743,14 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                     <option value="Electrobomba Cuajado 2HP">Electrobomba Cuajado 2HP</option>
                     <option value="Hiladora de Queso 3HP">Hiladora de Queso 3HP</option>
                     <option value="Moldeadora Industrial 250kg">Moldeadora Industrial 250kg</option>
+                    <option value="Ventiladores Industriales 26">Ventiladores Industriales 26"</option>
+                    <option value="Extractores de Aire 14">Extractores de Aire 14"</option>
                     <option value="Plancha Selladora Baquelita">Plancha Selladora Baquelita</option>
                     <option value="Cuarto Frío de Choque 5HP">Cuarto Frío de Choque 5HP</option>
                     <option value="Cuarto Frío Producto Terminado 7.5HP">Cuarto Frío Producto Terminado 7.5HP</option>
                     <option value="Caldera Pirotubular 60 BHP">Caldera Pirotubular 60 BHP</option>
                     <option value="Planta Eléctrica Cummins 80 KVA">Planta Eléctrica Cummins 80 KVA</option>
-                    <option value="Compresor de Aire 2HP">Compresor de Aire 2HP</option>
+                    <option value="Compresor 2HP (Área Neumática)">Compresor 2HP (Área Neumática)</option>
                   </select>
                 </div>
                 <div className="col-12 col-md-4">
@@ -878,16 +1006,29 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                     </div>
                   </div>
 
-                  {/* 4. PROGRAMA DETALLADO POR EQUIPO */}
+                  {/* 4. PROGRAMA DETALLADO POR EQUIPO CON FOTOGRAFÍAS */}
                   <h5 className="fw-bold text-primary font-heading border-bottom pb-2 mb-4">6. FICHAS TÉCNICAS Y PROGRAMAS OPERATIVOS POR EQUIPO</h5>
                   
                   {Object.keys(equiposDetalle).map((key, index) => {
                     const eq = equiposDetalle[key];
                     return (
                       <div key={key} className="card p-3 mb-4 border rounded-3 bg-light bg-opacity-25 shadow-sm">
-                        <h5 className="fw-bold font-heading text-dark border-bottom pb-2 mb-3">
-                          <span className="badge bg-primary me-2">{index + 1}</span>{eq.nombre}
+                        <h5 className="fw-bold font-heading text-dark border-bottom pb-2 mb-3 d-flex justify-content-between align-items-center">
+                          <span><span className="badge bg-primary me-2">{index + 1}</span>{eq.nombre}</span>
                         </h5>
+
+                        {eq.imagen && (
+                          <div className="text-center mb-3 p-3 bg-white rounded border shadow-sm">
+                            <img src={eq.imagen} alt={eq.nombre} style={{ maxHeight: '240px', objectFit: 'contain' }} className="img-fluid rounded" />
+                          </div>
+                        )}
+
+                        {eq.descripcionWord && (
+                          <div className="p-3 mb-3 bg-white rounded border text-dark small" style={{ textAlign: 'justify', borderLeft: '4px solid #0284c7' }}>
+                            {eq.descripcionWord}
+                          </div>
+                        )}
+
                         <div className="row g-3">
                           <div className="col-12 col-md-6 border-end">
                             <h6 className="fw-bold text-dark small"><i className="bi bi-gear-wide me-1 text-primary"></i> ESPECIFICACIONES:</h6>
@@ -898,6 +1039,11 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                             <div className="bg-white p-2 rounded border small text-dark mb-2">
                               {eq.accionamiento.map((a, idx) => <div key={idx}>{a}</div>)}
                             </div>
+                            {eq.notaAccionamiento && (
+                              <div className="alert alert-info p-2 small border-0 mb-2" style={{ fontSize: '11.5px', lineHeight: '1.4' }}>
+                                <i className="bi bi-info-circle-fill me-1"></i>{eq.notaAccionamiento}
+                              </div>
+                            )}
                           </div>
                           <div className="col-12 col-md-6">
                             <h6 className="fw-bold text-dark small"><i className="bi bi-wrench me-1 text-warning"></i> PROGRAMA DE MANTENIMIENTO:</h6>
@@ -989,7 +1135,7 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                   </table>
                 </div>
               </div>
-              <div className="modal-footer border-top-0 p-3 bg-light" style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}>
+              <div className="modal-footer border-top-0 p-3 bg-light" style={{ borderBottomLeftRadius: '18px', borderBottomRightRadius: '18px' }}>
                 <button type="button" className="btn btn-secondary btn-sm" onClick={() => setMostrarHistorial(false)}>
                   Cerrar
                 </button>
