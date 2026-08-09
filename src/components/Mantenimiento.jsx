@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { canUserDownloadProcedure, canUserEditDocument } from '../lib/permissions';
+import { MAN_PME_FULL_PARAGRAPHS } from '../domain/manPmeFullText';
 
 export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = 'super-admin' }) {
   const [mostrarHistorial, setMostrarHistorial] = useState(false);
@@ -297,25 +298,22 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
           </tr>
         </table>
 
-        <div class="section-title">1. INTRODUCCIÓN Y OBJETIVO</div>
-        <p>El mantenimiento industrial (preventivo y correctivo) es un conjunto de acciones encaminadas a la funcionalidad y durabilidad de la maquinaria, equipos e instalaciones, de tal manera que permanezcan sirviendo en óptimas condiciones y se detecten fallas a tiempo.</p>
-        <p><strong>Objetivo:</strong> Establecer el procedimiento para llevar a cabo el mantenimiento de los equipos para lograr confiabilidad, funcionalidad y durabilidad de los equipos y evitar retrasos en la producción.</p>
-        <p><strong>Alcance:</strong> Aplica a todos los equipos e instrumentos de medición que son necesarios para llevar a cabo el cumplimiento de los procesos en la planta.</p>
+        ${MAN_PME_FULL_PARAGRAPHS.map((pText) => {
+          const cleanText = pText.trim();
+          const isMainHeader = [
+            'INTRODUCCIÓN', 'OBJETIVO', 'ALCANCE', 'DEFINICIONES', 'RESPONSABILIDADES',
+            'MANTENIMIENTO PREVENTIVO', 'MANTENIMIENTO CORRECTIVO', 'ÁREA', 'EQUIPOS',
+            'FRECUENCIA', 'MANTENIMIENTO DE EQUIPOS', 'MOTOBOMBA', 'ELECTROBOMBA',
+            'HILADORAS', 'MOLDEADORA', 'VENTILADORES', 'EXTRACTORES', 'PLANCHA SELLADORA',
+            'CUARTOS FRIOS', 'CALDERA', 'PLANTA ELÉCTRICA', 'COMPRESOR 2HP', 'REGISTROS',
+            'ANEXOS', 'ESPECIFICACIONES', 'ACCIONAMIENTO', 'MANTENIMIENTO', 'RECOMENDACIONES'
+          ].includes(cleanText.toUpperCase());
 
-        <div class="section-title">2. DEFINICIONES GENERALES</div>
-        <ul>
-          <li><strong>Disponibilidad:</strong> Probabilidad de que el equipo esté en servicio o presto para operar cuando sea requerido.</li>
-          <li><strong>Fiabilidad:</strong> Probabilidad de que el equipo opere correctamente durante un período determinado.</li>
-          <li><strong>Mantenimiento Preventivo:</strong> Inspección periódica de los equipos de la planta para descubrir las condiciones que conducen a paros imprevistos de producción o desgaste perjudicial.</li>
-          <li><strong>Mantenimiento Correctivo:</strong> Corregir los defectos observados en los equipos o instalaciones; consiste en localizar fallos y reparar.</li>
-        </ul>
-
-        <div class="section-title">3. PROCEDIMIENTOS DE MANTENIMIENTO PREVENTIVO Y CORRECTIVO</div>
-        <p><strong>Preventivo:</strong> Limpieza pre-operacional diaria, revisión semanal con fichas de datos y desmontaje mensual de partes accesibles para extractores y ventiladores. Los equipos complejos (caldera, cuartos fríos, hiladoras) son intervenidos por personal calificado.</p>
-        <p><strong>Correctivo:</strong> 1. Evaluar el daño. 2. Analizar causas. 3. Corregir causas. 4. Reparar/ajustar/cambiar piezas defectuosas. 5. Ejecutar pruebas y ajustes finales.</p>
-
-        <div class="section-title">4. REGISTRO Y FORMATO ASOCIADO</div>
-        <p>Las actividades de mantenimiento realizadas a los equipos quedan registradas de forma obligatoria en la bitácora <strong>FOPME-002 (FORMATO DE MANTENIMIENTO REALIZADO A EQUIPOS Y MAQUINARIA)</strong>.</p>
+          if (isMainHeader) {
+            return `<div class="section-title">${cleanText}</div>`;
+          }
+          return `<p>${cleanText}</p>`;
+        }).join('')}
 
         <table class="footer-signatures">
           <tr>
@@ -758,27 +756,32 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                     <div className="badge bg-primary px-3 py-2 fs-6">CÓDIGO: MAN-PME-001 | VERSIÓN: 3.0.0</div>
                   </div>
 
-                  <h5 className="fw-bold text-primary border-bottom pb-1">1. INTRODUCCIÓN</h5>
-                  <p>El mantenimiento industrial (preventivo y correctivo) es un conjunto de acciones encaminadas a la funcionalidad y durabilidad de la maquinaria, equipos e instalaciones, de tal manera que permanezcan sirviendo en óptimas condiciones y se detecten fallas a tiempo.</p>
-                  <p>En la actualidad, gracias al desarrollo de nuevas tecnologías, el uso de diferentes técnicas de inspección para el mantenimiento industrial de equipos es algo común. Dichas técnicas permiten un estudio estadístico de los parámetros más importantes para conocer la condición operacional de cada equipo. Al realizar el monitoreo continuo, recolectando datos sobre el estado de los equipos, es posible predecir el momento para realizar paradas programadas y así reducir el número de intervenciones necesarias para cada equipo, garantizando una mayor continuidad del proceso productivo.</p>
+                  {/* Renderizado Completo Párrafo por Párrafo de los 514 Párrafos del Word */}
+                  {MAN_PME_FULL_PARAGRAPHS.map((pText, idx) => {
+                    const cleanText = pText.trim();
+                    const isMainHeader = [
+                      'INTRODUCCIÓN', 'OBJETIVO', 'ALCANCE', 'DEFINICIONES', 'RESPONSABILIDADES',
+                      'MANTENIMIENTO PREVENTIVO', 'MANTENIMIENTO CORRECTIVO', 'ÁREA', 'EQUIPOS',
+                      'FRECUENCIA', 'MANTENIMIENTO DE EQUIPOS', 'MOTOBOMBA', 'ELECTROBOMBA',
+                      'HILADORAS', 'MOLDEADORA', 'VENTILADORES', 'EXTRACTORES', 'PLANCHA SELLADORA',
+                      'CUARTOS FRIOS', 'CALDERA', 'PLANTA ELÉCTRICA', 'COMPRESOR 2HP', 'REGISTROS',
+                      'ANEXOS', 'ESPECIFICACIONES', 'ACCIONAMIENTO', 'MANTENIMIENTO', 'RECOMENDACIONES'
+                    ].includes(cleanText.toUpperCase());
 
-                  <h5 className="fw-bold text-primary border-bottom pb-1 mt-4">2. OBJETIVO Y ALCANCE</h5>
-                  <p><strong>Objetivo:</strong> Establecer el procedimiento para llevar a cabo el mantenimiento de los equipos para lograr confiabilidad, funcionalidad y durabilidad de los equipos y evitar retrasos en la producción.</p>
-                  <p><strong>Alcance:</strong> Este programa aplica para todos los equipos e instrumentos de medición que son necesarios para llevar a cabo el cumplimiento de los procesos en la planta.</p>
+                    if (isMainHeader) {
+                      return (
+                        <h5 key={idx} className="fw-bold text-primary border-bottom pb-1 mt-4 font-heading">
+                          <i className="bi bi-bookmark-fill me-2 text-primary"></i>{cleanText}
+                        </h5>
+                      );
+                    }
 
-                  <h5 className="fw-bold text-primary border-bottom pb-1 mt-4">3. DEFINICIONES</h5>
-                  <ul>
-                    <li><strong>Disponibilidad:</strong> Probabilidad de que el equipo esté en servicio o presto para operar cuando sea requerido.</li>
-                    <li><strong>Fiabilidad:</strong> Probabilidad de que el equipo o la máquina opere correctamente durante un período determinado de tiempo.</li>
-                    <li><strong>Mantenibilidad:</strong> Capacidad de un equipo de ser llevado a su funcionamiento regular mediante tareas de mantenimiento necesarias.</li>
-                    <li><strong>Mantenimiento Correctivo:</strong> Corregir los defectos observados en los equipos o instalaciones; es la forma más básica de mantenimiento y consiste en localizar fallos y corregirlos o repararlos.</li>
-                    <li><strong>Mantenimiento Preventivo:</strong> Inspección periódica de los equipos de la planta para descubrir las condiciones que conducen a paros imprevistos de producción o desgaste perjudicial. Corregir dichas condiciones aun cuando se encuentre en una fase inicial.</li>
-                    <li><strong>Reparaciones de Emergencia:</strong> Son aquellas que deben ejecutarse inmediatamente para prevenir pérdidas de producción, averías serias en los equipos o para corregir peligros.</li>
-                  </ul>
-
-                  <h5 className="fw-bold text-primary border-bottom pb-1 mt-4">4. MANTENIMIENTO PREVENTIVO Y CORRECTIVO</h5>
-                  <p><strong>Procedimiento Preventivo:</strong> Limpieza pre-operacional diaria, revisión semanal con fichas de datos y desmontaje mensual de partes accesibles para extractores y ventiladores. Los equipos complejos (caldera, cuartos fríos, hiladoras) son intervenidos por personal calificado.</p>
-                  <p><strong>Procedimiento Correctivo:</strong> 1. Evaluar el daño causado. 2. Analizar causas de la falla. 3. Corregir las causas. 4. Reparar, ajustar o cambiar piezas defectuosas. 5. Ejecutar pruebas y ajustes finales.</p>
+                    return (
+                      <p key={idx} className="mb-2 text-dark" style={{ textAlign: 'justify' }}>
+                        {cleanText}
+                      </p>
+                    );
+                  })}
                 </div>
               </div>
               <div className="modal-footer border-top-0 p-3 bg-light" style={{ borderBottomLeftRadius: '18px', borderBottomRightRadius: '18px' }}>
