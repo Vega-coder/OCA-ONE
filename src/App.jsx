@@ -9,6 +9,7 @@ import AllergenRecall from './components/AllergenRecall';
 import Procedimientos from './components/Procedimientos';
 import Mantenimiento from './components/Mantenimiento';
 import SgSst from './components/SgSst';
+import LiberacionLotes from './components/LiberacionLotes';
 import Login from './components/Login';
 import { useAppEngine } from './hooks/useAppContext';
 import { ROLES_DEFINITIONS, isViewAllowedForRole } from './lib/permissions';
@@ -33,6 +34,8 @@ function App() {
     setIsMantenimientoOpen,
     isSstOpen,
     setIsSstOpen,
+    isLiberacionLotesOpen,
+    setIsLiberacionLotesOpen,
     activeCategory,
     setActiveCategory,
     expandedCategories,
@@ -317,6 +320,55 @@ function App() {
                         className={`nav-link-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'sg-sst' && activeCategory === cat.name ? 'fw-bold' : ''}`}
                         onClick={() => {
                           setCurrentView('sg-sst');
+                          setActiveCategory(cat.name);
+                        }}
+                      >
+                        <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                          <i className={`bi ${cat.icon}`}></i>
+                        </div>
+                        {cat.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          )}
+
+          {/* Módulo Liberación de Lotes (Q-PD-15) - Desplegable Multinivel */}
+          {isViewAllowedForRole('liberacion-lotes', userRole, rolesList) && (
+            <li className="nav-item mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'liberacion-lotes' ? 'active' : 'text-white'}`}
+                onClick={() => {
+                  setCurrentView('liberacion-lotes');
+                  setIsLiberacionLotesOpen(!isLiberacionLotesOpen);
+                }}
+              >
+                <span className="d-flex align-items-center">
+                  <div className="icon-badge icon-badge-sky me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                    <i className="bi bi-box-seam-fill"></i>
+                  </div>
+                  Liberación Lotes (Q-PD-15)
+                </span>
+                <i className={`bi bi-chevron-down arrow-rotate ${isLiberacionLotesOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
+              </button>
+              
+              {/* Nivel 2: Categorías Desplegables Liberación de Lotes */}
+              {isLiberacionLotesOpen && (
+                <ul className="sidebar-submenu">
+                  {[
+                    { name: 'Objetivo y Responsabilidades', icon: 'bi-bullseye', badgeStyle: 'icon-badge-sky' },
+                    { name: 'Definiciones Rotulado', icon: 'bi-tags-fill', badgeStyle: 'icon-badge-amber' },
+                    { name: 'Trazabilidad Queso Costeño', icon: 'bi-journal-code', badgeStyle: 'icon-badge-indigo' },
+                    { name: 'Trazabilidad Queso Mozzarella', icon: 'bi-diagram-2', badgeStyle: 'icon-badge-emerald' },
+                    { name: 'Bitácora FOPD-15-01', icon: 'bi-clipboard-check-fill', badgeStyle: 'icon-badge-cyan' }
+                  ].map(cat => (
+                    <li key={cat.name} className="mb-1">
+                      <button 
+                        className={`nav-link-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'liberacion-lotes' && activeCategory === cat.name ? 'fw-bold' : ''}`}
+                        onClick={() => {
+                          setCurrentView('liberacion-lotes');
                           setActiveCategory(cat.name);
                         }}
                       >
@@ -654,6 +706,14 @@ function App() {
           )}
           {currentView === 'sg-sst' && (
             <SgSst 
+              tenantId={activeTenant.id} 
+              userRole={userRole} 
+              carpetaActiva={activeCategory}
+              setCarpetaActiva={setActiveCategory}
+            />
+          )}
+          {currentView === 'liberacion-lotes' && (
+            <LiberacionLotes 
               tenantId={activeTenant.id} 
               userRole={userRole} 
               carpetaActiva={activeCategory}

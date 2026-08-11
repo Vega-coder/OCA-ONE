@@ -38,6 +38,7 @@ export function useAppEngine() {
   const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
   const [isMantenimientoOpen, setIsMantenimientoOpen] = useState(true);
   const [isSstOpen, setIsSstOpen] = useState(true);
+  const [isLiberacionLotesOpen, setIsLiberacionLotesOpen] = useState(true);
   const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
   const [expandedCategories, setExpandedCategories] = useState({
     'Limpieza y Desinfección': true,
@@ -267,6 +268,8 @@ export function useAppEngine() {
     setIsMantenimientoOpen,
     isSstOpen,
     setIsSstOpen,
+    isLiberacionLotesOpen,
+    setIsLiberacionLotesOpen,
     activeCategory,
     setActiveCategory,
     expandedCategories,
