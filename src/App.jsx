@@ -10,6 +10,7 @@ import Procedimientos from './components/Procedimientos';
 import Mantenimiento from './components/Mantenimiento';
 import SgSst from './components/SgSst';
 import LiberacionLotes from './components/LiberacionLotes';
+import RecepcionMateriasPrimas from './components/RecepcionMateriasPrimas';
 import Login from './components/Login';
 import { useAppEngine } from './hooks/useAppContext';
 import { ROLES_DEFINITIONS, isViewAllowedForRole } from './lib/permissions';
@@ -36,6 +37,8 @@ function App() {
     setIsSstOpen,
     isLiberacionLotesOpen,
     setIsLiberacionLotesOpen,
+    isRecepcionMateriasPrimasOpen,
+    setIsRecepcionMateriasPrimasOpen,
     activeCategory,
     setActiveCategory,
     expandedCategories,
@@ -384,6 +387,55 @@ function App() {
             </li>
           )}
 
+          {/* Módulo Recepción Materias Primas (Q-PD-13) - Desplegable Multinivel */}
+          {isViewAllowedForRole('recepcion-materias-primas', userRole, rolesList) && (
+            <li className="nav-item mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'recepcion-materias-primas' ? 'active' : 'text-white'}`}
+                onClick={() => {
+                  setCurrentView('recepcion-materias-primas');
+                  setIsRecepcionMateriasPrimasOpen(!isRecepcionMateriasPrimasOpen);
+                }}
+              >
+                <span className="d-flex align-items-center">
+                  <div className="icon-badge icon-badge-emerald me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                    <i className="bi bi-truck-front-fill"></i>
+                  </div>
+                  Recepción Primas (Q-PD-13)
+                </span>
+                <i className={`bi bi-chevron-down arrow-rotate ${isRecepcionMateriasPrimasOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
+              </button>
+              
+              {/* Nivel 2: Categorías Desplegables Recepción Materias Primas */}
+              {isRecepcionMateriasPrimasOpen && (
+                <ul className="sidebar-submenu">
+                  {[
+                    { name: 'Objetivo y Responsabilidades', icon: 'bi-bullseye', badgeStyle: 'icon-badge-sky' },
+                    { name: 'Parámetros Fisicoquímicos', icon: 'bi-droplet-half', badgeStyle: 'icon-badge-amber' },
+                    { name: 'Criterios Microbiológicos', icon: 'bi-bug-fill', badgeStyle: 'icon-badge-indigo' },
+                    { name: 'Recepción de Empaques', icon: 'bi-box-seam', badgeStyle: 'icon-badge-emerald' },
+                    { name: 'Formato Plataforma Q-FR-25', icon: 'bi-journal-check', badgeStyle: 'icon-badge-cyan' }
+                  ].map(cat => (
+                    <li key={cat.name} className="mb-1">
+                      <button 
+                        className={`nav-link-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'recepcion-materias-primas' && activeCategory === cat.name ? 'fw-bold' : ''}`}
+                        onClick={() => {
+                          setCurrentView('recepcion-materias-primas');
+                          setActiveCategory(cat.name);
+                        }}
+                      >
+                        <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                          <i className={`bi ${cat.icon}`}></i>
+                        </div>
+                        {cat.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          )}
+
           {/* Módulo Dashboard */}
           {isViewAllowedForRole('dashboard', userRole, rolesList) && (
             <li className="mb-1">
@@ -714,6 +766,14 @@ function App() {
           )}
           {currentView === 'liberacion-lotes' && (
             <LiberacionLotes 
+              tenantId={activeTenant.id} 
+              userRole={userRole} 
+              carpetaActiva={activeCategory}
+              setCarpetaActiva={setActiveCategory}
+            />
+          )}
+          {currentView === 'recepcion-materias-primas' && (
+            <RecepcionMateriasPrimas 
               tenantId={activeTenant.id} 
               userRole={userRole} 
               carpetaActiva={activeCategory}
