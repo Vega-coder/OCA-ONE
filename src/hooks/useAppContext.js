@@ -35,19 +35,19 @@ export function useAppEngine() {
 
   const [rolesList, setRolesList] = useState(ROLES_DEFINITIONS);
   const [usuariosDb, setUsuariosDb] = useState([]);
-  const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
-  const [isMantenimientoOpen, setIsMantenimientoOpen] = useState(true);
-  const [isSstOpen, setIsSstOpen] = useState(true);
-  const [isLiberacionLotesOpen, setIsLiberacionLotesOpen] = useState(true);
-  const [isRecepcionMateriasPrimasOpen, setIsRecepcionMateriasPrimasOpen] = useState(true);
+  const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(false);
+  const [isMantenimientoOpen, setIsMantenimientoOpen] = useState(false);
+  const [isSstOpen, setIsSstOpen] = useState(false);
+  const [isLiberacionLotesOpen, setIsLiberacionLotesOpen] = useState(false);
+  const [isRecepcionMateriasPrimasOpen, setIsRecepcionMateriasPrimasOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
   const [expandedCategories, setExpandedCategories] = useState({
-    'Limpieza y Desinfección': true,
+    'Limpieza y Desinfección': false,
     'Control de Plagas': false,
     'Residuos Sólidos y Líquidos': false,
     'Agua Potable': false,
-    'Equipos de Producción': true,
+    'Equipos de Producción': false,
     'Servicios Auxiliares': false,
     'Frío y Ventilación': false
   });
