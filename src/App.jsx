@@ -35,6 +35,10 @@ function App() {
     setIsMantenimientoOpen,
     isSstOpen,
     setIsSstOpen,
+    isProduccionModuloOpen,
+    setIsProduccionModuloOpen,
+    isLogisticaModuloOpen,
+    setIsLogisticaModuloOpen,
     isLiberacionLotesOpen,
     setIsLiberacionLotesOpen,
     isRecepcionMateriasPrimasOpen,
@@ -132,7 +136,7 @@ function App() {
                   <div className="icon-badge icon-badge-cyan me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
                     <i className="bi bi-patch-check-fill"></i>
                   </div>
-                  Control de Calidad
+                  Módulo Control de Calidad
                 </span>
                 <i className={`bi bi-chevron-down arrow-rotate ${isProcedimientosOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
               </button>
@@ -207,7 +211,7 @@ function App() {
                   <div className="icon-badge icon-badge-indigo me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
                     <i className="bi bi-tools"></i>
                   </div>
-                  Mantenimiento de Equipos
+                  Módulo Mantenimiento Equipos
                 </span>
                 <i className={`bi bi-chevron-down arrow-rotate ${isMantenimientoOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
               </button>
@@ -328,7 +332,7 @@ function App() {
                   <div className="icon-badge icon-badge-rose me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
                     <i className="bi bi-heart-pulse-fill"></i>
                   </div>
-                  Seguridad y Salud (SG-SST)
+                  Módulo Seguridad y Salud (SG-SST)
                 </span>
                 <i className={`bi bi-chevron-down arrow-rotate ${isSstOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
               </button>
@@ -362,99 +366,139 @@ function App() {
             </li>
           )}
 
-          {/* Módulo Liberación de Lotes (Q-PD-15) - Desplegable Multinivel */}
-          {isViewAllowedForRole('liberacion-lotes', userRole, rolesList) && (
+          {/* Módulo Producción (Contiene Liberación de Lotes Q-PD-15) */}
+          {isViewAllowedForRole('produccion-modulo', userRole, rolesList) && (
             <li className="nav-item mb-1">
               <button 
-                className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'liberacion-lotes' ? 'active' : 'text-white'}`}
+                className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'liberacion-lotes' || isProduccionModuloOpen ? 'active' : 'text-white'}`}
                 onClick={() => {
                   setCurrentView('liberacion-lotes');
-                  setIsLiberacionLotesOpen(!isLiberacionLotesOpen);
+                  setIsProduccionModuloOpen(!isProduccionModuloOpen);
                 }}
               >
                 <span className="d-flex align-items-center">
                   <div className="icon-badge icon-badge-sky me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                    <i className="bi bi-box-seam-fill"></i>
+                    <i className="bi bi-gear-wide-connected"></i>
                   </div>
-                  Liberación Lotes (Q-PD-15)
+                  Módulo Producción
                 </span>
-                <i className={`bi bi-chevron-down arrow-rotate ${isLiberacionLotesOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
+                <i className={`bi bi-chevron-down arrow-rotate ${isProduccionModuloOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
               </button>
               
-              {/* Nivel 2: Categorías Desplegables Liberación de Lotes */}
-              {isLiberacionLotesOpen && (
+              {/* Nivel 2: Liberación de Lotes (Q-PD-15) dentro de Producción */}
+              {isProduccionModuloOpen && (
                 <ul className="sidebar-submenu">
-                  {[
-                    { name: 'Objetivo y Responsabilidades', icon: 'bi-bullseye', badgeStyle: 'icon-badge-sky' },
-                    { name: 'Definiciones Rotulado', icon: 'bi-tags-fill', badgeStyle: 'icon-badge-amber' },
-                    { name: 'Trazabilidad Queso Costeño', icon: 'bi-journal-code', badgeStyle: 'icon-badge-indigo' },
-                    { name: 'Trazabilidad Queso Mozzarella', icon: 'bi-diagram-2', badgeStyle: 'icon-badge-emerald' },
-                    { name: 'Bitácora FOPD-15-01', icon: 'bi-clipboard-check-fill', badgeStyle: 'icon-badge-cyan' }
-                  ].map(cat => (
-                    <li key={cat.name} className="mb-1">
-                      <button 
-                        className={`nav-link-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'liberacion-lotes' && activeCategory === cat.name ? 'fw-bold' : ''}`}
-                        onClick={() => {
-                          setCurrentView('liberacion-lotes');
-                          setActiveCategory(cat.name);
-                        }}
-                      >
-                        <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
-                          <i className={`bi ${cat.icon}`}></i>
+                  <li className="mb-1">
+                    <button 
+                      className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'liberacion-lotes' ? 'fw-bold' : ''}`}
+                      onClick={() => {
+                        setCurrentView('liberacion-lotes');
+                        setIsLiberacionLotesOpen(!isLiberacionLotesOpen);
+                      }}
+                    >
+                      <span className="d-flex align-items-center">
+                        <div className="icon-badge icon-badge-sky me-2" style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                          <i className="bi bi-box-seam-fill"></i>
                         </div>
-                        {cat.name}
-                      </button>
-                    </li>
-                  ))}
+                        Liberación Lotes (Q-PD-15)
+                      </span>
+                      <i className={`bi bi-chevron-down arrow-rotate ${isLiberacionLotesOpen ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
+                    </button>
+
+                    {/* Nivel 3: Secciones de Liberación de Lotes */}
+                    {isLiberacionLotesOpen && (
+                      <ul className="sidebar-sub-submenu">
+                        {[
+                          { name: 'Objetivo y Responsabilidades', icon: 'bi-bullseye' },
+                          { name: 'Definiciones Rotulado', icon: 'bi-tags-fill' },
+                          { name: 'Trazabilidad Queso Costeño', icon: 'bi-journal-code' },
+                          { name: 'Trazabilidad Queso Mozzarella', icon: 'bi-diagram-2' },
+                          { name: 'Bitácora FOPD-15-01', icon: 'bi-clipboard-check-fill' }
+                        ].map(sub => (
+                          <li key={sub.name}>
+                            <button
+                              className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'liberacion-lotes' && activeCategory === sub.name ? 'active-sub-sub' : 'text-white'}`}
+                              onClick={() => {
+                                setCurrentView('liberacion-lotes');
+                                setActiveCategory(sub.name);
+                              }}
+                            >
+                              <i className={`bi ${sub.icon} me-2 text-info`}></i> {sub.name}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
                 </ul>
               )}
             </li>
           )}
 
-          {/* Módulo Recepción Materias Primas (Q-PD-13) - Desplegable Multinivel */}
-          {isViewAllowedForRole('recepcion-materias-primas', userRole, rolesList) && (
+          {/* Módulo Logística, Abastecimiento y Despachos (Contiene Recepción de Materias Primas Q-PD-13) */}
+          {isViewAllowedForRole('logistica-modulo', userRole, rolesList) && (
             <li className="nav-item mb-1">
               <button 
-                className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'recepcion-materias-primas' ? 'active' : 'text-white'}`}
+                className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'recepcion-materias-primas' || isLogisticaModuloOpen ? 'active' : 'text-white'}`}
                 onClick={() => {
                   setCurrentView('recepcion-materias-primas');
-                  setIsRecepcionMateriasPrimasOpen(!isRecepcionMateriasPrimasOpen);
+                  setIsLogisticaModuloOpen(!isLogisticaModuloOpen);
                 }}
               >
                 <span className="d-flex align-items-center">
                   <div className="icon-badge icon-badge-emerald me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
-                    <i className="bi bi-truck-front-fill"></i>
+                    <i className="bi bi-truck"></i>
                   </div>
-                  Recepción Primas (Q-PD-13)
+                  Módulo Logística y Despachos
                 </span>
-                <i className={`bi bi-chevron-down arrow-rotate ${isRecepcionMateriasPrimasOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
+                <i className={`bi bi-chevron-down arrow-rotate ${isLogisticaModuloOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
               </button>
               
-              {/* Nivel 2: Categorías Desplegables Recepción Materias Primas */}
-              {isRecepcionMateriasPrimasOpen && (
+              {/* Nivel 2: Recepción de Materias Primas (Q-PD-13) dentro de Logística */}
+              {isLogisticaModuloOpen && (
                 <ul className="sidebar-submenu">
-                  {[
-                    { name: 'Objetivo y Responsabilidades', icon: 'bi-bullseye', badgeStyle: 'icon-badge-sky' },
-                    { name: 'Parámetros Fisicoquímicos', icon: 'bi-droplet-half', badgeStyle: 'icon-badge-amber' },
-                    { name: 'Criterios Microbiológicos', icon: 'bi-bug-fill', badgeStyle: 'icon-badge-indigo' },
-                    { name: 'Recepción de Empaques', icon: 'bi-box-seam', badgeStyle: 'icon-badge-emerald' },
-                    { name: 'Formato Plataforma Q-FR-25', icon: 'bi-journal-check', badgeStyle: 'icon-badge-cyan' }
-                  ].map(cat => (
-                    <li key={cat.name} className="mb-1">
-                      <button 
-                        className={`nav-link-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'recepcion-materias-primas' && activeCategory === cat.name ? 'fw-bold' : ''}`}
-                        onClick={() => {
-                          setCurrentView('recepcion-materias-primas');
-                          setActiveCategory(cat.name);
-                        }}
-                      >
-                        <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
-                          <i className={`bi ${cat.icon}`}></i>
+                  <li className="mb-1">
+                    <button 
+                      className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'recepcion-materias-primas' ? 'fw-bold' : ''}`}
+                      onClick={() => {
+                        setCurrentView('recepcion-materias-primas');
+                        setIsRecepcionMateriasPrimasOpen(!isRecepcionMateriasPrimasOpen);
+                      }}
+                    >
+                      <span className="d-flex align-items-center">
+                        <div className="icon-badge icon-badge-emerald me-2" style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                          <i className="bi bi-truck-front-fill"></i>
                         </div>
-                        {cat.name}
-                      </button>
-                    </li>
-                  ))}
+                        Recepción Primas (Q-PD-13)
+                      </span>
+                      <i className={`bi bi-chevron-down arrow-rotate ${isRecepcionMateriasPrimasOpen ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
+                    </button>
+
+                    {/* Nivel 3: Secciones de Recepción de Materias Primas */}
+                    {isRecepcionMateriasPrimasOpen && (
+                      <ul className="sidebar-sub-submenu">
+                        {[
+                          { name: 'Objetivo y Responsabilidades', icon: 'bi-bullseye' },
+                          { name: 'Parámetros Fisicoquímicos', icon: 'bi-droplet-half' },
+                          { name: 'Criterios Microbiológicos', icon: 'bi-bug-fill' },
+                          { name: 'Recepción de Empaques', icon: 'bi-box-seam' },
+                          { name: 'Formato Plataforma Q-FR-25', icon: 'bi-journal-check' }
+                        ].map(sub => (
+                          <li key={sub.name}>
+                            <button
+                              className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'recepcion-materias-primas' && activeCategory === sub.name ? 'active-sub-sub' : 'text-white'}`}
+                              onClick={() => {
+                                setCurrentView('recepcion-materias-primas');
+                                setActiveCategory(sub.name);
+                              }}
+                            >
+                              <i className={`bi ${sub.icon} me-2 text-success`}></i> {sub.name}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
                 </ul>
               )}
             </li>

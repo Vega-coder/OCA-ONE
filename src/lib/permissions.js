@@ -16,7 +16,7 @@ export const ROLES_DEFINITIONS = [
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
     canViewMSDS: true,
-    allowedViews: ['procedimientos', 'mantenimiento', 'sg-sst', 'liberacion-lotes', 'recepcion-materias-primas', 'dashboard', 'saneamiento', 'variables', 'capa', 'trazabilidad', 'alergenos-recall', 'capacitaciones']
+    allowedViews: ['procedimientos', 'mantenimiento', 'sg-sst', 'liberacion-lotes', 'recepcion-materias-primas', 'produccion-modulo', 'logistica-modulo', 'dashboard', 'saneamiento', 'variables', 'capa', 'trazabilidad', 'alergenos-recall', 'capacitaciones']
   },
   {
     id: 'control-calidad',
@@ -31,7 +31,7 @@ export const ROLES_DEFINITIONS = [
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
     canViewMSDS: true,
-    allowedViews: ['procedimientos', 'mantenimiento', 'sg-sst', 'liberacion-lotes', 'recepcion-materias-primas', 'dashboard', 'saneamiento', 'capa', 'alergenos-recall']
+    allowedViews: ['procedimientos', 'mantenimiento', 'sg-sst', 'liberacion-lotes', 'recepcion-materias-primas', 'produccion-modulo', 'logistica-modulo', 'dashboard', 'saneamiento', 'capa', 'alergenos-recall']
   },
   {
     id: 'produccion',
@@ -46,7 +46,7 @@ export const ROLES_DEFINITIONS = [
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
     canViewMSDS: false,
-    allowedViews: ['mantenimiento', 'sg-sst', 'liberacion-lotes', 'recepcion-materias-primas', 'variables', 'trazabilidad', 'dashboard']
+    allowedViews: ['mantenimiento', 'sg-sst', 'liberacion-lotes', 'recepcion-materias-primas', 'produccion-modulo', 'logistica-modulo', 'variables', 'trazabilidad', 'dashboard']
   },
   {
     id: 'operativo',
@@ -61,7 +61,7 @@ export const ROLES_DEFINITIONS = [
     canDownloadFormats: true,
     canViewFichasTecnicas: false,
     canViewMSDS: false,
-    allowedViews: ['variables', 'saneamiento', 'trazabilidad', 'liberacion-lotes', 'recepcion-materias-primas']
+    allowedViews: ['variables', 'saneamiento', 'trazabilidad', 'liberacion-lotes', 'recepcion-materias-primas', 'produccion-modulo', 'logistica-modulo']
   },
   {
     id: 'mantenimiento',
@@ -91,7 +91,7 @@ export const ROLES_DEFINITIONS = [
     canDownloadFormats: true,
     canViewFichasTecnicas: true,
     canViewMSDS: false,
-    allowedViews: ['trazabilidad', 'liberacion-lotes', 'recepcion-materias-primas', 'alergenos-recall', 'dashboard']
+    allowedViews: ['trazabilidad', 'liberacion-lotes', 'recepcion-materias-primas', 'produccion-modulo', 'logistica-modulo', 'alergenos-recall', 'dashboard']
   },
   {
     id: 'sg-sst',

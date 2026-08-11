@@ -38,6 +38,8 @@ export function useAppEngine() {
   const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(false);
   const [isMantenimientoOpen, setIsMantenimientoOpen] = useState(false);
   const [isSstOpen, setIsSstOpen] = useState(false);
+  const [isProduccionModuloOpen, setIsProduccionModuloOpen] = useState(false);
+  const [isLogisticaModuloOpen, setIsLogisticaModuloOpen] = useState(false);
   const [isLiberacionLotesOpen, setIsLiberacionLotesOpen] = useState(false);
   const [isRecepcionMateriasPrimasOpen, setIsRecepcionMateriasPrimasOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -270,6 +272,10 @@ export function useAppEngine() {
     setIsMantenimientoOpen,
     isSstOpen,
     setIsSstOpen,
+    isProduccionModuloOpen,
+    setIsProduccionModuloOpen,
+    isLogisticaModuloOpen,
+    setIsLogisticaModuloOpen,
     isLiberacionLotesOpen,
     setIsLiberacionLotesOpen,
     isRecepcionMateriasPrimasOpen,
