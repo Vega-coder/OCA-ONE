@@ -537,7 +537,7 @@ export default function LiberacionLotes({ tenantId = 'tenant-opt-01', userRole =
         </div>
       )}
 
-      {/* Modal Lector Completo del Documento PDF (Q-PD-15) */}
+      {/* Modal Lector Completo del Documento PDF (Q-PD-15) Formateado en Hoja Limpia ISO */}
       {mostrarTextoCompleto && (
         <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}>
           <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -550,7 +550,7 @@ export default function LiberacionLotes({ tenantId = 'tenant-opt-01', userRole =
               </div>
 
               <div className="modal-body p-4 bg-light" style={{ fontSize: '13.5px', lineHeight: '1.6' }}>
-                <div className="bg-white p-5 shadow-sm rounded-3 border mx-auto" style={{ maxWidth: '900px' }}>
+                <div className="bg-white p-5 shadow-sm rounded-3 border mx-auto" style={{ maxWidth: '920px' }}>
                   {/* Encabezado Oficial ISO del Documento */}
                   <table className="table table-bordered align-middle text-center mb-4 small border-secondary">
                     <tbody>
@@ -568,36 +568,167 @@ export default function LiberacionLotes({ tenantId = 'tenant-opt-01', userRole =
                     </tbody>
                   </table>
 
-                  {/* Texto Extrapolado Completo Párrafo por Párrafo */}
-                  {LIBERACION_LOTES_PDF_TEXT.split('\n\n--- PAGE BREAK ---\n\n').map((pageContent, pageIdx) => (
-                    <div key={pageIdx} className="mb-4 pb-4 border-bottom">
-                      <div className="badge bg-secondary mb-3">PÁGINA {pageIdx + 1} DE 14</div>
-                      {pageContent.split('\n').map((line, lineIdx) => {
-                        const txt = line.strip ? line.strip() : line.trim();
-                        if (!txt) return null;
+                  {/* Sección 1: Objetivo y Alcance */}
+                  <div className="mb-4">
+                    <h5 className="fw-bold text-info border-bottom pb-1 font-heading">1. OBJETIVO</h5>
+                    <p className="text-dark mb-3" style={{ textAlign: 'justify' }}>
+                      Dar a conocer los elementos fundamentales a considerar y el buen desempeño de la liberación de lotes de los productos procesados, empacados y comercializados por la empresa Lácteos Río Grande SAS.
+                    </p>
 
-                        const isHeader = [
-                          '1. OBJETIVO', '2. ALCANCE', '3. DEFINICIONES', '4. GENERALIDADES',
-                          '5. GENERALIDADES', '6. LIBERACIÓN DE MATERIA PRIMA', '7. IDENTIFICACIÓN DEL PRODUCTO',
-                          '8. RUTA DE TRAZABILIDAD', '9. DEFINICIÓN DE LOTE', '10. CONTROL DE REGISTROS'
-                        ].some(h => txt.toUpperCase().startsWith(h));
+                    <h5 className="fw-bold text-info border-bottom pb-1 font-heading">2. ALCANCE Y RESPONSABILIDADES</h5>
+                    <p className="text-dark mb-2" style={{ textAlign: 'justify' }}>
+                      El procedimiento aplica a todos los procesos y controles realizados desde la recepción de las materias primas hasta la entrega de producto terminado en Lácteos Río Grande SAS.
+                    </p>
+                    <ul className="text-dark small">
+                      <li><strong>2.1. Jefe de Producción / Analista de Laboratorio:</strong> Responsable de la vigencia del documento y el control de implementación de todos los POES.</li>
+                      <li><strong>2.2. Analista Q.A. / Calidad:</strong> Responsable de realizar todos los controles y generar los registros para garantizar la trazabilidad.</li>
+                      <li><strong>2.3. Manipuladores de Alimentos:</strong> Cumplimiento estricto de los controles definidos en los planes de calidad.</li>
+                    </ul>
+                  </div>
 
-                        if (isHeader) {
-                          return (
-                            <h5 key={lineIdx} className="fw-bold text-info border-bottom pb-1 mt-4 font-heading">
-                              <i className="bi bi-bookmark-star-fill me-2 text-info"></i>{txt}
-                            </h5>
-                          );
-                        }
-
-                        return (
-                          <p key={lineIdx} className="mb-1 text-dark" style={{ textAlign: 'justify' }}>
-                            {txt}
-                          </p>
-                        );
-                      })}
+                  {/* Sección 3: Definiciones */}
+                  <div className="mb-4">
+                    <h5 className="fw-bold text-info border-bottom pb-1 font-heading">3. DEFINICIONES NORMATIVAS (RESOLUCIÓN 5109)</h5>
+                    <div className="row g-2 text-dark small">
+                      <div className="col-12 col-md-6"><strong>Contenido Neto:</strong> Cantidad de producto sin considerar la masa del empaque.</div>
+                      <div className="col-12 col-md-6"><strong>Fecha de Duración Mínima:</strong> Fecha límite para máxima calidad organoléptica.</div>
+                      <div className="col-12 col-md-6"><strong>Lote:</strong> Cantidad de unidades producidas en condiciones esencialmente iguales.</div>
+                      <div className="col-12 col-md-6"><strong>Trazabilidad:</strong> Capacidad para seguir la historia del alimento desde el origen.</div>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Tabla 2 Oficial: Matriz de Control e Inspección en Recepción */}
+                  <div className="my-4">
+                    <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-table me-2 text-info"></i>Tabla de Control de Recepción de Insumos y Materia Prima</h6>
+                    <div className="table-responsive">
+                      <table className="table table-bordered table-sm align-middle small mb-0 bg-white">
+                        <thead className="table-dark">
+                          <tr>
+                            <th>Etapa / Ruta</th>
+                            <th>Control Realizado</th>
+                            <th>Frecuencia</th>
+                            <th>Parámetros de Calidad</th>
+                            <th>Registro Oficial</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td className="fw-bold">Recepción Leche Cruda</td>
+                            <td>Prueba de Alcohol, Acidez, Grasa, Densidad, Antibióticos</td>
+                            <td>Diario (Cada Carro Cister)</td>
+                            <td>Acidez: 14-18°D | Temp: &lt; 10°C | Alcohol: Negativo</td>
+                            <td><span className="badge bg-secondary">Q-FR-25 Registro Ruta</span></td>
+                          </tr>
+                          <tr>
+                            <td className="fw-bold">Recepciones Insumos / Empaque</td>
+                            <td>Inspección de sello, certificación de grado alimenticio, vida útil</td>
+                            <td>Cada Despacho</td>
+                            <td>FT-01 Ficha Técnica de Empaque</td>
+                            <td><span className="badge bg-secondary">Q-FR-21 Control Insumos</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Tabla de Rutas de Trazabilidad: Queso Costeño y Mozzarella */}
+                  <div className="my-4">
+                    <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-diagram-3-fill me-2 text-info"></i>Matriz de Puntos Críticos y Trazabilidad por Producto</h6>
+                    <div className="table-responsive">
+                      <table className="table table-bordered table-sm align-middle small mb-0 bg-white">
+                        <thead className="table-light">
+                          <tr>
+                            <th>Producto</th>
+                            <th>Etapa del Proceso</th>
+                            <th>Temperatura / Parámetro Crítico</th>
+                            <th>Tiempo / Especificación</th>
+                            <th>Registro de Control</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td rowSpan="3" className="fw-bold align-middle bg-light">Queso Costeño</td>
+                            <td>Pasteurización</td>
+                            <td>72°C +/- 1°C</td>
+                            <td>15 segundos (Flujo continuo)</td>
+                            <td>FOR-PT-02 Graficador</td>
+                          </tr>
+                          <tr>
+                            <td>Cuajado y Salado</td>
+                            <td>32°C - 35°C | Sal: 2.0% - 2.5%</td>
+                            <td>Reposo: 35 min | Salado: 15 min</td>
+                            <td>FOPD-15-01 Marmita</td>
+                          </tr>
+                          <tr>
+                            <td>Almacenamiento Frío</td>
+                            <td>0°C a 4°C +/- 2°C</td>
+                            <td>Temperatura máxima 6°C</td>
+                            <td>FOR-CF-03 Control Frío</td>
+                          </tr>
+                          <tr>
+                            <td rowSpan="3" className="fw-bold align-middle bg-light">Queso Mozzarella</td>
+                            <td>Inoculación y Cuajado</td>
+                            <td>38°C - 42°C</td>
+                            <td>Inoculo: 5 min | Reposo: 35 min</td>
+                            <td>FOPD-15-01 Marmita</td>
+                          </tr>
+                          <tr>
+                            <td>Hilado y Salmuera</td>
+                            <td>Agua: 75°C-80°C | Salmuera: 18-20°Bé</td>
+                            <td>Enfriamiento: 4h a 2°C-4°C</td>
+                            <td>Control Salmuera</td>
+                          </tr>
+                          <tr>
+                            <td>Empaque y Cuarto Frío</td>
+                            <td>Empaque al Vacío | Temp: 0°C a 4°C</td>
+                            <td>Tajado Max 10°C | Bloque Max 6°C</td>
+                            <td>FOPD-15-01 Liberación</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Tabla 11 Oficial: Control de Registros */}
+                  <div className="my-4">
+                    <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-folder-check me-2 text-info"></i>Tabla 10: Control de Registros y Tiempos de Archivo</h6>
+                    <div className="table-responsive">
+                      <table className="table table-bordered table-sm align-middle small mb-0 bg-white">
+                        <thead className="table-light">
+                          <tr>
+                            <th>Código del Registro</th>
+                            <th>Ubicación del Archivo</th>
+                            <th>Responsable</th>
+                            <th>Tiempo de Retención</th>
+                            <th>Disposición Final</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><strong>Q-FR-25 Control Leche Cruda</strong></td>
+                            <td>Carpeta Manual de Calidad</td>
+                            <td>Analista de Laboratorio</td>
+                            <td>1 Año</td>
+                            <td>Reciclaje</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Q-FR-26 Control Producto Terminado</strong></td>
+                            <td>Carpeta Control de Proceso</td>
+                            <td>Jefe de Producción</td>
+                            <td>1 Año (Vida Útil + 6 meses)</td>
+                            <td>Reciclaje</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Q-FR-21 Control de Despachos</strong></td>
+                            <td>Oficina de Logística</td>
+                            <td>Auxiliar de Despachos</td>
+                            <td>1 Año</td>
+                            <td>Reciclaje</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
 
