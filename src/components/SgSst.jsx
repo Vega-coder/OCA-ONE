@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { canUserDownloadProcedure } from '../lib/permissions';
-import { SST_FULL_PARAGRAPHS, SST_FULL_TABLES } from '../domain/sstFullText';
+import { SST_PARAGRAPHS, SST_TABLES } from '../domain/sstDocumentFlow';
 
 export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-admin', carpetaActiva, setCarpetaActiva }) {
   const [mostrarTextoCompleto, setMostrarTextoCompleto] = useState(false);
@@ -18,9 +18,9 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
       controlesExistentes: 'Uso de guantes de nitrilo, monogafas y delantal impermeable',
       nivelDeficiencia: 2,
       nivelExposicion: 3,
-      nivelProbabilidad: 6, // ND x NE
+      nivelProbabilidad: 6,
       nivelConsecuencia: 25,
-      nivelRiesgo: 150, // NP x NC
+      nivelRiesgo: 150,
       aceptabilidad: 'II - Aceptable con Control',
       medidaIntervencion: 'Controles de Ingeniería: Instalación de acoples rápidos antigoteo en mangueras de recepción.'
     },
@@ -83,8 +83,7 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
       'Definiciones y Alcance': 'definiciones',
       'Metodología GTC 45': 'metodologia',
       'Matriz de 8 Pasos': 'pasos',
-      'Matriz de Peligros': 'matriz',
-      'Lista de Chequeo': 'inspeccion'
+      'Matriz de Peligros': 'matriz'
     };
     if (mapaSecciones[carpetaActiva]) {
       setSeccionActiva(mapaSecciones[carpetaActiva]);
@@ -361,6 +360,56 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
             </div>
           </div>
 
+          {/* Tabla 2 Oficial GTC 45 Matriz Nivel de Riesgo (NR) */}
+          <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-grid-3x3-gap-fill me-2 text-danger"></i>Tabla Oficial GTC 45 - Matriz Nivel de Riesgo (NR = NP x NC):</h6>
+          <div className="table-responsive mb-4">
+            <table className="table table-bordered table-sm align-middle text-center small mb-0">
+              <thead className="table-dark">
+                <tr>
+                  <th colSpan="2" rowSpan="2" className="align-middle">NIVEL DE RIESGO Y DE INTERVENCIÓN (NR)</th>
+                  <th colSpan="4">NIVEL DE PROBABILIDAD (NP = ND x NE)</th>
+                </tr>
+                <tr>
+                  <th>40 - 24</th>
+                  <th>20 - 10</th>
+                  <th>8 - 6</th>
+                  <th>4 - 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowSpan="4" className="fw-bold bg-light align-middle" style={{ width: '120px' }}>NIVEL DE CONSECUENCIAS (NC)</td>
+                  <td className="fw-bold bg-danger text-white">100 (Mortal o Catastrófico)</td>
+                  <td className="bg-danger text-white fw-bold">I (4000 - 2400)</td>
+                  <td className="bg-danger text-white fw-bold">I (2000 - 1000)</td>
+                  <td className="bg-danger text-white fw-bold">I (800 - 600)</td>
+                  <td className="bg-warning text-dark fw-bold">II (400 - 200)</td>
+                </tr>
+                <tr>
+                  <td className="fw-bold bg-warning text-dark">60 (Muy Grave)</td>
+                  <td className="bg-danger text-white fw-bold">I (2400 - 1440)</td>
+                  <td className="bg-danger text-white fw-bold">I (1200 - 600)</td>
+                  <td className="bg-warning text-dark fw-bold">II (480 - 360)</td>
+                  <td className="bg-warning text-dark fw-bold">II (240) / III (120)</td>
+                </tr>
+                <tr>
+                  <td className="fw-bold bg-info text-dark">25 (Grave)</td>
+                  <td className="bg-danger text-white fw-bold">I (1000 - 600)</td>
+                  <td className="bg-warning text-dark fw-bold">II (500 - 250)</td>
+                  <td className="bg-info text-dark fw-bold">III (200 - 150)</td>
+                  <td className="bg-info text-dark fw-bold">III (100 - 50)</td>
+                </tr>
+                <tr>
+                  <td className="fw-bold bg-secondary text-white">10 (Leve)</td>
+                  <td className="bg-warning text-dark fw-bold">II (400 - 240)</td>
+                  <td className="bg-info text-dark fw-bold">III (200 - 100)</td>
+                  <td className="bg-info text-dark fw-bold">III (80 - 60)</td>
+                  <td className="bg-success text-white fw-bold">IV (40 - 20)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
           <h6 className="fw-bold text-dark font-heading mb-2">Jerarquía de Medidas de Intervención (Control de Riesgos):</h6>
           <div className="d-flex flex-column gap-2">
             {[
@@ -389,7 +438,7 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
             <i className="bi bi-diagram-3 me-2"></i>3. Pasos del Procedimiento de Identificación de Peligros
           </h4>
 
-          <div className="row g-3">
+          <div className="row g-3 mb-4">
             {[
               { step: '1', t: 'Entrada de Información', d: 'Describir detalladamente cada actividad ejecutada (Rutinaria / No Rutinaria) y visitar las instalaciones.' },
               { step: '2', t: 'Identificación de Peligros', d: 'Identificar factores físicos, químicos, biológicos, biomecánicos, psicosociales, de seguridad y ambientales.' },
@@ -410,6 +459,24 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Tabla 1 Oficial de Pasos y Descripción */}
+          <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-list-task me-2 text-danger"></i>Tabla 1: Descripción Detallada de Actividades del Procedimiento</h6>
+          <div className="table-responsive">
+            <table className="table table-bordered table-sm align-middle small mb-0">
+              <thead className="table-light">
+                <tr><th width="30%">Actividad</th><th>Descripción de la Tarea</th></tr>
+              </thead>
+              <tbody>
+                {SST_TABLES && SST_TABLES[0] ? SST_TABLES[0].slice(1).map((row, rIdx) => (
+                  <tr key={rIdx}>
+                    <td className="fw-bold text-danger">{row[0]}</td>
+                    <td>{row[1] || row[0]}</td>
+                  </tr>
+                )) : null}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
@@ -537,9 +604,9 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
         </div>
       )}
 
-      {/* Modal Lector Completo del Documento Word (SST-PRO-001) */}
+      {/* Modal Lector Completo del Documento Word (SST-PRO-001) en Formato Documento ISO Limpio */}
       {mostrarTextoCompleto && (
-        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(5px)' }}>
+        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}>
           <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '18px' }}>
               <div className="modal-header bg-danger text-white border-0" style={{ borderTopLeftRadius: '18px', borderTopRightRadius: '18px' }}>
@@ -548,38 +615,131 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
                 </h5>
                 <button type="button" className="btn-close btn-close-white" onClick={() => setMostrarTextoCompleto(false)}></button>
               </div>
-              <div className="modal-body p-4 bg-body" style={{ fontSize: '13.5px', lineHeight: '1.6' }}>
-                <div className="border p-4 rounded-3 bg-white shadow-sm">
-                  <div className="text-center border-bottom pb-3 mb-4">
-                    <h3 className="fw-bold font-heading text-dark">PROCEDIMIENTO DE IDENTIFICACIÓN DE PELIGROS Y CONTROL DE RIESGOS</h3>
-                    <div className="badge bg-danger px-3 py-2 fs-6">CÓDIGO: SST-PRO-001 | NORMA: GTC 45 / ISO 45001</div>
-                  </div>
+              
+              <div className="modal-body p-4 bg-light" style={{ fontSize: '13.5px', lineHeight: '1.6' }}>
+                <div className="bg-white p-5 shadow-sm rounded-3 border mx-auto" style={{ maxWidth: '900px' }}>
+                  {/* Encabezado Oficial ISO del Documento */}
+                  <table className="table table-bordered align-middle text-center mb-4 small border-secondary">
+                    <tbody>
+                      <tr>
+                        <td width="20%" className="fw-bold text-danger fs-5 align-middle">OCA ONE</td>
+                        <td width="60%" className="fw-bold align-middle text-uppercase">
+                          PROCEDIMIENTO DE IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN, VALORACIÓN Y DETERMINACIÓN DE CONTROL DE RIESGOS E IMPACTOS
+                        </td>
+                        <td width="20%" className="text-start small align-middle">
+                          <strong>CÓDIGO:</strong> SST-PRO-001<br/>
+                          <strong>VERSIÓN:</strong> 2.0.0<br/>
+                          <strong>FECHA:</strong> 11/08/2026
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
 
-                  {/* Renderizado Completo Párrafo por Párrafo del Word */}
-                  {SST_FULL_PARAGRAPHS.map((pText, idx) => {
-                    const cleanText = pText.trim();
-                    const isHeader = [
+                  {/* Renderizado de Párrafos y Tablas Limpias en Orden de Lectura */}
+                  {SST_PARAGRAPHS.map((item, idx) => {
+                    const txt = item.text ? item.text.trim() : '';
+                    if (!txt) return null;
+
+                    // Si es un título o encabezado principal
+                    const isTitle = [
                       'OBJETO', 'ALCANCE', 'DEFINICIONES Y ABREVIATURAS', 'DESCRIPCION',
-                      'CONDICIONES GENERALES', 'PASOS DEL PROCEDIMIENTO', 'MATRIZ DE IDENTIFICACION DE PELIGROS',
-                      'EVALUACION DEL RIESGO', 'VALORACION DEL RIESGO', 'JERARQUIA DE CONTROLES'
-                    ].some(h => cleanText.toUpperCase().startsWith(h));
+                      'CONDICIONES GENERALES', 'PASOS DEL PROCEDIMIENTO', 'PASOS DEL PROCEDIMIENTO DE VALORACIÓN'
+                    ].some(h => txt.toUpperCase().startsWith(h));
 
-                    if (isHeader) {
+                    if (isTitle) {
                       return (
-                        <h5 key={idx} className="fw-bold text-danger border-bottom pb-1 mt-4 font-heading">
-                          <i className="bi bi-bookmark-fill me-2 text-danger"></i>{cleanText}
-                        </h5>
+                        <div key={idx} className="mt-4 mb-2 pb-1 border-bottom border-danger">
+                          <h5 className="fw-bold text-danger font-heading mb-0">
+                            <i className="bi bi-bookmark-fill me-2 text-danger"></i>{txt}
+                          </h5>
+                        </div>
+                      );
+                    }
+
+                    // Renderizado especial cuando llegamos a la sección de tablas
+                    if (txt.includes('Tabla 12 Nivel de Riesgo') || txt.includes('Tabla determinaci')) {
+                      return (
+                        <div key={idx} className="my-4 p-3 border rounded-3 bg-light">
+                          <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-grid-3x3-gap-fill me-2 text-danger"></i>Tabla 12: Nivel de Riesgo (NR = NP x NC)</h6>
+                          <div className="table-responsive">
+                            <table className="table table-bordered table-sm align-middle text-center small mb-0 bg-white">
+                              <thead className="table-dark">
+                                <tr>
+                                  <th colSpan="2" rowSpan="2" className="align-middle">NIVEL DE RIESGO (NR)</th>
+                                  <th colSpan="4">NIVEL DE PROBABILIDAD (NP)</th>
+                                </tr>
+                                <tr>
+                                  <th>40 - 24</th>
+                                  <th>20 - 10</th>
+                                  <th>8 - 6</th>
+                                  <th>4 - 2</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td rowSpan="4" className="fw-bold bg-light align-middle" style={{ width: '120px' }}>NIVEL DE CONSECUENCIAS (NC)</td>
+                                  <td className="fw-bold bg-danger text-white">100</td>
+                                  <td className="bg-danger text-white fw-bold">I (4000 - 2400)</td>
+                                  <td className="bg-danger text-white fw-bold">I (2000 - 1000)</td>
+                                  <td className="bg-danger text-white fw-bold">I (800 - 600)</td>
+                                  <td className="bg-warning text-dark fw-bold">II (400 - 200)</td>
+                                </tr>
+                                <tr>
+                                  <td className="fw-bold bg-warning text-dark">60</td>
+                                  <td className="bg-danger text-white fw-bold">I (2400 - 1440)</td>
+                                  <td className="bg-danger text-white fw-bold">I (1200 - 600)</td>
+                                  <td className="bg-warning text-dark fw-bold">II (480 - 360)</td>
+                                  <td className="bg-warning text-dark fw-bold">II (240) / III (120)</td>
+                                </tr>
+                                <tr>
+                                  <td className="fw-bold bg-info text-dark">25</td>
+                                  <td className="bg-danger text-white fw-bold">I (1000 - 600)</td>
+                                  <td className="bg-warning text-dark fw-bold">II (500 - 250)</td>
+                                  <td className="bg-info text-dark fw-bold">III (200 - 150)</td>
+                                  <td className="bg-info text-dark fw-bold">III (100 - 50)</td>
+                                </tr>
+                                <tr>
+                                  <td className="fw-bold bg-secondary text-white">10</td>
+                                  <td className="bg-warning text-dark fw-bold">II (400 - 240)</td>
+                                  <td className="bg-info text-dark fw-bold">III (200 - 100)</td>
+                                  <td className="bg-info text-dark fw-bold">III (80 - 60)</td>
+                                  <td className="bg-success text-white fw-bold">IV (40 - 20)</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    if (txt.includes('Tabla 13 Significados')) {
+                      return (
+                        <div key={idx} className="my-4 p-3 border rounded-3 bg-light">
+                          <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-info-circle-fill me-2 text-danger"></i>Tabla 13: Significados de los Niveles de Riesgo (NR)</h6>
+                          <table className="table table-bordered table-sm align-middle small mb-0 bg-white">
+                            <thead className="table-light">
+                              <tr><th>Nivel</th><th>Nivel de Riesgo (NR)</th><th>Significado e Intervención Requerida</th></tr>
+                            </thead>
+                            <tbody>
+                              <tr><td><span className="badge bg-danger">I</span></td><td><strong>4000 - 600</strong></td><td>Situación crítica. Corrección urgente. Establecer programa de gestión inmediato.</td></tr>
+                              <tr><td><span className="badge bg-warning text-dark">II</span></td><td><strong>500 - 150</strong></td><td>Corregir y adoptar medidas de control operacional oportunas.</td></tr>
+                              <tr><td><span className="badge bg-info text-dark">III</span></td><td><strong>120 - 40</strong></td><td>Mejorar si es posible. Justificar la intervención y su rentabilidad.</td></tr>
+                              <tr><td><span className="badge bg-success">IV</span></td><td><strong>20</strong></td><td>Mantener medidas de control existentes y realizar comprobaciones periódicas.</td></tr>
+                            </tbody>
+                          </table>
+                        </div>
                       );
                     }
 
                     return (
                       <p key={idx} className="mb-2 text-dark" style={{ textAlign: 'justify' }}>
-                        {cleanText}
+                        {txt}
                       </p>
                     );
                   })}
                 </div>
               </div>
+
               <div className="modal-footer border-top-0 p-3 bg-light" style={{ borderBottomLeftRadius: '18px', borderBottomRightRadius: '18px' }}>
                 <button type="button" className="btn btn-danger btn-sm px-4 fw-bold" onClick={() => setMostrarTextoCompleto(false)}>
                   Entendido / Cerrar Lector SG-SST
