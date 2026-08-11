@@ -583,28 +583,33 @@ function App() {
         {/* Cabecera */}
         <header className="navbar navbar-expand-lg border-bottom px-4 py-3 bg-body-tertiary sticky-top">
           <div className="container-fluid p-0 d-flex align-items-center justify-content-between">
-            <div className="d-flex align-items-center">
-              {/* Botón Menú Hamburguesa para Colapsar / Desplegar Sidebar */}
-              <button 
-                className="btn btn-outline-secondary me-3 d-flex align-items-center justify-content-center shadow-sm"
-                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                title={isSidebarCollapsed ? "Desplegar menú lateral" : "Ocultar menú lateral (Pantalla Completa)"}
-                style={{ width: '40px', height: '40px', borderRadius: '10px' }}
-              >
-                <i className={`bi ${isSidebarCollapsed ? 'bi-list fs-4' : 'bi-layout-sidebar-inset fs-5'}`}></i>
-              </button>
+            <div className="d-flex align-items-center flex-grow-1 me-3">
+              {/* Mostrar botón sólo si el sidebar está colapsado para recuperar espacio */}
+              {isSidebarCollapsed && (
+                <button 
+                  className="btn btn-sm btn-outline-secondary me-3 d-flex align-items-center justify-content-center shadow-sm"
+                  onClick={() => setIsSidebarCollapsed(false)}
+                  title="Desplegar menú lateral"
+                  style={{ width: '36px', height: '36px', borderRadius: '8px' }}
+                >
+                  <i className="bi bi-list fs-4"></i>
+                </button>
+              )}
 
-              <h1 className="h3 mb-0 text-capitalize font-heading">
+              <h1 className="h4 mb-0 text-capitalize font-heading text-truncate">
                 {currentView === 'procedimientos' && 'Módulo de Control de Calidad - Procedimientos, POES y Archivos'}
-              {currentView === 'mantenimiento' && 'Módulo de Mantenimiento Preventivo y Correctivo de Equipos'}
-              {currentView === 'dashboard' && 'Dashboard de Calidad e Inocuidad'}
-              {currentView === 'saneamiento' && 'Plan de Saneamiento e Higiene'}
-              {currentView === 'variables' && 'Monitoreo de Variables Críticas (PCC)'}
-              {currentView === 'capa' && 'Gestión de Acciones Correctivas (CAPA)'}
-              {currentView === 'trazabilidad' && 'Trazabilidad de Lotes'}
-              {currentView === 'alergenos-recall' && 'Control de Alérgenos y Simulador de Retiro'}
-              {currentView === 'capacitaciones' && 'Control de Manipuladores y BPM'}
-            </h1>
+                {currentView === 'mantenimiento' && 'Módulo de Mantenimiento Preventivo y Correctivo de Equipos'}
+                {currentView === 'sg-sst' && 'Módulo SG-SST - Identificación de Peligros y Control de Riesgos'}
+                {currentView === 'liberacion-lotes' && 'Módulo de Liberación de Productos Terminados (Q-PD-15)'}
+                {currentView === 'recepcion-materias-primas' && 'Módulo de Recepción de Materias Primas e Insumos (Q-PD-13)'}
+                {currentView === 'dashboard' && 'Dashboard de Calidad e Inocuidad'}
+                {currentView === 'saneamiento' && 'Plan de Saneamiento e Higiene'}
+                {currentView === 'variables' && 'Monitoreo de Variables Críticas (PCC)'}
+                {currentView === 'capa' && 'Gestión de Acciones Correctivas (CAPA)'}
+                {currentView === 'trazabilidad' && 'Trazabilidad de Lotes'}
+                {currentView === 'alergenos-recall' && 'Control de Alérgenos y Simulador de Retiro'}
+                {currentView === 'capacitaciones' && 'Control de Manipuladores y BPM'}
+              </h1>
             </div>
             
             <div className="d-flex align-items-center ms-auto">
