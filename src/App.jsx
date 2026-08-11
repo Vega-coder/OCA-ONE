@@ -8,6 +8,7 @@ import Capa from './components/Capa';
 import AllergenRecall from './components/AllergenRecall';
 import Procedimientos from './components/Procedimientos';
 import Mantenimiento from './components/Mantenimiento';
+import SgSst from './components/SgSst';
 import Login from './components/Login';
 import { useAppEngine } from './hooks/useAppContext';
 import { ROLES_DEFINITIONS, isViewAllowedForRole } from './lib/permissions';
@@ -30,6 +31,8 @@ function App() {
     setIsProcedimientosOpen,
     isMantenimientoOpen,
     setIsMantenimientoOpen,
+    isSstOpen,
+    setIsSstOpen,
     activeCategory,
     setActiveCategory,
     expandedCategories,
@@ -276,6 +279,54 @@ function App() {
                       Formato Registro (FOPME-002)
                     </button>
                   </li>
+                </ul>
+              )}
+            </li>
+          )}
+
+          {/* Módulo Seguridad y Salud en el Trabajo (SG-SST) - Desplegable Multinivel */}
+          {isViewAllowedForRole('sg-sst', userRole, rolesList) && (
+            <li className="nav-item mb-1">
+              <button 
+                className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'sg-sst' ? 'active' : 'text-white'}`}
+                onClick={() => {
+                  setCurrentView('sg-sst');
+                  setIsSstOpen(!isSstOpen);
+                }}
+              >
+                <span className="d-flex align-items-center">
+                  <div className="icon-badge icon-badge-rose me-2" style={{ width: '28px', height: '28px', fontSize: '13px' }}>
+                    <i className="bi bi-heart-pulse-fill"></i>
+                  </div>
+                  Seguridad y Salud (SG-SST)
+                </span>
+                <i className={`bi bi-chevron-down arrow-rotate ${isSstOpen ? 'rotated' : ''}`} style={{ fontSize: '12px' }}></i>
+              </button>
+              
+              {/* Nivel 2: Categorías Desplegables SG-SST */}
+              {isSstOpen && (
+                <ul className="sidebar-submenu">
+                  {[
+                    { name: 'Definiciones y Alcance', icon: 'bi-book', badgeStyle: 'icon-badge-sky' },
+                    { name: 'Metodología GTC 45', icon: 'bi-calculator', badgeStyle: 'icon-badge-amber' },
+                    { name: 'Matriz de 8 Pasos', icon: 'bi-diagram-3', badgeStyle: 'icon-badge-indigo' },
+                    { name: 'Matriz de Peligros', icon: 'bi-shield-exclamation', badgeStyle: 'icon-badge-emerald' }
+                  ].map(cat => (
+                    <li key={cat.name} className="mb-1">
+                      <button 
+                        className={`nav-link-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'sg-sst' && activeCategory === cat.name ? 'fw-bold' : ''}`}
+                        onClick={() => {
+                          setCurrentView('sg-sst');
+                          setActiveCategory(cat.name);
+                        }}
+                      >
+                        <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                          <i className={`bi ${cat.icon}`}></i>
+                        </div>
+                        {cat.name}
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               )}
             </li>
@@ -595,6 +646,14 @@ function App() {
           )}
           {currentView === 'mantenimiento' && (
             <Mantenimiento 
+              tenantId={activeTenant.id} 
+              userRole={userRole} 
+              carpetaActiva={activeCategory}
+              setCarpetaActiva={setActiveCategory}
+            />
+          )}
+          {currentView === 'sg-sst' && (
+            <SgSst 
               tenantId={activeTenant.id} 
               userRole={userRole} 
               carpetaActiva={activeCategory}

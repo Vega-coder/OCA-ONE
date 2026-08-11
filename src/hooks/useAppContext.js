@@ -37,6 +37,7 @@ export function useAppEngine() {
   const [usuariosDb, setUsuariosDb] = useState([]);
   const [isProcedimientosOpen, setIsProcedimientosOpen] = useState(true);
   const [isMantenimientoOpen, setIsMantenimientoOpen] = useState(true);
+  const [isSstOpen, setIsSstOpen] = useState(true);
   const [activeCategory, setActiveCategory] = useState('Limpieza y Desinfección');
   const [expandedCategories, setExpandedCategories] = useState({
     'Limpieza y Desinfección': true,
@@ -264,6 +265,8 @@ export function useAppEngine() {
     setIsProcedimientosOpen,
     isMantenimientoOpen,
     setIsMantenimientoOpen,
+    isSstOpen,
+    setIsSstOpen,
     activeCategory,
     setActiveCategory,
     expandedCategories,
