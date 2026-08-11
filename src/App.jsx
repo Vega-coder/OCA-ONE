@@ -39,6 +39,8 @@ function App() {
     setIsLiberacionLotesOpen,
     isRecepcionMateriasPrimasOpen,
     setIsRecepcionMateriasPrimasOpen,
+    isSidebarCollapsed,
+    setIsSidebarCollapsed,
     activeCategory,
     setActiveCategory,
     expandedCategories,
@@ -78,17 +80,38 @@ function App() {
 
   return (
     <div className="d-flex min-vh-100 bg-body font-sans">
-      {/* Sidebar Lateral */}
-      <aside className="d-flex flex-column flex-shrink-0 p-3 bg-dark text-white shadow-lg" style={{ width: '280px', minHeight: '100vh', zIndex: 1000 }}>
-        {/* Brand Header */}
-        <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none px-2 py-2">
-          <div className="icon-badge icon-badge-teal me-2" style={{ width: '36px', height: '36px', fontSize: '18px' }}>
-            <i className="bi bi-shield-check"></i>
+      {/* Sidebar Lateral Colapsable / Ocultable */}
+      <aside 
+        className="d-flex flex-column flex-shrink-0 bg-dark text-white shadow-lg overflow-hidden" 
+        style={{ 
+          width: isSidebarCollapsed ? '0px' : '280px', 
+          minWidth: isSidebarCollapsed ? '0px' : '280px',
+          padding: isSidebarCollapsed ? '0px' : '1rem',
+          opacity: isSidebarCollapsed ? 0 : 1,
+          pointerEvents: isSidebarCollapsed ? 'none' : 'auto',
+          minHeight: '100vh', 
+          zIndex: 1000,
+          transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)'
+        }}
+      >
+        {/* Brand Header con Botón para Ocultar */}
+        <div className="d-flex align-items-center justify-content-between mb-3 mb-md-0 me-md-auto text-white text-decoration-none px-2 py-2 w-100">
+          <div className="d-flex align-items-center">
+            <div className="icon-badge icon-badge-teal me-2" style={{ width: '36px', height: '36px', fontSize: '18px' }}>
+              <i className="bi bi-shield-check"></i>
+            </div>
+            <div>
+              <span className="fs-4 font-heading fw-bold tracking-tight text-white d-block" style={{ lineHeight: '1.1' }}>OCA ONE</span>
+              <small className="text-secondary" style={{ fontSize: '10.5px' }}>Plataforma SaaS de Inocuidad</small>
+            </div>
           </div>
-          <div>
-            <span className="fs-4 font-heading fw-bold tracking-tight text-white d-block" style={{ lineHeight: '1.1' }}>OCA ONE</span>
-            <small className="text-secondary" style={{ fontSize: '10.5px' }}>Plataforma SaaS de Inocuidad</small>
-          </div>
+          <button 
+            className="btn btn-sm text-secondary hover-white p-1 ms-2 border-0" 
+            onClick={() => setIsSidebarCollapsed(true)}
+            title="Ocultar menú lateral (Modo Pantalla Completa)"
+          >
+            <i className="bi bi-layout-sidebar-reverse fs-5"></i>
+          </button>
         </div>
 
         <hr className="bg-secondary opacity-25" />
@@ -559,9 +582,20 @@ function App() {
       <main className="flex-grow-1 min-vh-100 d-flex flex-column" style={{ overflowY: 'auto' }}>
         {/* Cabecera */}
         <header className="navbar navbar-expand-lg border-bottom px-4 py-3 bg-body-tertiary sticky-top">
-          <div className="container-fluid p-0">
-            <h1 className="h3 mb-0 text-capitalize font-heading">
-              {currentView === 'procedimientos' && 'Módulo de Control de Calidad - Procedimientos, POES y Archivos'}
+          <div className="container-fluid p-0 d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center">
+              {/* Botón Menú Hamburguesa para Colapsar / Desplegar Sidebar */}
+              <button 
+                className="btn btn-outline-secondary me-3 d-flex align-items-center justify-content-center shadow-sm"
+                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                title={isSidebarCollapsed ? "Desplegar menú lateral" : "Ocultar menú lateral (Pantalla Completa)"}
+                style={{ width: '40px', height: '40px', borderRadius: '10px' }}
+              >
+                <i className={`bi ${isSidebarCollapsed ? 'bi-list fs-4' : 'bi-layout-sidebar-inset fs-5'}`}></i>
+              </button>
+
+              <h1 className="h3 mb-0 text-capitalize font-heading">
+                {currentView === 'procedimientos' && 'Módulo de Control de Calidad - Procedimientos, POES y Archivos'}
               {currentView === 'mantenimiento' && 'Módulo de Mantenimiento Preventivo y Correctivo de Equipos'}
               {currentView === 'dashboard' && 'Dashboard de Calidad e Inocuidad'}
               {currentView === 'saneamiento' && 'Plan de Saneamiento e Higiene'}
@@ -571,6 +605,7 @@ function App() {
               {currentView === 'alergenos-recall' && 'Control de Alérgenos y Simulador de Retiro'}
               {currentView === 'capacitaciones' && 'Control de Manipuladores y BPM'}
             </h1>
+            </div>
             
             <div className="d-flex align-items-center ms-auto">
               {/* Selector Multi-Tenant de Empresa */}
