@@ -212,7 +212,7 @@ export default function RecepcionMateriasPrimas({ tenantId = 'tenant-opt-01', us
       )}
 
       {/* Banner Encabezado Módulo Recepción Materias Primas */}
-      <div className="d-flex align-items-center justify-content-between p-3 mb-4 rounded-3 border bg-body shadow-sm border-start border-5 border-success">
+      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 mb-4 rounded-3 border bg-body shadow-sm border-start border-5 border-success">
         <div className="d-flex align-items-center gap-3">
           <div className="icon-badge icon-badge-emerald" style={{ width: '44px', height: '44px', fontSize: '22px' }}>
             <i className="bi bi-truck-front-fill"></i>
@@ -226,7 +226,7 @@ export default function RecepcionMateriasPrimas({ tenantId = 'tenant-opt-01', us
             </div>
           </div>
         </div>
-        <div className="d-flex gap-2">
+        <div className="d-flex flex-wrap gap-2">
           <button 
             className="btn btn-sm btn-outline-success d-flex align-items-center gap-2 fw-semibold"
             onClick={() => setMostrarTextoCompleto(true)}

@@ -580,24 +580,24 @@ function App() {
       </aside>
 
       {/* Contenido Principal */}
-      <main className="flex-grow-1 min-vh-100 d-flex flex-column" style={{ overflowY: 'auto' }}>
-        {/* Cabecera */}
-        <header className="navbar navbar-expand-lg border-bottom px-4 py-3 bg-body-tertiary sticky-top">
-          <div className="container-fluid p-0 d-flex align-items-center justify-content-between">
-            <div className="d-flex align-items-center flex-grow-1 me-3">
+      <main className="flex-grow-1 min-vh-100 d-flex flex-column min-w-0 w-100 overflow-x-hidden" style={{ overflowY: 'auto' }}>
+        {/* Cabecera Responsiva */}
+        <header className="navbar navbar-expand-lg border-bottom px-3 px-md-4 py-2 py-md-3 bg-body-tertiary sticky-top">
+          <div className="container-fluid p-0 d-flex flex-wrap align-items-center justify-content-between gap-2 min-w-0">
+            <div className="d-flex align-items-center me-2 min-w-0 flex-shrink-1" style={{ maxWidth: '60%' }}>
               {/* Mostrar botón sólo si el sidebar está colapsado para recuperar espacio */}
               {isSidebarCollapsed && (
                 <button 
-                  className="btn btn-sm btn-outline-secondary me-3 d-flex align-items-center justify-content-center shadow-sm"
+                  className="btn btn-sm btn-outline-secondary me-2 me-md-3 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0"
                   onClick={() => setIsSidebarCollapsed(false)}
                   title="Desplegar menú lateral"
-                  style={{ width: '36px', height: '36px', borderRadius: '8px' }}
+                  style={{ width: '34px', height: '34px', borderRadius: '8px' }}
                 >
-                  <i className="bi bi-chevron-right fs-5"></i>
+                  <i className="bi bi-chevron-right fs-6"></i>
                 </button>
               )}
 
-              <h1 className="h4 mb-0 text-capitalize font-heading text-truncate">
+              <h1 className="h5 h4-md mb-0 text-capitalize font-heading text-truncate" style={{ fontSize: 'calc(0.9rem + 0.4vw)' }}>
                 {currentView === 'procedimientos' && 'Módulo de Control de Calidad - Procedimientos, POES y Archivos'}
                 {currentView === 'mantenimiento' && 'Módulo de Mantenimiento Preventivo y Correctivo de Equipos'}
                 {currentView === 'sg-sst' && 'Módulo SG-SST - Identificación de Peligros y Control de Riesgos'}
@@ -613,19 +613,19 @@ function App() {
               </h1>
             </div>
             
-            <div className="d-flex align-items-center ms-auto">
+            <div className="d-flex align-items-center flex-wrap gap-2 ms-auto">
               {/* Selector Multi-Tenant de Empresa */}
-              <div className="dropdown me-3">
+              <div className="dropdown">
                 <button 
-                  className="btn btn-sm btn-outline-success dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 fw-semibold" 
+                  className="btn btn-sm btn-outline-success dropdown-toggle d-flex align-items-center gap-1.5 px-2 px-md-3 py-1.5 fw-semibold" 
                   type="button" 
                   data-bs-toggle="dropdown" 
                   aria-expanded="false"
-                  style={{ borderRadius: '10px' }}
+                  style={{ borderRadius: '10px', fontSize: '12px' }}
                 >
                   <i className="bi bi-building-fill text-success"></i>
-                  <span>{activeTenant.nombre}</span>
-                  <span className="badge bg-success-subtle text-success ms-1" style={{ fontSize: '10px' }}>{activeTenant.plan}</span>
+                  <span className="d-none d-sm-inline">{activeTenant.nombre}</span>
+                  <span className="badge bg-success-subtle text-success ms-1 d-none d-md-inline" style={{ fontSize: '9.5px' }}>{activeTenant.plan}</span>
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '280px', borderRadius: '12px' }}>
                   <li className="dropdown-header fw-bold text-dark border-bottom pb-2">Seleccionar Inquilino / Empresa</li>
@@ -656,17 +656,17 @@ function App() {
               </div>
 
               {/* Selector de Rol del Usuario (RBAC) */}
-              <div className="dropdown me-3">
+              <div className="dropdown">
                 <button 
-                  className={`btn btn-sm dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 fw-semibold text-white ${roleDefinition.badgeClass}`} 
+                  className={`btn btn-sm dropdown-toggle d-flex align-items-center gap-1.5 px-2 px-md-3 py-1.5 fw-semibold text-white ${roleDefinition.badgeClass}`} 
                   type="button" 
                   data-bs-toggle="dropdown" 
                   aria-expanded="false"
-                  style={{ borderRadius: '10px' }}
+                  style={{ borderRadius: '10px', fontSize: '12px' }}
                   title="Cambiar rol para simular permisos"
                 >
                   <i className={`bi ${roleDefinition.icon}`}></i>
-                  <span>{roleDefinition.nombre}</span>
+                  <span className="d-none d-md-inline">{roleDefinition.nombre}</span>
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '310px', borderRadius: '12px' }}>
                   <li className="dropdown-header fw-bold text-dark border-bottom pb-2">Seleccionar Rol del Usuario (RBAC)</li>
@@ -692,30 +692,30 @@ function App() {
 
               {/* Tema claro/oscuro */}
               <button 
-                className="btn btn-outline-secondary me-3 border-0 rounded-circle" 
+                className="btn btn-outline-secondary border-0 rounded-circle" 
                 onClick={toggleTheme}
                 title="Cambiar tema"
-                style={{ width: '40px', height: '40px', padding: '0' }}
+                style={{ width: '36px', height: '36px', padding: '0' }}
               >
                 {theme === 'light' ? <i className="bi bi-moon-stars-fill"></i> : <i className="bi bi-sun-fill text-warning"></i>}
               </button>
 
               {/* Alertas */}
-              <div className="dropdown me-3">
+              <div className="dropdown">
                 <button 
                   className="btn btn-outline-secondary position-relative border-0 rounded-circle"
-                  style={{ width: '40px', height: '40px', padding: '0' }}
+                  style={{ width: '36px', height: '36px', padding: '0' }}
                   data-bs-toggle="dropdown" 
                   aria-expanded="false"
                 >
                   <i className="bi bi-bell-fill"></i>
                   {alertasActivas.length > 0 && (
-                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger badge-pulse" style={{ fontSize: '10px' }}>
+                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger badge-pulse" style={{ fontSize: '9px' }}>
                       {alertasActivas.length}
                     </span>
                   )}
                 </button>
-                <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '320px', borderRadius: '12px' }}>
+                <ul className="dropdown-menu dropdown-menu-end shadow p-2" style={{ width: '300px', borderRadius: '12px' }}>
                   <li className="dropdown-header fw-bold text-dark border-bottom pb-2">
                     Notificaciones de Calidad ({alertasActivas.length})
                   </li>
@@ -724,7 +724,7 @@ function App() {
                   ) : (
                     alertasActivas.map(al => (
                       <li key={al.id} className="my-1">
-                        <div className="alert alert-danger py-2 px-3 mb-0 border-0 rounded-3" style={{ fontSize: '12.5px' }}>
+                        <div className="alert alert-danger py-2 px-3 mb-0 border-0 rounded-3" style={{ fontSize: '12px' }}>
                           <div>{al.mensaje}</div>
                           <div className="text-muted small mt-1"><i className="bi bi-clock me-1"></i>{al.fecha}</div>
                         </div>
@@ -735,18 +735,18 @@ function App() {
               </div>
 
               {/* Perfil del Usuario Autenticado */}
-              <div className="dropdown border-start ps-3">
+              <div className="dropdown border-start ps-2">
                 <button 
                   className="btn border-0 p-0 d-flex align-items-center dropdown-toggle text-start" 
                   type="button" 
                   data-bs-toggle="dropdown" 
                   aria-expanded="false"
                 >
-                  <div className="text-end me-2 d-none d-md-block">
-                    <div className="fw-bold text-dark" style={{ fontSize: '13.5px' }}>{currentUser.nombre}</div>
-                    <div className="text-muted" style={{ fontSize: '11.5px' }}>{currentUser.cargo || roleDefinition.nombre}</div>
+                  <div className="text-end me-2 d-none d-lg-block">
+                    <div className="fw-bold text-dark" style={{ fontSize: '13px' }}>{currentUser.nombre}</div>
+                    <div className="text-muted" style={{ fontSize: '11px' }}>{currentUser.cargo || roleDefinition.nombre}</div>
                   </div>
-                  <div className="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style={{ width: '40px', height: '40px', fontSize: '14px' }}>
+                  <div className="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style={{ width: '36px', height: '36px', fontSize: '13px' }}>
                     {currentUser.nombre ? currentUser.nombre.split(' ').map(n => n[0]).join('').substring(0, 2) : 'US'}
                   </div>
                 </button>
@@ -763,7 +763,7 @@ function App() {
                   <li><hr className="dropdown-divider my-2" /></li>
                   <li>
                     <button 
-                      className="dropdown-item text-danger fw-semibold d-flex align-items-center gap-2 py-2 rounded-2"
+                      className="dropdown-item text-danger fw-semibold d-flex align-items-center gap-2 py-2"
                       onClick={handleLogout}
                     >
                       <i className="bi bi-box-arrow-right"></i> Cerrar Sesión
@@ -776,7 +776,7 @@ function App() {
         </header>
 
         {/* Vistas Dinámicas */}
-        <div className="flex-grow-1 p-4 bg-light bg-opacity-10 fade-in-view">
+        <div className="flex-grow-1 p-3 p-md-4 bg-light bg-opacity-10 fade-in-view min-w-0 w-100 overflow-x-hidden">
           {currentView === 'procedimientos' && (
             <Procedimientos 
               procedimientos={procedimientos} 

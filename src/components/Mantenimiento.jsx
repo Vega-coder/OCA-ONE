@@ -576,7 +576,7 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
       )}
 
       {/* Encabezado Principal Módulo de Mantenimiento */}
-      <div className="d-flex align-items-center justify-content-between p-3 mb-4 rounded-3 border bg-body shadow-sm">
+      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 mb-4 rounded-3 border bg-body shadow-sm">
         <div className="d-flex align-items-center gap-3">
           <div className="icon-badge icon-badge-indigo" style={{ width: '44px', height: '44px', fontSize: '22px' }}>
             <i className="bi bi-tools"></i>
@@ -586,7 +586,7 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
             <div className="text-muted small">Gestión completa de procedimientos, imágenes oficiales, especificidades técnicas y registros FOPME-002.</div>
           </div>
         </div>
-        <div className="d-flex gap-2">
+        <div className="d-flex flex-wrap gap-2">
           <button 
             className="btn btn-sm btn-outline-primary d-flex align-items-center gap-2"
             onClick={() => setMostrarTextoCompleto(true)}
@@ -605,8 +605,8 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
       <div className="d-flex flex-column gap-4">
         
         {/* BLOQUE 1: Procedimiento Oficial ISO (MAN-PME-001) */}
-        <div className="card gipa-card p-4 border-0 shadow-sm border-top border-5 border-primary">
-          <div className="d-flex justify-content-between align-items-center mb-3">
+        <div className="card gipa-card p-3 p-md-4 border-0 shadow-sm border-top border-5 border-primary">
+          <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
             <div>
               <span className="badge bg-primary-subtle text-primary me-2 fw-semibold">MAN-PME-001</span>
               <span className="badge bg-success-subtle text-success">Versión 3.0.0 Vigente</span>
