@@ -106,11 +106,12 @@ function App() {
             </div>
           </div>
           <button 
-            className="btn btn-sm text-secondary hover-white p-1 ms-2 border-0" 
+            className="btn btn-sm btn-outline-secondary text-white p-1 ms-2 border-0 d-flex align-items-center justify-content-center" 
             onClick={() => setIsSidebarCollapsed(true)}
             title="Ocultar menú lateral (Modo Pantalla Completa)"
+            style={{ width: '32px', height: '32px', borderRadius: '8px' }}
           >
-            <i className="bi bi-layout-sidebar-reverse fs-5"></i>
+            <i className="bi bi-chevron-left fs-5"></i>
           </button>
         </div>
 
@@ -592,7 +593,7 @@ function App() {
                   title="Desplegar menú lateral"
                   style={{ width: '36px', height: '36px', borderRadius: '8px' }}
                 >
-                  <i className="bi bi-list fs-4"></i>
+                  <i className="bi bi-chevron-right fs-5"></i>
                 </button>
               )}
 
