@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { canUserDownloadProcedure } from '../lib/permissions';
+import { canUserDownloadProcedure, canUserWriteInModule } from '../lib/permissions';
 import { RECEPCION_MATERIAS_PRIMAS_TEXT, RECEPCION_MATERIAS_PRIMAS_TABLES } from '../domain/recepcionMateriasPrimasFullText';
 
 export default function RecepcionMateriasPrimas({ tenantId = 'tenant-opt-01', userRole = 'super-admin', carpetaActiva, setCarpetaActiva }) {
@@ -421,12 +421,18 @@ export default function RecepcionMateriasPrimas({ tenantId = 'tenant-opt-01', us
               </h4>
               <p className="text-muted small mb-0">Formato oficial de recepción diaria de leche cruda en plataforma.</p>
             </div>
-            <button 
-              className="btn btn-sm btn-success text-white d-flex align-items-center gap-2 fw-semibold"
-              onClick={() => setMostrarFormularioRecepcion(prev => !prev)}
-            >
-              <i className="bi bi-plus-circle"></i> {mostrarFormularioRecepcion ? 'Cerrar Formulario' : 'Registrar Recepción de Leche'}
-            </button>
+            {canUserWriteInModule(userRole, 'recepcion-materias-primas') ? (
+              <button 
+                className="btn btn-sm btn-success text-white d-flex align-items-center gap-2 fw-semibold"
+                onClick={() => setMostrarFormularioRecepcion(prev => !prev)}
+              >
+                <i className="bi bi-plus-circle"></i> {mostrarFormularioRecepcion ? 'Cerrar Formulario' : 'Registrar Recepción de Leche'}
+              </button>
+            ) : (
+              <span className="badge bg-secondary text-white px-3 py-2 d-flex align-items-center gap-1" title="Visualizando en modo consulta inter-áreas">
+                <i className="bi bi-lock-fill text-warning"></i> Modo Consulta Inter-Áreas (Solo Lectura)
+              </span>
+            )}
           </div>
 
           {/* Formulario de Recepción */}

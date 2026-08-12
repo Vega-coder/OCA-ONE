@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { canUserDownloadProcedure, canUserEditDocument } from '../lib/permissions';
+import { canUserDownloadProcedure, canUserEditDocument, canUserWriteInModule } from '../lib/permissions';
 
 export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = 'super-admin', carpetaActiva, setCarpetaActiva }) {
   const [mostrarHistorial, setMostrarHistorial] = useState(false);
@@ -746,7 +746,7 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
               <p className="text-muted small mb-0">Descarga la plantilla vacía o registra las intervenciones técnicas ejecutadas.</p>
             </div>
             
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2 align-items-center">
               <button 
                 className="btn btn-sm btn-outline-success d-flex align-items-center gap-2"
                 onClick={handlePrintFormatoBlanco}
@@ -754,12 +754,18 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
                 <i className="bi bi-printer"></i> Imprimir Formato Blanco (FOPME-002)
               </button>
               
-              <button 
-                className="btn btn-sm btn-success d-flex align-items-center gap-2"
-                onClick={() => setMostrarRegistroForm(prev => !prev)}
-              >
-                <i className="bi bi-plus-circle"></i> {mostrarRegistroForm ? 'Cerrar Formulario' : 'Diligenciar Formato Mantenimiento'}
-              </button>
+              {canUserWriteInModule(userRole, 'mantenimiento') ? (
+                <button 
+                  className="btn btn-sm btn-success d-flex align-items-center gap-2"
+                  onClick={() => setMostrarRegistroForm(prev => !prev)}
+                >
+                  <i className="bi bi-plus-circle"></i> {mostrarRegistroForm ? 'Cerrar Formulario' : 'Diligenciar Formato Mantenimiento'}
+                </button>
+              ) : (
+                <span className="badge bg-secondary text-white px-3 py-2 d-flex align-items-center gap-1" title="Visualizando en modo consulta inter-áreas">
+                  <i className="bi bi-lock-fill text-warning"></i> Modo Consulta Inter-Áreas (Solo Lectura)
+                </span>
+              )}
             </div>
           </div>
 

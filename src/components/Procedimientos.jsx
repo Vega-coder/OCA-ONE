@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchFormatosFromDb, saveFormatoToDb, fetchVersionHistoryFromDb } from '../lib/dataService';
-import { canUserDownloadProcedure } from '../lib/permissions';
+import { canUserDownloadProcedure, canUserEditDocument, canUserWriteInModule } from '../lib/permissions';
 
 function Procedimientos({ 
   procedimientos, 
@@ -296,20 +296,26 @@ function Procedimientos({
               <p className="text-muted small mb-0">Listado oficial de manuales de procedimiento ISO vigentes.</p>
             </div>
             
-            {/* Botón condicional: Sólo "Limpieza y Desinfección" tiene "Redactar Procedimiento" */}
+            {/* Botón condicional: Solo si tiene permisos de escritura en Calidad */}
             {carpetaActiva === 'Limpieza y Desinfección' && (
-              <button 
-                className="btn btn-sm btn-outline-success d-flex align-items-center gap-1"
-                onClick={() => {
-                  setMostrarCrearPoes(prev => !prev);
-                }}
-              >
-                {mostrarCrearPoes ? (
-                  <span><i className="bi bi-x-circle me-1"></i> Cerrar Editor</span>
-                ) : (
-                  <span><i className="bi bi-plus-circle me-1"></i> Redactar Procedimiento</span>
-                )}
-              </button>
+              canUserWriteInModule(userRole, 'procedimientos') ? (
+                <button 
+                  className="btn btn-sm btn-outline-success d-flex align-items-center gap-1"
+                  onClick={() => {
+                    setMostrarCrearPoes(prev => !prev);
+                  }}
+                >
+                  {mostrarCrearPoes ? (
+                    <span><i className="bi bi-x-circle me-1"></i> Cerrar Editor</span>
+                  ) : (
+                    <span><i className="bi bi-plus-circle me-1"></i> Redactar Procedimiento</span>
+                  )}
+                </button>
+              ) : (
+                <span className="badge bg-secondary text-white px-3 py-2 d-flex align-items-center gap-1" title="Visualizando en modo consulta inter-áreas">
+                  <i className="bi bi-lock-fill text-warning"></i> Modo Consulta Inter-Áreas (Solo Lectura)
+                </span>
+              )
             )}
           </div>
 

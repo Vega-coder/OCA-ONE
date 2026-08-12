@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { canUserDownloadProcedure } from '../lib/permissions';
+import { canUserDownloadProcedure, canUserWriteInModule } from '../lib/permissions';
 import { SST_PARAGRAPHS, SST_TABLES } from '../domain/sstDocumentFlow';
 
 export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-admin', carpetaActiva, setCarpetaActiva }) {
@@ -491,12 +491,18 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
               </h4>
               <p className="text-muted small mb-0">Inspecciones activas registradas en los diferentes puestos de trabajo.</p>
             </div>
-            <button 
-              className="btn btn-sm btn-danger d-flex align-items-center gap-2 fw-semibold"
-              onClick={() => setMostrarInspeccionForm(prev => !prev)}
-            >
-              <i className="bi bi-plus-circle"></i> {mostrarInspeccionForm ? 'Cerrar Formulario' : 'Registrar Nueva Inspección SST'}
-            </button>
+            {canUserWriteInModule(userRole, 'sg-sst') ? (
+              <button 
+                className="btn btn-sm btn-danger d-flex align-items-center gap-2 fw-semibold"
+                onClick={() => setMostrarInspeccionForm(prev => !prev)}
+              >
+                <i className="bi bi-plus-circle"></i> {mostrarInspeccionForm ? 'Cerrar Formulario' : 'Registrar Nueva Inspección SST'}
+              </button>
+            ) : (
+              <span className="badge bg-secondary text-white px-3 py-2 d-flex align-items-center gap-1" title="Visualizando en modo consulta inter-áreas">
+                <i className="bi bi-lock-fill text-warning"></i> Modo Consulta Inter-Áreas (Solo Lectura)
+              </span>
+            )}
           </div>
 
           {/* Formulario de Inspección SST */}
