@@ -241,7 +241,10 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
             </div>
           </div>
         </div>
-        <div className="d-flex gap-2">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <span className="badge bg-light text-dark border px-3 py-2 fw-semibold" style={{ fontSize: '12px' }}>
+            <i className="bi bi-folder-fill me-1 text-warning"></i> Carpeta: {carpetaActiva || 'Identificación de Peligros'}
+          </span>
           <button 
             className="btn btn-sm btn-outline-danger d-flex align-items-center gap-2 fw-semibold"
             onClick={() => setMostrarTextoCompleto(true)}

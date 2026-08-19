@@ -8,25 +8,32 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
   const [equipoSeleccionadoTab, setEquipoSeleccionadoTab] = useState('motobomba');
   const [alertaExito, setAlertaExito] = useState(false);
 
+  const mapaCategoriasEquipos = {
+    'Equipos de Producción': [
+      { id: 'motobomba', label: 'Motobomba Recepción GX 120' },
+      { id: 'electrobomba', label: 'Electrobomba Cuajado 2HP' },
+      { id: 'hiladoras', label: 'Hiladoras de Queso 3HP' },
+      { id: 'moldeadora', label: 'Moldeadora Industrial 250kg' }
+    ],
+    'Servicios Auxiliares': [
+      { id: 'caldera', label: 'Caldera Pirotubular 60 BHP' },
+      { id: 'planta_electrica', label: 'Planta Eléctrica Cummins 80 KVA' },
+      { id: 'compresor', label: 'Compresor 2HP (Área Neumática)' }
+    ],
+    'Frío y Ventilación': [
+      { id: 'cuartos_frios', label: 'Cuartos Fríos (5HP y 7.5HP)' },
+      { id: 'ventiladores', label: 'Ventiladores Industriales 26"' },
+      { id: 'extractores', label: 'Extractores de Aire 14"' },
+      { id: 'plancha_selladora', label: 'Plancha Selladora Baquelita' }
+    ]
+  };
+
   // Sincronizar selección desde el Sidebar
   useEffect(() => {
     if (!carpetaActiva) return;
-    const mapaTabs = {
-      'Motobomba Recepción GX 120': 'motobomba',
-      'Electrobomba Cuajado 2HP': 'electrobomba',
-      'Hiladoras de Queso 3HP': 'hiladoras',
-      'Moldeadora Industrial 250kg': 'moldeadora',
-      'Caldera Pirotubular 60 BHP': 'caldera',
-      'Planta Eléctrica Cummins 80 KVA': 'planta_electrica',
-      'Compresor 2HP (Área Neumática)': 'compresor',
-      'Cuartos Fríos (5HP y 7.5HP)': 'cuartos_frios',
-      'Ventiladores Industriales 26"': 'ventiladores',
-      'Extractores de Aire 14"': 'extractores',
-      'Plancha Selladora Baquelita': 'plancha_selladora'
-    };
 
-    if (mapaTabs[carpetaActiva]) {
-      setEquipoSeleccionadoTab(mapaTabs[carpetaActiva]);
+    if (mapaCategoriasEquipos[carpetaActiva]) {
+      setEquipoSeleccionadoTab(mapaCategoriasEquipos[carpetaActiva][0].id);
     } else if (carpetaActiva === 'FOPME-002') {
       setMostrarRegistroForm(true);
     }
@@ -586,7 +593,10 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
             <div className="text-muted small">Gestión completa de procedimientos, imágenes oficiales, especificidades técnicas y registros FOPME-002.</div>
           </div>
         </div>
-        <div className="d-flex flex-wrap gap-2">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <span className="badge bg-light text-dark border px-3 py-2 fw-semibold" style={{ fontSize: '12px' }}>
+            <i className="bi bi-folder-fill me-1 text-warning"></i> Carpeta: {carpetaActiva || 'Equipos de Producción'}
+          </span>
           <button 
             className="btn btn-sm btn-outline-primary d-flex align-items-center gap-2"
             onClick={() => setMostrarTextoCompleto(true)}
@@ -626,29 +636,17 @@ export default function Mantenimiento({ tenantId = 'tenant-opt-01', userRole = '
           </div>
 
           <h4 className="fw-bold font-heading text-dark mb-2">
-            Programa de Mantenimiento Preventivo y Correctivo de Equipos e Instrumentos
+            <i className="bi bi-file-earmark-pdf-fill text-danger me-2"></i>Procedimientos en: {carpetaActiva || 'Equipos de Producción'}
           </h4>
           <p className="text-muted small mb-3">
-            Manual maestro extraído directamente del documento Word oficial. Selecciona la pestaña de cada equipo para visualizar su fotografía oficial, descripción extensa, especificaciones y recomendaciones.
+            Listado oficial de manuales de procedimiento e instructivos técnicos ISO vigentes en la carpeta seleccionada.
           </p>
 
-          {/* Navegación por Pestañas de Equipos */}
+          {/* Navegación por Pestañas de Equipos de la Carpeta Activa */}
           <div className="mb-3">
-            <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-cpu me-2 text-primary"></i>Seleccionar Ficha Técnica de Equipo:</h6>
+            <h6 className="fw-bold text-dark font-heading mb-2"><i className="bi bi-cpu me-2 text-primary"></i>Seleccionar Ficha Técnica de Equipo ({carpetaActiva || 'Equipos de Producción'}):</h6>
             <div className="d-flex flex-wrap gap-1 bg-light p-2 rounded-3 border">
-              {[
-                { id: 'motobomba', label: 'Motobomba Recepción' },
-                { id: 'electrobomba', label: 'Electrobomba Cuajado' },
-                { id: 'hiladoras', label: 'Hiladoras' },
-                { id: 'moldeadora', label: 'Moldeadora' },
-                { id: 'ventiladores', label: 'Ventiladores 26"' },
-                { id: 'extractores', label: 'Extractores 14"' },
-                { id: 'plancha_selladora', label: 'Plancha Selladora' },
-                { id: 'cuartos_frios', label: 'Cuartos Fríos' },
-                { id: 'caldera', label: 'Caldera 60 BHP' },
-                { id: 'planta_electrica', label: 'Planta Eléctrica 80 KVA' },
-                { id: 'compresor', label: 'Compresor 2HP' }
-              ].map(tab => (
+              {(mapaCategoriasEquipos[carpetaActiva] || mapaCategoriasEquipos['Equipos de Producción']).map(tab => (
                 <button
                   key={tab.id}
                   className={`btn btn-sm ${equipoSeleccionadoTab === tab.id ? 'btn-primary fw-bold shadow-sm' : 'btn-outline-secondary border-0'}`}
