@@ -220,38 +220,9 @@ function App() {
               {isMantenimientoOpen && (
                 <ul className="sidebar-submenu">
                   {[
-                    { 
-                      name: 'Equipos de Producción', 
-                      icon: 'bi-gear-wide-connected', 
-                      badgeStyle: 'icon-badge-sky',
-                      subItems: [
-                        { label: 'Motobomba Recepción GX 120', tabId: 'motobomba' },
-                        { label: 'Electrobomba Cuajado 2HP', tabId: 'electrobomba' },
-                        { label: 'Hiladoras de Queso 3HP', tabId: 'hiladoras' },
-                        { label: 'Moldeadora Industrial 250kg', tabId: 'moldeadora' }
-                      ]
-                    },
-                    { 
-                      name: 'Servicios Auxiliares', 
-                      icon: 'bi-lightning-charge-fill', 
-                      badgeStyle: 'icon-badge-amber',
-                      subItems: [
-                        { label: 'Caldera Pirotubular 60 BHP', tabId: 'caldera' },
-                        { label: 'Planta Eléctrica Cummins 80 KVA', tabId: 'planta_electrica' },
-                        { label: 'Compresor 2HP (Área Neumática)', tabId: 'compresor' }
-                      ]
-                    },
-                    { 
-                      name: 'Frío y Ventilación', 
-                      icon: 'bi-snow', 
-                      badgeStyle: 'icon-badge-cyan',
-                      subItems: [
-                        { label: 'Cuartos Fríos (5HP y 7.5HP)', tabId: 'cuartos_frios' },
-                        { label: 'Ventiladores Industriales 26"', tabId: 'ventiladores' },
-                        { label: 'Extractores de Aire 14"', tabId: 'extractores' },
-                        { label: 'Plancha Selladora Baquelita', tabId: 'plancha_selladora' }
-                      ]
-                    }
+                    { name: 'Equipos de Producción', icon: 'bi-gear-wide-connected', badgeStyle: 'icon-badge-sky' },
+                    { name: 'Servicios Auxiliares', icon: 'bi-lightning-charge-fill', badgeStyle: 'icon-badge-amber' },
+                    { name: 'Frío y Ventilación', icon: 'bi-snow', badgeStyle: 'icon-badge-cyan' }
                   ].map(cat => {
                     const isCatExpanded = expandedCategories[cat.name];
                     return (
@@ -276,22 +247,20 @@ function App() {
                           <i className={`bi bi-chevron-down arrow-rotate ${isCatExpanded ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
                         </button>
                         
-                        {/* Nivel 3: Sub-submenú de Equipos */}
+                        {/* Nivel 3: Sub-submenú Procedimiento */}
                         {isCatExpanded && (
                           <ul className="sidebar-sub-submenu">
-                            {cat.subItems.map(item => (
-                              <li key={item.tabId}>
-                                <button
-                                  className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'mantenimiento' && activeCategory === item.label ? 'active-sub-sub' : 'text-white'}`}
-                                  onClick={() => {
-                                    setCurrentView('mantenimiento');
-                                    setActiveCategory(item.label);
-                                  }}
-                                >
-                                  <i className="bi bi-wrench-adjustable me-2 text-warning"></i> {item.label}
-                                </button>
-                              </li>
-                            ))}
+                            <li>
+                              <button
+                                className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'mantenimiento' && activeCategory === cat.name ? 'active-sub-sub' : 'text-white'}`}
+                                onClick={() => {
+                                  setCurrentView('mantenimiento');
+                                  setActiveCategory(cat.name);
+                                }}
+                              >
+                                <i className="bi bi-file-earmark-pdf me-2 text-danger"></i> Procedimiento
+                              </button>
+                            </li>
                           </ul>
                         )}
                       </li>
@@ -341,26 +310,50 @@ function App() {
               {isSstOpen && (
                 <ul className="sidebar-submenu">
                   {[
-                    { name: 'Definiciones y Alcance', icon: 'bi-book', badgeStyle: 'icon-badge-sky' },
-                    { name: 'Metodología GTC 45', icon: 'bi-calculator', badgeStyle: 'icon-badge-amber' },
-                    { name: 'Matriz de 8 Pasos', icon: 'bi-diagram-3', badgeStyle: 'icon-badge-indigo' },
-                    { name: 'Matriz de Peligros', icon: 'bi-shield-exclamation', badgeStyle: 'icon-badge-emerald' }
-                  ].map(cat => (
-                    <li key={cat.name} className="mb-1">
-                      <button 
-                        className={`nav-link-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'sg-sst' && activeCategory === cat.name ? 'fw-bold' : ''}`}
-                        onClick={() => {
-                          setCurrentView('sg-sst');
-                          setActiveCategory(cat.name);
-                        }}
-                      >
-                        <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
-                          <i className={`bi ${cat.icon}`}></i>
-                        </div>
-                        {cat.name}
-                      </button>
-                    </li>
-                  ))}
+                    { name: 'Identificación de Peligros (SST-PRO-001)', icon: 'bi-shield-exclamation', badgeStyle: 'icon-badge-rose' }
+                  ].map(cat => {
+                    const isCatExpanded = expandedCategories[cat.name];
+                    return (
+                      <li key={cat.name} className="mb-1">
+                        <button 
+                          className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'sg-sst' && activeCategory === cat.name ? 'fw-bold' : ''}`}
+                          onClick={() => {
+                            setCurrentView('sg-sst');
+                            setActiveCategory(cat.name);
+                            setExpandedCategories(prev => ({
+                              ...prev,
+                              [cat.name]: !prev[cat.name]
+                            }));
+                          }}
+                        >
+                          <span className="d-flex align-items-center">
+                            <div className={`icon-badge ${cat.badgeStyle} me-2`} style={{ width: '22px', height: '22px', fontSize: '11px' }}>
+                              <i className={`bi ${cat.icon}`}></i>
+                            </div>
+                            {cat.name}
+                          </span>
+                          <i className={`bi bi-chevron-down arrow-rotate ${isCatExpanded ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
+                        </button>
+                        
+                        {/* Nivel 3: Procedimiento */}
+                        {isCatExpanded && (
+                          <ul className="sidebar-sub-submenu">
+                            <li>
+                              <button
+                                className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'sg-sst' && activeCategory === cat.name ? 'active-sub-sub' : 'text-white'}`}
+                                onClick={() => {
+                                  setCurrentView('sg-sst');
+                                  setActiveCategory(cat.name);
+                                }}
+                              >
+                                <i className="bi bi-file-earmark-pdf me-2 text-danger"></i> Procedimiento
+                              </button>
+                            </li>
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </li>
@@ -405,28 +398,19 @@ function App() {
                       <i className={`bi bi-chevron-down arrow-rotate ${isLiberacionLotesOpen ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
                     </button>
 
-                    {/* Nivel 3: Secciones de Liberación de Lotes */}
+                    {/* Nivel 3: Procedimiento */}
                     {isLiberacionLotesOpen && (
                       <ul className="sidebar-sub-submenu">
-                        {[
-                          { name: 'Objetivo y Responsabilidades', icon: 'bi-bullseye' },
-                          { name: 'Definiciones Rotulado', icon: 'bi-tags-fill' },
-                          { name: 'Trazabilidad Queso Costeño', icon: 'bi-journal-code' },
-                          { name: 'Trazabilidad Queso Mozzarella', icon: 'bi-diagram-2' },
-                          { name: 'Bitácora FOPD-15-01', icon: 'bi-clipboard-check-fill' }
-                        ].map(sub => (
-                          <li key={sub.name}>
-                            <button
-                              className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'liberacion-lotes' && activeCategory === sub.name ? 'active-sub-sub' : 'text-white'}`}
-                              onClick={() => {
-                                setCurrentView('liberacion-lotes');
-                                setActiveCategory(sub.name);
-                              }}
-                            >
-                              <i className={`bi ${sub.icon} me-2 text-info`}></i> {sub.name}
-                            </button>
-                          </li>
-                        ))}
+                        <li>
+                          <button
+                            className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'liberacion-lotes' ? 'active-sub-sub' : 'text-white'}`}
+                            onClick={() => {
+                              setCurrentView('liberacion-lotes');
+                            }}
+                          >
+                            <i className="bi bi-file-earmark-pdf me-2 text-danger"></i> Procedimiento
+                          </button>
+                        </li>
                       </ul>
                     )}
                   </li>
@@ -474,28 +458,19 @@ function App() {
                       <i className={`bi bi-chevron-down arrow-rotate ${isRecepcionMateriasPrimasOpen ? 'rotated' : ''}`} style={{ fontSize: '10px' }}></i>
                     </button>
 
-                    {/* Nivel 3: Secciones de Recepción de Materias Primas */}
+                    {/* Nivel 3: Procedimiento */}
                     {isRecepcionMateriasPrimasOpen && (
                       <ul className="sidebar-sub-submenu">
-                        {[
-                          { name: 'Objetivo y Responsabilidades', icon: 'bi-bullseye' },
-                          { name: 'Parámetros Fisicoquímicos', icon: 'bi-droplet-half' },
-                          { name: 'Criterios Microbiológicos', icon: 'bi-bug-fill' },
-                          { name: 'Recepción de Empaques', icon: 'bi-box-seam' },
-                          { name: 'Formato Plataforma Q-FR-25', icon: 'bi-journal-check' }
-                        ].map(sub => (
-                          <li key={sub.name}>
-                            <button
-                              className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'recepcion-materias-primas' && activeCategory === sub.name ? 'active-sub-sub' : 'text-white'}`}
-                              onClick={() => {
-                                setCurrentView('recepcion-materias-primas');
-                                setActiveCategory(sub.name);
-                              }}
-                            >
-                              <i className={`bi ${sub.icon} me-2 text-success`}></i> {sub.name}
-                            </button>
-                          </li>
-                        ))}
+                        <li>
+                          <button
+                            className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'recepcion-materias-primas' ? 'active-sub-sub' : 'text-white'}`}
+                            onClick={() => {
+                              setCurrentView('recepcion-materias-primas');
+                            }}
+                          >
+                            <i className="bi bi-file-earmark-pdf me-2 text-danger"></i> Procedimiento
+                          </button>
+                        </li>
                       </ul>
                     )}
                   </li>
