@@ -414,6 +414,52 @@ export default function RecepcionMateriasPrimas({ tenantId = 'tenant-opt-01', us
         </div>
       )}
 
+      {/* BLOQUE 2: Formatos Imprimibles y Registro Plataforma (Q-FR-25) */}
+      <div className="card gipa-card p-4 border-0 shadow-sm mb-4 border-top border-5 border-success">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 className="card-title font-heading mb-1 text-dark">
+              <i className="bi bi-printer-fill text-success me-2"></i>Formatos Imprimibles, Registros Asociados
+            </h4>
+            <p className="text-muted small mb-0">Descarga la plantilla vacía o registra análisis físico-químicos en la bitácora Q-FR-25.</p>
+          </div>
+          
+          <div className="d-flex gap-2 align-items-center">
+            {canUserWriteInModule(userRole, 'recepcion-materias-primas') ? (
+              <button 
+                className="btn btn-sm btn-success text-white d-flex align-items-center gap-2 fw-semibold"
+                onClick={() => {
+                  setSeccionActiva('plataforma');
+                  setMostrarFormularioRecepcion(true);
+                }}
+              >
+                <i className="bi bi-plus-circle"></i> {mostrarFormularioRecepcion ? 'Cerrar Formulario' : '➕ Registrar Recepción de Leche (Q-FR-25)'}
+              </button>
+            ) : (
+              <span className="badge bg-secondary text-white px-3 py-2 d-flex align-items-center gap-1">
+                <i className="bi bi-lock-fill text-warning"></i> Modo Consulta Inter-Áreas (Solo Lectura)
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Ficha resumen del formato */}
+        <div className="border p-3 rounded-3 bg-light d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <div>
+            <span className="badge bg-success me-2">Q-FR-25</span>
+            <span className="badge bg-secondary">Plantilla Registro Plataforma</span>
+            <h6 className="fw-bold text-dark font-heading mt-2 mb-1">Formato Registro Control Físico-Químico por Ruta</h6>
+            <span className="text-muted small"><i className="bi bi-info-circle me-1"></i>Muestreo de acidez, grasa, densidad y prueba de alcohol en recepción.</span>
+          </div>
+          <button 
+            className="btn btn-sm btn-outline-success d-flex align-items-center gap-2"
+            onClick={() => setSeccionActiva('plataforma')}
+          >
+            <i className="bi bi-journal-check"></i> Ver Bitácora Plataforma Q-FR-25
+          </button>
+        </div>
+      </div>
+
       {/* VISTA 5: FORMATO PLATAFORMA Q-FR-25 */}
       {seccionActiva === 'plataforma' && (
         <div className="card gipa-card p-4 border-0 shadow-sm mb-4 fade-in-view">

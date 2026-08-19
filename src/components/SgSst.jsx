@@ -484,6 +484,52 @@ export default function SgSst({ tenantId = 'tenant-opt-01', userRole = 'super-ad
         </div>
       )}
 
+      {/* BLOQUE 2: Formatos Imprimibles y Registro Inspección SST */}
+      <div className="card gipa-card p-4 border-0 shadow-sm mb-4 border-top border-5 border-danger">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 className="card-title font-heading mb-1 text-dark">
+              <i className="bi bi-printer-fill text-danger me-2"></i>Formatos Imprimibles, Registros Asociados
+            </h4>
+            <p className="text-muted small mb-0">Descarga la matriz de riesgos vacía o registra inspecciones SST en planta.</p>
+          </div>
+          
+          <div className="d-flex gap-2 align-items-center">
+            {canUserWriteInModule(userRole, 'sg-sst') ? (
+              <button 
+                className="btn btn-sm btn-danger text-white d-flex align-items-center gap-2 fw-semibold"
+                onClick={() => {
+                  setSeccionActiva('matriz');
+                  setMostrarInspeccionForm(true);
+                }}
+              >
+                <i className="bi bi-plus-circle"></i> {mostrarInspeccionForm ? 'Cerrar Formulario' : '➕ Registrar Nueva Inspección SST (SST-PRO-001)'}
+              </button>
+            ) : (
+              <span className="badge bg-secondary text-white px-3 py-2 d-flex align-items-center gap-1">
+                <i className="bi bi-lock-fill text-warning"></i> Modo Consulta Inter-Áreas (Solo Lectura)
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Ficha resumen del formato */}
+        <div className="border p-3 rounded-3 bg-light d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <div>
+            <span className="badge bg-danger me-2">SST-PRO-001</span>
+            <span className="badge bg-secondary">Matriz de Peligros GTC 45</span>
+            <h6 className="fw-bold text-dark font-heading mt-2 mb-1">Formato Registro de Inspecciones e Identificación de Riesgos</h6>
+            <span className="text-muted small"><i className="bi bi-info-circle me-1"></i>Evaluación de riesgos físicos, químicos, biológicos y biomecánicos en puestos de trabajo.</span>
+          </div>
+          <button 
+            className="btn btn-sm btn-outline-danger d-flex align-items-center gap-2"
+            onClick={() => setSeccionActiva('matriz')}
+          >
+            <i className="bi bi-journal-check"></i> Ver Matriz de Peligros Planta
+          </button>
+        </div>
+      </div>
+
       {/* VISTA 4: MATRIZ INTERACTIVA DE PELIGROS */}
       {seccionActiva === 'matriz' && (
         <div className="card gipa-card p-4 border-0 shadow-sm mb-4 fade-in-view">

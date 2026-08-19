@@ -366,6 +366,7 @@ function App() {
                 className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'liberacion-lotes' || isProduccionModuloOpen ? 'active' : 'text-white'}`}
                 onClick={() => {
                   setCurrentView('liberacion-lotes');
+                  setActiveCategory('Liberación Lotes (Q-PD-15)');
                   setIsProduccionModuloOpen(!isProduccionModuloOpen);
                 }}
               >
@@ -386,6 +387,7 @@ function App() {
                       className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'liberacion-lotes' ? 'fw-bold' : ''}`}
                       onClick={() => {
                         setCurrentView('liberacion-lotes');
+                        setActiveCategory('Liberación Lotes (Q-PD-15)');
                         setIsLiberacionLotesOpen(!isLiberacionLotesOpen);
                       }}
                     >
@@ -406,6 +408,7 @@ function App() {
                             className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'liberacion-lotes' ? 'active-sub-sub' : 'text-white'}`}
                             onClick={() => {
                               setCurrentView('liberacion-lotes');
+                              setActiveCategory('Liberación Lotes (Q-PD-15)');
                             }}
                           >
                             <i className="bi bi-file-earmark-pdf me-2 text-danger"></i> Procedimiento
@@ -426,6 +429,7 @@ function App() {
                 className={`nav-link text-start w-100 btn border-0 d-flex justify-content-between align-items-center ${currentView === 'recepcion-materias-primas' || isLogisticaModuloOpen ? 'active' : 'text-white'}`}
                 onClick={() => {
                   setCurrentView('recepcion-materias-primas');
+                  setActiveCategory('Recepción Primas (Q-PD-13)');
                   setIsLogisticaModuloOpen(!isLogisticaModuloOpen);
                 }}
               >
@@ -446,6 +450,7 @@ function App() {
                       className={`nav-link-sub w-100 btn border-0 text-start d-flex justify-content-between align-items-center ${currentView === 'recepcion-materias-primas' ? 'fw-bold' : ''}`}
                       onClick={() => {
                         setCurrentView('recepcion-materias-primas');
+                        setActiveCategory('Recepción Primas (Q-PD-13)');
                         setIsRecepcionMateriasPrimasOpen(!isRecepcionMateriasPrimasOpen);
                       }}
                     >
@@ -466,6 +471,7 @@ function App() {
                             className={`nav-link-sub-sub w-100 btn border-0 text-start d-flex align-items-center ${currentView === 'recepcion-materias-primas' ? 'active-sub-sub' : 'text-white'}`}
                             onClick={() => {
                               setCurrentView('recepcion-materias-primas');
+                              setActiveCategory('Recepción Primas (Q-PD-13)');
                             }}
                           >
                             <i className="bi bi-file-earmark-pdf me-2 text-danger"></i> Procedimiento
